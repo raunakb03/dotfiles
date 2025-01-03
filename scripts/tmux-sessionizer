@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+session=$(find ~ $DPATH -mindepth 1 -maxdepth 4 -type d | fzf --height 50% --layout reverse --border)
+session_name=$(basename "$session" | tr . _)
+
+if [ -z "$TMUX" ]; then
+  cd $session
+  nvim
+else
+  if ! tmux has-session -t "$session_name" 2> /dev/null; then
+    tmux new-session -s "$session_name" -c "$session" -d
+  fi
+  tmux switch-client -t "$session_name"
+fi
