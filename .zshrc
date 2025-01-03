@@ -39,6 +39,7 @@ eval "$(zoxide init zsh)"
 bindkey -s ^f "sh ~/scripts/tmux-sessionizer\n"
 export CPLUS_INCLUDE_PATH="$HOME/atcoder-library:$CPLUS_INCLUDE_PATH"
 alias fullexpand="python3 $HOME/atcoder-library/expander.py"
+setxkbmap -option caps:escape &
 
 if [ -z "$TMUX" ]; then
   tmux
