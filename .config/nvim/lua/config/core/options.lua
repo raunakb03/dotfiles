@@ -68,7 +68,7 @@ opt.swapfile = false
 opt.backup = false
 opt.writebackup = false
 
-opt.colorcolumn = "90"
+-- opt.colorcolumn = "90"
 
 opt.wildignore:append({"*/node_modules/*"})
 

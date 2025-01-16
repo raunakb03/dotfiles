@@ -17,9 +17,10 @@ source $ZSH/oh-my-zsh.sh
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:/opt/nvim-linux64/bin"
-export PATH=$PATH:/usr/local/go/bin
+export PATH="$PATH:/usr/local/go/bin"
 export PATH="$HOME/development/flutter/bin:$PATH"
 export PATH="$PATH:/home/rb/go/bin"
+export PATH="$PATH:~/.config/emacs/bin"
 
 . "$HOME/.cargo/env"
 
