@@ -6,13 +6,13 @@ return {
         opts = {},
         config = function()
             require('tokyonight').setup({
-                transparent = true,
+                -- transparent = true,
                 styles = {
-                    sidebars = "transparent",
-                    floats = "transparent",
+                    -- sidebars = "transparent",
+                    -- floats = "transparent",
                 }
             })
-            -- vim.cmd.colorscheme "tokyonight-night"
+            vim.cmd.colorscheme "tokyonight-night"
         end,
     },
     {
@@ -22,9 +22,21 @@ return {
         config = function()
             require('catppuccin').setup({
                 flavour = "mocha",
-                transparent_background = true,
+                -- transparent_background = true,
             })
-            vim.cmd.colorscheme "catppuccin-mocha"
+            -- vim.cmd.colorscheme "catppuccin-mocha"
         end,
     },
+    {
+        "rose-pine/neovim",
+        name = "rose-pine",
+        config = function()
+            require('rose-pine').setup({
+                -- styles = {
+                --     transparency = true,
+                -- }
+            })
+            -- vim.cmd("colorscheme rose-pine")
+        end
+    }
 }

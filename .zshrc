@@ -34,6 +34,7 @@ alias ls="eza --icons=always -la"
 alias cprun="~/scripts/cp-run"
 alias tmux-sessionizer="~/scripts/tmux-sessionizer"
 alias c="clear"
+alias vi="nvim"
 
 eval "$(zoxide init zsh)"
 
