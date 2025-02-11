@@ -13,3 +13,5 @@ opt.signcolumn = 'yes' -- side column does not shift rightwards after changing t
 
 opt.tabstop = 4 -- 4 spaces for tabs (prettier default)
 opt.shiftwidth = 4 -- 4 spaces for indent width
+
+opt.guicursor = ""
