@@ -21,6 +21,7 @@ export PATH="$PATH:/usr/local/go/bin"
 export PATH="$HOME/development/flutter/bin:$PATH"
 export PATH="$PATH:/home/rb/go/bin"
 export PATH="$PATH:~/.config/emacs/bin"
+export ANDROID_HOME="/home/rb/Android/Sdk"
 
 . "$HOME/.cargo/env"
 
