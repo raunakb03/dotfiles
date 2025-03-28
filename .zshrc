@@ -16,7 +16,7 @@ plugins=(git zsh-autosuggestions docker zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
 
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="$PATH:/opt/nvim-linux64/bin"
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 export PATH="$PATH:/usr/local/go/bin"
 export PATH="$HOME/development/flutter/bin:$PATH"
 export PATH="$PATH:/home/rb/go/bin"
@@ -36,6 +36,7 @@ alias cprun="~/scripts/cp-run"
 alias tmux-sessionizer="~/scripts/tmux-sessionizer"
 alias c="clear"
 alias vi="nvim"
+alias nvim2="NVIM_APPNAME=nvim2 nvim"
 
 eval "$(zoxide init zsh)"
 
@@ -56,3 +57,5 @@ function y() {
 	fi
 	rm -f -- "$tmp"
 }
+
+# fastfetch --config hypr
