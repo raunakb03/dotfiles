@@ -1,2 +1,4 @@
--- bootstrap lazy.nvim, LazyVim and your plugins
+require("config.core.options")
+require("config.core.keymaps")
 require("config.lazy")
+require("config.core.autocmds")
