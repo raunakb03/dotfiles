@@ -1,6 +1,22 @@
 return {
   'saghen/blink.cmp',
-  dependencies = { 'rafamadriz/friendly-snippets' },
+  dependencies = {
+    {
+      "L3MON4D3/LuaSnip",
+      build = "make install_jsregexp",
+      dependencies = { "rafamadriz/friendly-snippets" },
+      config = function()
+        local luasnip = require("luasnip")
+        require("luasnip.loaders.from_vscode").lazy_load()
+        luasnip.config.set_config({
+          history = true,
+          updateevents = "TextChanged,TextChangedI",
+          enable_autosnippets = true,
+        })
+      end,
+    },
+    "rafamadriz/friendly-snippets",
+  },
   version = '1.*',
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config

@@ -9,6 +9,12 @@ return {
         fullscreen = false,
         preview = { hidden = false },
       },
+      files = {
+        fd_opts = [[--type f --strip-cwd-prefix --hidden --exclude .git --exclude node_modules]]
+      },
+      grep = {
+        rg_opts = [[--hidden --column --line-number --no-heading --color=always --smart-case --glob "!.git/*" --glob "!node_modules/*"]]
+      },
       actions = {
       },
       on_create = function()
