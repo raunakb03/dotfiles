@@ -1,0 +1,9 @@
+local opt = vim.opt
+vim.g.autoformat = false -- disable autoformat
+vim.cmd("autocmd BufEnter * set formatoptions-=cro") -- do not comment next line if comment this one
+vim.cmd("autocmd BufEnter * setlocal formatoptions-=cro") -- do not comment next line if comment this one
+opt.signcolumn = "yes" -- side column does not shift rightwards after changing text
+opt.tabstop = 4 -- 4 spaces for tabs (prettier default)
+opt.shiftwidth = 4 -- 4 spaces for indent width
+vim.g.lazyvim_picker = "fzf" -- use fzf-lua as default picker
+opt.guicursor = "n-v-c:block-blinkon0,i-ci-ve:block-blinkon0,r-cr:block-blinkon0,o:block-blinkon0"
