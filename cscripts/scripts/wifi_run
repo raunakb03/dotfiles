@@ -1,0 +1,6 @@
+#!/bin/bash
+
+nmcli d wifi connect "$(nmcli -t -f SSID dev wifi list | fzf)"
+
+nmcli d wifi show
+
