@@ -39,6 +39,8 @@ alias tmux-sessionizer="~/scripts/tmux-sessionizer"
 alias c="clear"
 alias vi="nvim"
 alias nvim2="NVIM_APPNAME=nvim2 nvim"
+alias wifi="nmcli d wifi"
+alias axel="axel -n 10"
 
 eval "$(zoxide init zsh)"
 
