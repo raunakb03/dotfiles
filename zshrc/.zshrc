@@ -41,6 +41,7 @@ alias vi="nvim"
 alias nvim2="NVIM_APPNAME=nvim2 nvim"
 alias wifi="nmcli d wifi"
 alias axel="axel -n 10"
+alias nvim2="NVIM_APPNAME=nvim2 nvim"
 
 eval "$(zoxide init zsh)"
 
