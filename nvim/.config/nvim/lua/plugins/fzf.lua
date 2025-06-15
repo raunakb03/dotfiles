@@ -15,6 +15,12 @@ return {
       grep = {
         rg_opts = [[--hidden --column --line-number --no-heading --color=always --smart-case --glob "!.git/*" --glob "!node_modules/*"]]
       },
+      keymap = {
+        fzf = {
+          ["ctrl-a"] = "select-all",
+          ["ctrl-q"] = "select-all+accept",
+        },
+      },
       actions = {
       },
       on_create = function()
