@@ -18,7 +18,7 @@ return {
       keymap = {
         fzf = {
           ["ctrl-a"] = "select-all",
-          ["ctrl-q"] = "select-all+accept",
+          ["ctrl-q"] = "accept",
         },
       },
       actions = {

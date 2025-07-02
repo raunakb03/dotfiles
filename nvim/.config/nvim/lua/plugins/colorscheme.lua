@@ -26,7 +26,7 @@ return {
                     colors.bg = "#000000"
                 end
             })
-            vim.cmd("colorscheme tokyonight-night")
+            -- vim.cmd("colorscheme tokyonight-night")
         end,
     },
     {
@@ -44,5 +44,14 @@ return {
             })
             -- vim.cmd("colorscheme catppuccin")
         end,
+    },
+    {
+        "morhetz/gruvbox",
+        config = function()
+            vim.g.gruvbox_contrast_dark = "hard"
+            vim.g.gruvbox_invert_selection = "0"
+            vim.cmd("colorscheme gruvbox")
+            vim.cmd("hi Normal guibg=#000000 ctermbg=0")
+        end
     }
 }
