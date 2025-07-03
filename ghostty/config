@@ -1,0 +1,20 @@
+# theme = tokyonight_night
+theme = GruvboxDarkHard
+font-family = "JetBrains Mono Nerd Font"
+font-size = 15
+background=#000000
+# background-opacity=0.9
+# background-blur-radius=40
+clipboard-read=allow
+clipboard-write=allow
+window-decoration=false
+confirm-close-surface=false
+adjust-cell-height=5
+# cursor-color=#ff88ec
+cursor-style-blink=false
+window-padding-y=0
+
+keybind = ctrl+shift+down=scroll_page_lines:25
+keybind = ctrl+shift+up=scroll_page_lines:-25
+
+maximize=true
