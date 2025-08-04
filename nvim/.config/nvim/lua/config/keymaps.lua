@@ -1,120 +1,19 @@
--- local opts = { noremap = true, silent = true }
--- -- local map = vim.keymap.set
---
--- -- Keep cursor centered when scrolling
--- vim.keymap.set("n", "<C-d>", "<C-d>zz", opts)
--- vim.keymap.set("n", "<C-u>", "<C-u>zz", opts)
---
--- -- Move selected line / block of text in visual mode
--- vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", opts)
--- vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", opts)
---
--- -- Fast saving
--- -- vim.keymap.set("n", "<leader>w", ":write!<CR>", { silent = true, desc = "Save file" })
--- -- vim.keymap.set("n", "<leader>q", ":q!<CR>", opts)
---
--- -- Remap for dealing with visual line wraps
--- vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
--- vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true })
---
--- -- better indenting
--- vim.keymap.set("v", "<", "<gv")
--- vim.keymap.set("v", ">", ">gv")
---
--- -- paste over currently selected text without yanking it
--- vim.keymap.set("v", "p", '"_dp')
--- vim.keymap.set("v", "P", '"_dP')
---
--- -- copy everything between { and } including the brackets
--- -- p puts text after the cursor,
--- -- P puts text before the cursor.
--- vim.keymap.set("n", "YY", "va{Vy", opts)
---
--- -- Move line on the screen rather than by line in the file
--- vim.keymap.set("n", "j", "gj", opts)
--- vim.keymap.set("n", "k", "gk", opts)
---
--- -- Exit on jj and jk
--- vim.keymap.set("i", "jj", "<ESC>", opts)
--- vim.keymap.set("i", "jk", "<ESC>", opts)
---
--- -- Move to start/end of line
--- vim.keymap.set({ "n", "x", "o" }, "H", "^", opts)
--- vim.keymap.set({ "n", "x", "o" }, "L", "g_", opts)
---
--- -- Navigate buffers
--- vim.keymap.set("n", "<Right>", ":bnext<CR>", opts)
--- vim.keymap.set("n", "<Left>", ":bprevious<CR>", opts)
---
--- -- Panes resizing
--- vim.keymap.set("n", "+", ":vertical resize +5<CR>")
--- vim.keymap.set("n", "_", ":vertical resize -5<CR>")
--- vim.keymap.set("n", "=", ":resize +5<CR>")
--- vim.keymap.set("n", "-", ":resize -5<CR>")
---
--- -- Map enter to ciw in normal mode
--- vim.keymap.set("n", "<CR>", "ciw", opts)
--- vim.keymap.set("n", "<BS>", "ci", opts)
---
--- vim.keymap.set("n", "n", "nzzv", opts)
--- vim.keymap.set("n", "N", "Nzzv", opts)
--- vim.keymap.set("n", "*", "*zzv", opts)
--- vim.keymap.set("n", "#", "#zzv", opts)
--- vim.keymap.set("n", "g*", "g*zz", opts)
--- vim.keymap.set("n", "g#", "g#zz", opts)
---
--- -- map ; to resume last search
--- -- map("n", ";", "<cmd>Telescope resume<cr>", opts)
---
--- -- search current buffer
--- -- vim.keymap.set("n", "<C-s>", ":Telescope current_buffer_fuzzy_find<CR>", opts)
---
--- -- Split line with X
--- vim.keymap.set("n", "X", ":keeppatterns substitute/\\s*\\%#\\s*/\\r/e <bar> normal! ==^<cr>", { silent = true })
---
--- -- ctrl + x to cut full line
--- vim.keymap.set("n", "<C-x>", "dd", opts)
---
--- -- Select all
--- vim.keymap.set("n", "<C-a>", "ggVG", opts)
---
--- -- write file in current directory
--- -- :w %:h/<new-file-name>
--- vim.keymap.set("n", "<C-n>", ":w %:h/", opts)
---
--- -- delete forward
--- -- w{number}dw
--- -- delete backward
--- -- w{number}db
---
--- vim.keymap.set("n", "<C-P>", ':lua require("config.utils").toggle_go_test()<CR>', opts)
---
--- vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", opts)
+-- My keymaps
+vim.keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" }) -- clear search highlights
+vim.keymap.del("n", "<leader>n") -- remove lazyvim show all notification keymap
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww ~/scripts/tmux-sessionizer<CR>", { desc = "Start Tmux Sessionizer" }) -- start tmux sessionizer
 
+-- Copilot keymaps
+vim.keymap.set("n", "<leader>aa", "<cmd>CopilotChatToggle<cr>", { noremap = true, silent = true, desc = "Toggle Copilot Chat" })
+vim.keymap.set("n", "<leader>ad", "<cmd>Copilot disable<cr>", { noremap = true, silent = true, desc = "Disable Copilot" })
+vim.keymap.set("n", "<leader>ae", "<cmd>Copilot enable<cr>", { noremap = true, silent = true, desc = "Enable Copilot" })
 
+-- Undotree keymaps
+vim.keymap.set("n", "<leader>zz", "<cmd>UndotreeToggle<CR>", { noremap = true, desc = "Toggle Undo Tree" })
 
--- my starts here
-local keymap = vim.keymap;
+-- Tmux navigator keymaps
+vim.keymap.set('n', "<C-h>", "<cmd>TmuxNavigateLeft<CR>")
+vim.keymap.set('n', "<C-j>", "<cmd>TmuxNavigateDown<CR>")
+vim.keymap.set('n', "<C-l>", "<cmd>TmuxNavigateRight<CR>")
+vim.keymap.set('n', "<C-k>", "<cmd>TmuxNavigateUp<CR>")
 
--- clear search highlights
-keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
-
--- increment/decrement numbers
-keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
-keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
-
--- javascript stuffs
-keymap.set("n", "clog", "iconsole.log()<Esc>i")
-keymap.set("i", "clog", "console.log()<Esc>i")
-
--- ctrl f keybinding in neovim
-keymap.set("n", "<C-f>", "<cmd>silent !tmux neww ~/scripts/tmux-sessionizer<CR>")
-
--- get current line diagnostics
-keymap.set('n', '<leader>cd', function() vim.diagnostic.open_float({ scope = "line" }) end, { noremap = true, silent = true, desc = "Show current line diagnostics" })
-
--- git signs keybindings
--- keymap.set("n", "<leader>ghs", "<cmd>lua require'gitsigns'.stage_hunk()<CR>", { noremap = true, silent = true, desc = "Stage hunk" })
--- keymap.set("n", "<leader>ghr", "<cmd>lua require'gitsigns'.reset_hunk()<CR>", { noremap = true, silent = true, desc = "Reset hunk" })
--- keymap.set("n", "<leader>ghp", "<cmd>lua require'gitsigns'.preview_hunk()<CR>", { noremap = true, silent = true, desc = "Preview hunk" })
--- keymap.set("n", "<leader>ghd", "<cmd>lua require'gitsigns'.diffthis()<CR>", { noremap = true, silent = true, desc = "Diff this" })
