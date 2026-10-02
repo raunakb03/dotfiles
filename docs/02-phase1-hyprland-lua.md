@@ -348,6 +348,7 @@ return {
     kbPinWindow                = "SUPER + P",
     kbWindowFullscreen         = "SUPER + F",
     kbWindowBorderedFullscreen = "SUPER + ALT + F",
+    kbWindowFakeFullscreen     = "SUPER + SHIFT + F",
     kbToggleWindowFloating     = "SUPER + ALT + Space",
     kbCloseWindow              = "SUPER + Q",
     kbFocusLeft                = "SUPER + H",
@@ -1527,6 +1528,21 @@ end, nil, "Windows: picture-in-picture (float, shrink, pin to corner)")
 create_bind(vars.kbPinWindow, hl.dsp.window.pin(), nil, "Windows: pin (show on every workspace)")
 create_bind(vars.kbWindowFullscreen, hl.dsp.window.fullscreen({ mode = "fullscreen" }), nil, "Windows: fullscreen")
 create_bind(vars.kbWindowBorderedFullscreen, hl.dsp.window.fullscreen({ mode = "maximized" }), nil, "Windows: maximize (keep gaps and bar)")
+
+-- "Fake" fullscreen: the window fills the screen, but the app is told it is NOT
+-- fullscreen, so it keeps its normal UI (e.g. Zen's sidebar on hover).
+-- fullscreen_state doesn't toggle by itself, so we check the current state.
+create_bind(vars.kbWindowFakeFullscreen, function()
+    local win = hl.get_active_window()
+    if not win then return end
+
+    local internal = win.fullscreen ~= 0 and 0 or 2 -- 0 = normal, 2 = fullscreen
+    hl.dispatch(hl.dsp.window.fullscreen_state({
+        internal = internal,
+        client   = 0,
+        window   = "address:" .. win.address,
+    }))
+end, nil, "Windows: fullscreen, app keeps its UI (fake fullscreen)")
 create_bind(vars.kbToggleWindowFloating, hl.dsp.window.float(), nil, "Windows: toggle floating")
 create_bind(vars.kbCloseWindow, hl.dsp.window.close(), nil, "Windows: close")
 
@@ -1637,6 +1653,16 @@ create_bind(
   onto the normal one behind it.
 - `hl.dsp.window.fullscreen({ mode = "maximized" })`: fills the screen but
   keeps gaps, border and bar ("bordered fullscreen").
+- **Fake fullscreen (`Super + Shift + F`, added 2026-10-02):** with real
+  fullscreen (`Super + F`), Hyprland *tells the app* it's fullscreen, and
+  apps like Zen then switch to their own fullscreen mode, hiding the sidebar
+  and toolbars. `hl.dsp.window.fullscreen_state({ internal = 2, client = 0 })`
+  makes the window fill the screen (`internal = 2`) while telling the app
+  "you're a normal window" (`client = 0`), so the app keeps its UI.
+  `fullscreen_state` doesn't toggle by itself (calling it twice keeps the
+  same state), so the bind checks `win.fullscreen` and switches between
+  `internal = 2` and `0`. In `hyprctl clients`, `fullscreen` is Hyprland's
+  state and `fullscreenClient` is what the app was told.
 - `locked` binds (volume, brightness, media, sleep) keep working while the
   screen is locked.
 - `wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 10%+`: `-l` = limit
@@ -2164,6 +2190,9 @@ What was actually done, and where it differs from the steps above:
 | A new 18-line `hyprland.conf` appeared | Hyprland writes a placeholder "STUB" `.conf` when none exists. Harmless: the Lua config is the one loaded | deleted it. If it comes back after a login, ignore it (`echo hyprland.conf >> .gitignore`) |
 
 **Added after testing:**
+- Fake fullscreen on `Super + Shift + F`: Zen's sidebar didn't appear in real
+  fullscreen because Zen was told it was fullscreen (`fullscreenClient: 2`)
+  and hid its UI.
 - Faster animations everywhere (about 40–50% shorter than Caelestia's). All
   11 speeds now live in `variables.lua`, with the originals in comments.
 - Step 1.20: keybind descriptions and a rofi cheat sheet on `Super + /`
