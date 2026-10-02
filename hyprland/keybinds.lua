@@ -175,6 +175,21 @@ end, nil, "Windows: picture-in-picture (float, shrink, pin to corner)")
 create_bind(vars.kbPinWindow, hl.dsp.window.pin(), nil, "Windows: pin (show on every workspace)")
 create_bind(vars.kbWindowFullscreen, hl.dsp.window.fullscreen({ mode = "fullscreen" }), nil, "Windows: fullscreen")
 create_bind(vars.kbWindowBorderedFullscreen, hl.dsp.window.fullscreen({ mode = "maximized" }), nil, "Windows: maximize (keep gaps and bar)")
+
+-- "Fake" fullscreen: the window fills the screen, but the app is told it is NOT
+-- fullscreen, so it keeps its normal UI (e.g. Zen's sidebar on hover).
+-- fullscreen_state doesn't toggle by itself, so we check the current state.
+create_bind(vars.kbWindowFakeFullscreen, function()
+    local win = hl.get_active_window()
+    if not win then return end
+
+    local internal = win.fullscreen ~= 0 and 0 or 2 -- 0 = normal, 2 = fullscreen
+    hl.dispatch(hl.dsp.window.fullscreen_state({
+        internal = internal,
+        client   = 0,
+        window   = "address:" .. win.address,
+    }))
+end, nil, "Windows: fullscreen, app keeps its UI (fake fullscreen)")
 create_bind(vars.kbToggleWindowFloating, hl.dsp.window.float(), nil, "Windows: toggle floating")
 create_bind(vars.kbCloseWindow, hl.dsp.window.close(), nil, "Windows: close")
 

@@ -46,11 +46,11 @@ return {
     workspaceGaps              = 20,
     windowGapsIn               = 5,
     windowGapsOut              = 10,
-    singleWindowGapsOut        = 20,
+    singleWindowGapsOut        = 5,
 
     -- Window styling
     windowOpacity              = 0.95,
-    windowRounding             = 15,
+    windowRounding             = 10,
     windowBorderSize           = 1,
     activeWindowBorderColour   = "rgba(" .. scheme.primary .. "e6)",
     inactiveWindowBorderColour = "rgba(" .. scheme.onSurfaceVariant .. "11)",
@@ -136,6 +136,7 @@ return {
     kbPinWindow                = "SUPER + P",
     kbWindowFullscreen         = "SUPER + F",
     kbWindowBorderedFullscreen = "SUPER + ALT + F",
+    kbWindowFakeFullscreen     = "SUPER + SHIFT + F",
     kbToggleWindowFloating     = "SUPER + ALT + Space",
     kbCloseWindow              = "SUPER + Q",
     kbFocusLeft                = "SUPER + H",
