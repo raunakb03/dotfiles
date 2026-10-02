@@ -55,6 +55,12 @@ return {
     activeWindowBorderColour   = "rgba(" .. scheme.primary .. "e6)",
     inactiveWindowBorderColour = "rgba(" .. scheme.onSurfaceVariant .. "11)",
 
+    -- Layer animations: rofi, waybar, later the shell's panels.
+    -- Speed is in units of 100 ms (2.5 = 250 ms). Smaller = faster.
+    layersInSpeed              = 2.5,
+    layersOutSpeed             = 2,
+    fadeLayersSpeed            = 2.5,
+
     -- Misc
     volumeStep                 = 10,
     volumeMax                  = 100,

@@ -1,3 +1,5 @@
+local vars = require("variables")
+
 hl.config({
     animations = {
         enabled = true,
@@ -11,9 +13,9 @@ hl.curve("emphasizedDecel", { type = "bezier", points = { { 0.05, 0.7 }, { 0.1, 
 hl.curve("standard", { type = "bezier", points = { { 0.2, 0 }, { 0, 1 } } })
 
 -- Animation configs
-hl.animation({ leaf = "layersIn", enabled = true, speed = 5, bezier = "emphasizedDecel", style = "slide" })
-hl.animation({ leaf = "layersOut", enabled = true, speed = 4, bezier = "emphasizedAccel", style = "slide" })
-hl.animation({ leaf = "fadeLayers", enabled = true, speed = 5, bezier = "standard" })
+hl.animation({ leaf = "layersIn", enabled = true, speed = vars.layersInSpeed, bezier = "emphasizedDecel", style = "slide" })
+hl.animation({ leaf = "layersOut", enabled = true, speed = vars.layersOutSpeed, bezier = "emphasizedAccel", style = "slide" })
+hl.animation({ leaf = "fadeLayers", enabled = true, speed = vars.fadeLayersSpeed, bezier = "standard" })
 
 hl.animation({ leaf = "windowsIn", enabled = true, speed = 5, bezier = "emphasizedDecel" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, bezier = "emphasizedAccel" })
