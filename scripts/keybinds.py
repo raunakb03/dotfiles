@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Print every Hyprland keybind that has a description, one line per action.
+"""Keybind cheat sheet (Super + /): every Hyprland bind that has a description,
+one key combination per row, shown in rofi.
 
-Used by the keybind cheat sheet (Super + /):
-    keybinds.py | rofi -dmenu -i -markup-rows -p Keybinds
+    keybinds.py            open the list in rofi
+    keybinds.py --print    just print the rows (for testing)
 
 Descriptions come from the 4th argument of create_bind() in hyprland/keybinds.lua.
 """
@@ -11,6 +12,20 @@ import html
 import json
 import re
 import subprocess
+import sys
+
+# Monospace font for the key column, so the descriptions line up
+KEY_FONT = "JetBrainsMono Nerd Font"
+
+# Layout overrides for THIS menu only. Colours and fonts still come from
+# ~/.config/rofi/config.rasi, whose 4-column icon grid would cut every row off.
+ROFI_THEME = """
+window       { width: 75%; }
+prompt       { padding: 0.5% 32px 0% 0%; }
+listview     { columns: 1; lines: 15; scrollbar: false; }
+element      { orientation: horizontal; padding: 6px 12px; }
+element-text { horizontal-align: 0; }
+"""
 
 # Modifier bits in `modmask` (from the Wayland/XKB modifier order)
 MODS = [(64, "SUPER"), (4, "CTRL"), (8, "ALT"), (1, "SHIFT")]
@@ -107,8 +122,22 @@ def main():
             rows.append((f"{line['key_prefix']} + {line['first_digit']}…{line['last_digit']}",
                          f"{line['prefix']}{line['first']}–{line['last']}"))
 
-    for key, desc in rows:
-        print(f"<b>{html.escape(key)}</b>    {html.escape(desc)}")
+    # Pad every key to the same width (in a monospace font) so descriptions form a column
+    width = max(len(key) for key, _ in rows) + 3
+    text = "\n".join(
+        f'<span font_family="{KEY_FONT}"><b>{html.escape(key.ljust(width))}</b></span>{html.escape(desc)}'
+        for key, desc in rows
+    )
+
+    if "--print" in sys.argv:
+        print(text)
+        return
+
+    subprocess.run(
+        ["rofi", "-dmenu", "-i", "-markup-rows", "-no-show-icons",
+         "-p", "Keybinds", "-theme-str", ROFI_THEME],
+        input=text, text=True, stdout=subprocess.DEVNULL,
+    )
 
 
 if __name__ == "__main__":
