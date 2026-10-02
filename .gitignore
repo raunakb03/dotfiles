@@ -2,3 +2,9 @@
 *.png
 scheme/current.lua
 
+
+# Python bytecode cache
+__pycache__/
+
+# Placeholder Hyprland writes when no hyprland.conf exists
+hyprland.conf
