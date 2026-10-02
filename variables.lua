@@ -18,6 +18,7 @@ return {
     launcherCmd                = "pkill rofi || rofi -show drun",               -- Phase 7
     clipboardCmd               = "pkill rofi || cliphist list | rofi -dmenu | cliphist decode | wl-copy", -- Phase 7
     lockCmd                    = "hyprlock",                                    -- Phase 10
+    keybindsCmd                = "pkill rofi || ~/.config/hypr/scripts/keybinds.py | rofi -dmenu -i -markup-rows -p Keybinds", -- Phase 7+
 
     -- Touchpad
     touchpadDisableTyping      = true,
@@ -147,6 +148,7 @@ return {
     kbScreenshot               = "Print",
     kbScreenshotRegion         = "SUPER + SHIFT + S",
     kbColorPicker              = "SUPER + SHIFT + C",
+    kbShowKeybinds             = "SUPER + slash",
 
     -- Media
     kbMediaToggle              = "CTRL + SUPER + Space",
