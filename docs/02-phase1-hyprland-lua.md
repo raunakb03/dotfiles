@@ -230,6 +230,7 @@ return {
     launcherCmd                = "pkill rofi || rofi -show drun",               -- Phase 7
     clipboardCmd               = "pkill rofi || cliphist list | rofi -dmenu | cliphist decode | wl-copy", -- Phase 7
     lockCmd                    = "hyprlock",                                    -- Phase 10
+    keybindsCmd                = "pkill rofi || ~/.config/hypr/scripts/keybinds.py | rofi -dmenu -i -markup-rows -p Keybinds", -- Phase 7+
 
     -- Touchpad
     touchpadDisableTyping      = true,
@@ -336,8 +337,6 @@ return {
     kbWindowBorderedFullscreen = "SUPER + ALT + F",
     kbToggleWindowFloating     = "SUPER + ALT + Space",
     kbCloseWindow              = "SUPER + Q",
-
-    -- Focus windows (vim style: H = left, J = down, K = up, L = right)
     kbFocusLeft                = "SUPER + H",
     kbFocusDown                = "SUPER + J",
     kbFocusUp                  = "SUPER + K",
@@ -361,6 +360,7 @@ return {
     kbScreenshot               = "Print",
     kbScreenshotRegion         = "SUPER + SHIFT + S",
     kbColorPicker              = "SUPER + SHIFT + C",
+    kbShowKeybinds             = "SUPER + slash",
 
     -- Media
     kbMediaToggle              = "CTRL + SUPER + Space",
@@ -1374,13 +1374,21 @@ end
 
 -- Bind every key in `keybinds` to `action`.
 -- `flags` is a table, or a function that picks flags per key.
-local function create_bind(keybinds, action, flags)
+-- `desc` is a human-readable description, shown by the keybind cheat sheet.
+local function create_bind(keybinds, action, flags, desc)
     local get_flags = type(flags) == "function" and flags or function()
         return flags
     end
 
     for _, key in ipairs(flatten_keybinds(keybinds)) do
-        hl.bind(key, action, get_flags(key))
+        -- Copy the flags so the shared tables (locked, repeating, ...) are never modified
+        local opts = {}
+        for k, v in pairs(get_flags(key) or {}) do
+            opts[k] = v
+        end
+        opts.description = desc
+
+        hl.bind(key, action, opts)
     end
 end
 
@@ -1401,17 +1409,18 @@ create_bind(
     hl.dsp.exec_cmd(vars.launcherCmd),
     function(key)
         return normalise_keybind(key) == launcher_default and release or nil
-    end
+    end,
+    "Launcher: open app launcher"
 )
 
 ---------------
 ---- Misc ----
 ---------------
 
-create_bind(vars.kbLock, hl.dsp.exec_cmd(vars.lockCmd))
-create_bind(vars.kbExit, hl.dsp.exit())
-create_bind(vars.kbSleep, hl.dsp.exec_cmd(vars.sleepCmd), locked)
-create_bind(vars.kbClipboard, hl.dsp.exec_cmd(vars.clipboardCmd))
+create_bind(vars.kbLock, hl.dsp.exec_cmd(vars.lockCmd), nil, "Session: lock screen")
+create_bind(vars.kbExit, hl.dsp.exit(), nil, "Session: exit Hyprland (log out)")
+create_bind(vars.kbSleep, hl.dsp.exec_cmd(vars.sleepCmd), locked, "Session: suspend")
+create_bind(vars.kbClipboard, hl.dsp.exec_cmd(vars.clipboardCmd), nil, "Utilities: clipboard history")
 
 --------------------
 ---- Workspaces ----
@@ -1419,60 +1428,68 @@ create_bind(vars.kbClipboard, hl.dsp.exec_cmd(vars.clipboardCmd))
 
 for i = 1, 10 do
     local key = i % 10 -- workspace 10 is on key 0
-    create_bind(extend_keybind(vars.kbGoToWs, key), fn.wsaction("focus", "", i))
-    create_bind(extend_keybind(vars.kbMoveWinToWs, key), fn.wsaction("move", "", i))
-    create_bind(extend_keybind(vars.kbGoToWsGroup, key), fn.wsaction("focus", "group", i))
-    create_bind(extend_keybind(vars.kbMoveWinToWsGroup, key), fn.wsaction("move", "group", i))
+    create_bind(extend_keybind(vars.kbGoToWs, key), fn.wsaction("focus", "", i), nil,
+        "Workspaces: go to workspace " .. i)
+    create_bind(extend_keybind(vars.kbMoveWinToWs, key), fn.wsaction("move", "", i), nil,
+        "Workspaces: move window to workspace " .. i)
+    create_bind(extend_keybind(vars.kbGoToWsGroup, key), fn.wsaction("focus", "group", i), nil,
+        "Workspaces: go to workspace group " .. i)
+    create_bind(extend_keybind(vars.kbMoveWinToWsGroup, key), fn.wsaction("move", "group", i), nil,
+        "Workspaces: move window to workspace group " .. i)
 end
 
-create_bind(vars.kbPrevWs, hl.dsp.focus({ workspace = "-1" }), repeating_unless_mouse)
-create_bind(vars.kbNextWs, hl.dsp.focus({ workspace = "+1" }), repeating_unless_mouse)
-create_bind(vars.kbPrevWsGroup, hl.dsp.focus({ workspace = "-10" }), repeating_unless_mouse)
-create_bind(vars.kbNextWsGroup, hl.dsp.focus({ workspace = "+10" }), repeating_unless_mouse)
+create_bind(vars.kbPrevWs, hl.dsp.focus({ workspace = "-1" }), repeating_unless_mouse, "Workspaces: previous workspace")
+create_bind(vars.kbNextWs, hl.dsp.focus({ workspace = "+1" }), repeating_unless_mouse, "Workspaces: next workspace")
+create_bind(vars.kbPrevWsGroup, hl.dsp.focus({ workspace = "-10" }), repeating_unless_mouse, "Workspaces: previous workspace group")
+create_bind(vars.kbNextWsGroup, hl.dsp.focus({ workspace = "+10" }), repeating_unless_mouse, "Workspaces: next workspace group")
 
-create_bind(vars.kbMoveWinToWsNext, hl.dsp.window.move({ workspace = "+1" }), repeating_unless_mouse)
-create_bind(vars.kbMoveWinToWsPrev, hl.dsp.window.move({ workspace = "-1" }), repeating_unless_mouse)
+create_bind(vars.kbMoveWinToWsNext, hl.dsp.window.move({ workspace = "+1" }), repeating_unless_mouse,
+    "Workspaces: move window to next workspace")
+create_bind(vars.kbMoveWinToWsPrev, hl.dsp.window.move({ workspace = "-1" }), repeating_unless_mouse,
+    "Workspaces: move window to previous workspace")
 
-create_bind(vars.kbMoveWinToWsSpecial, hl.dsp.window.move({ workspace = "special:special" }))
-create_bind(vars.kbMoveWinFromWsSpecial, hl.dsp.window.move({ workspace = "e+0" }))
+create_bind(vars.kbMoveWinToWsSpecial, hl.dsp.window.move({ workspace = "special:special" }), nil,
+    "Workspaces: move window to special workspace")
+create_bind(vars.kbMoveWinFromWsSpecial, hl.dsp.window.move({ workspace = "e+0" }), nil,
+    "Workspaces: move window out of special workspace")
 
 -----------------------
 ---- Window groups ----
 -----------------------
 
-create_bind(vars.kbWindowCycleNext, hl.dsp.window.cycle_next(), repeating)
-create_bind(vars.kbWindowCyclePrev, hl.dsp.window.cycle_next({ next = false }), repeating)
-create_bind(vars.kbWindowGroupCycleNext, hl.dsp.group.next(), repeating)
-create_bind(vars.kbWindowGroupCyclePrev, hl.dsp.group.prev(), repeating)
-create_bind(vars.kbToggleGroup, hl.dsp.group.toggle())
-create_bind(vars.kbUngroup, hl.dsp.window.move({ out_of_group = true }))
-create_bind(vars.kbGroupLockActive, hl.dsp.group.lock_active())
+create_bind(vars.kbWindowCycleNext, hl.dsp.window.cycle_next(), repeating, "Groups: next window")
+create_bind(vars.kbWindowCyclePrev, hl.dsp.window.cycle_next({ next = false }), repeating, "Groups: previous window")
+create_bind(vars.kbWindowGroupCycleNext, hl.dsp.group.next(), repeating, "Groups: next tab in group")
+create_bind(vars.kbWindowGroupCyclePrev, hl.dsp.group.prev(), repeating, "Groups: previous tab in group")
+create_bind(vars.kbToggleGroup, hl.dsp.group.toggle(), nil, "Groups: make / dissolve group")
+create_bind(vars.kbUngroup, hl.dsp.window.move({ out_of_group = true }), nil, "Groups: move window out of group")
+create_bind(vars.kbGroupLockActive, hl.dsp.group.lock_active(), nil, "Groups: lock / unlock group")
 
 ------------------------
 ---- Window actions ----
 ------------------------
 
-create_bind(vars.kbFocusLeft, hl.dsp.focus({ direction = "left" }))
-create_bind(vars.kbFocusDown, hl.dsp.focus({ direction = "down" }))
-create_bind(vars.kbFocusUp, hl.dsp.focus({ direction = "up" }))
-create_bind(vars.kbFocusRight, hl.dsp.focus({ direction = "right" }))
+create_bind(vars.kbFocusLeft, hl.dsp.focus({ direction = "left" }), nil, "Windows: focus left")
+create_bind(vars.kbFocusDown, hl.dsp.focus({ direction = "down" }), nil, "Windows: focus down")
+create_bind(vars.kbFocusUp, hl.dsp.focus({ direction = "up" }), nil, "Windows: focus up")
+create_bind(vars.kbFocusRight, hl.dsp.focus({ direction = "right" }), nil, "Windows: focus right")
 
 for _, dir in ipairs({ "left", "right", "up", "down" }) do
-    create_bind("SUPER + SHIFT + " .. dir, hl.dsp.window.move({ direction = dir }))
+    create_bind("SUPER + SHIFT + " .. dir, hl.dsp.window.move({ direction = dir }), nil, "Windows: move window " .. dir)
 end
 
-create_bind(vars.kbWindowDecreaseWidth, fn.resize_active_window(-10, 0), repeating)
-create_bind(vars.kbWindowIncreaseWidth, fn.resize_active_window(10, 0), repeating)
-create_bind(vars.kbWindowDecreaseHeight, fn.resize_active_window(0, -10), repeating)
-create_bind(vars.kbWindowIncreaseHeight, fn.resize_active_window(0, 10), repeating)
+create_bind(vars.kbWindowDecreaseWidth, fn.resize_active_window(-10, 0), repeating, "Windows: narrower")
+create_bind(vars.kbWindowIncreaseWidth, fn.resize_active_window(10, 0), repeating, "Windows: wider")
+create_bind(vars.kbWindowDecreaseHeight, fn.resize_active_window(0, -10), repeating, "Windows: shorter")
+create_bind(vars.kbWindowIncreaseHeight, fn.resize_active_window(0, 10), repeating, "Windows: taller")
 
-create_bind({ vars.kbMoveWindow, "SUPER + mouse:272" }, hl.dsp.window.drag(), mouse)
-create_bind({ vars.kbResizeWindow, "SUPER + mouse:273" }, hl.dsp.window.resize(), mouse)
-create_bind(vars.kbCenterWindow, hl.dsp.window.center())
+create_bind({ vars.kbMoveWindow, "SUPER + mouse:272" }, hl.dsp.window.drag(), mouse, "Windows: drag to move")
+create_bind({ vars.kbResizeWindow, "SUPER + mouse:273" }, hl.dsp.window.resize(), mouse, "Windows: drag to resize")
+create_bind(vars.kbCenterWindow, hl.dsp.window.center(), nil, "Windows: centre (floating)")
 create_bind(vars.kbNormalizeWindow, function()
     hl.dispatch(hl.dsp.window.resize(fn.resize_by_screen(55, 70)))
     hl.dispatch(hl.dsp.window.center())
-end)
+end, nil, "Windows: resize to 55% x 70% and centre")
 create_bind(vars.kbWindowPip, function()
     local a = hl.get_active_window()
     if a then
@@ -1484,75 +1501,84 @@ create_bind(vars.kbWindowPip, function()
             hl.dispatch(x)
         end
     end
-end)
-create_bind(vars.kbPinWindow, hl.dsp.window.pin())
-create_bind(vars.kbWindowFullscreen, hl.dsp.window.fullscreen({ mode = "fullscreen" }))
-create_bind(vars.kbWindowBorderedFullscreen, hl.dsp.window.fullscreen({ mode = "maximized" }))
-create_bind(vars.kbToggleWindowFloating, hl.dsp.window.float())
-create_bind(vars.kbCloseWindow, hl.dsp.window.close())
+end, nil, "Windows: picture-in-picture (float, shrink, pin to corner)")
+create_bind(vars.kbPinWindow, hl.dsp.window.pin(), nil, "Windows: pin (show on every workspace)")
+create_bind(vars.kbWindowFullscreen, hl.dsp.window.fullscreen({ mode = "fullscreen" }), nil, "Windows: fullscreen")
+create_bind(vars.kbWindowBorderedFullscreen, hl.dsp.window.fullscreen({ mode = "maximized" }), nil, "Windows: maximize (keep gaps and bar)")
+create_bind(vars.kbToggleWindowFloating, hl.dsp.window.float(), nil, "Windows: toggle floating")
+create_bind(vars.kbCloseWindow, hl.dsp.window.close(), nil, "Windows: close")
 
 -----------------------------------
 ---- Special workspace toggles ----
 -----------------------------------
 
-create_bind(vars.kbSpecialWs, fn.toggle("specialws"))
-create_bind(vars.kbSystemMonitorWs, fn.toggle("sysmon"))
-create_bind(vars.kbMusicWs, fn.toggle("music"))
-create_bind(vars.kbCommunicationWs, fn.toggle("communication"))
-create_bind(vars.kbTodoWs, fn.toggle("todo"))
+create_bind(vars.kbSpecialWs, fn.toggle("specialws"), nil, "Special: show / hide special workspace")
+create_bind(vars.kbSystemMonitorWs, fn.toggle("sysmon"), nil, "Special: system monitor (btop)")
+create_bind(vars.kbMusicWs, fn.toggle("music"), nil, "Special: music")
+create_bind(vars.kbCommunicationWs, fn.toggle("communication"), nil, "Special: communication")
+create_bind(vars.kbTodoWs, fn.toggle("todo"), nil, "Special: todo")
 
 --------------
 ---- Apps ----
 --------------
 
-create_bind(vars.kbTerminal, hl.dsp.exec_cmd(vars.terminal))
-create_bind(vars.kbBrowser, hl.dsp.exec_cmd(vars.browser))
-create_bind(vars.kbEditor, hl.dsp.exec_cmd(vars.editor))
-create_bind(vars.kbFileExplorer, hl.dsp.exec_cmd(vars.fileExplorer))
-create_bind(vars.kbAudioSettings, hl.dsp.exec_cmd(vars.audioSettings))
+create_bind(vars.kbTerminal, hl.dsp.exec_cmd(vars.terminal), nil, "Apps: terminal")
+create_bind(vars.kbBrowser, hl.dsp.exec_cmd(vars.browser), nil, "Apps: browser")
+create_bind(vars.kbEditor, hl.dsp.exec_cmd(vars.editor), nil, "Apps: editor")
+create_bind(vars.kbFileExplorer, hl.dsp.exec_cmd(vars.fileExplorer), nil, "Apps: file manager")
+create_bind(vars.kbAudioSettings, hl.dsp.exec_cmd(vars.audioSettings), nil, "Apps: audio settings")
 
 -------------------
 ---- Utilities ----
 -------------------
 
 -- TEMPORARY screenshots (Phase 11 replaces these with the shell's area picker)
-create_bind(vars.kbScreenshot, hl.dsp.exec_cmd("grim - | wl-copy"), locked)
-create_bind(vars.kbScreenshotRegion, hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
-create_bind(vars.kbColorPicker, hl.dsp.exec_cmd("hyprpicker -a"))
+create_bind(vars.kbScreenshot, hl.dsp.exec_cmd("grim - | wl-copy"), locked, "Utilities: screenshot (to clipboard)")
+create_bind(vars.kbScreenshotRegion, hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'), nil,
+    "Utilities: screenshot a region (to clipboard)")
+create_bind(vars.kbColorPicker, hl.dsp.exec_cmd("hyprpicker -a"), nil, "Utilities: colour picker")
+
+-- Keybind cheat sheet: every bind with a description, searchable in rofi
+create_bind(vars.kbShowKeybinds, hl.dsp.exec_cmd(vars.keybindsCmd), nil, "Utilities: show this keybind list")
 
 -------------------------------
 ---- Brightness and media ----
 -------------------------------
 
 -- TEMPORARY: Phase 8 routes these through the shell so it can show an OSD
-create_bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl set 5%+"), locked_repeating)
-create_bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%-"), locked_repeating)
+create_bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl set 5%+"), locked_repeating, "Media: brightness up")
+create_bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%-"), locked_repeating, "Media: brightness down")
 
-create_bind({ vars.kbMediaToggle, "XF86AudioPlay", "XF86AudioPause" }, hl.dsp.exec_cmd("playerctl play-pause"), locked)
-create_bind({ vars.kbMediaNext, "XF86AudioNext" }, hl.dsp.exec_cmd("playerctl next"), locked)
-create_bind({ vars.kbMediaPrev, "XF86AudioPrev" }, hl.dsp.exec_cmd("playerctl previous"), locked)
-create_bind({ vars.kbMediaStop, "XF86AudioStop" }, hl.dsp.exec_cmd("playerctl stop"), locked)
+create_bind({ vars.kbMediaToggle, "XF86AudioPlay", "XF86AudioPause" }, hl.dsp.exec_cmd("playerctl play-pause"), locked,
+    "Media: play / pause")
+create_bind({ vars.kbMediaNext, "XF86AudioNext" }, hl.dsp.exec_cmd("playerctl next"), locked, "Media: next track")
+create_bind({ vars.kbMediaPrev, "XF86AudioPrev" }, hl.dsp.exec_cmd("playerctl previous"), locked, "Media: previous track")
+create_bind({ vars.kbMediaStop, "XF86AudioStop" }, hl.dsp.exec_cmd("playerctl stop"), locked, "Media: stop")
 
 ----------------
 ---- Volume ----
 ----------------
 
-create_bind({ vars.kbVolumeMute, "XF86AudioMute" }, hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), locked)
-create_bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), locked)
+create_bind({ vars.kbVolumeMute, "XF86AudioMute" }, hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), locked,
+    "Media: mute / unmute")
+create_bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"), locked,
+    "Media: mute / unmute microphone")
 create_bind(
     "XF86AudioRaiseVolume",
     hl.dsp.exec_cmd(
         "wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume -l " ..
         (vars.volumeMax / 100) .. " @DEFAULT_AUDIO_SINK@ " .. vars.volumeStep .. "%+"
     ),
-    locked_repeating
+    locked_repeating,
+    "Media: volume up"
 )
 create_bind(
     "XF86AudioLowerVolume",
     hl.dsp.exec_cmd(
         "wpctl set-mute @DEFAULT_AUDIO_SINK@ 0; wpctl set-volume @DEFAULT_AUDIO_SINK@ " .. vars.volumeStep .. "%-"
     ),
-    locked_repeating
+    locked_repeating,
+    "Media: volume down"
 )
 ```
 
@@ -1839,6 +1865,196 @@ fails → `hyprctl configerrors`, then check the matching step.
 
 ---
 
+## 1.20 Extra: a keybind cheat sheet (`Super + /`)
+
+*Added 2026-10-02, after Phase 1. Not part of Caelestia.*
+
+**Why:** about 70 different actions are hard to remember. `hyprctl binds`
+can't help on its own: every Lua bind shows up as
+`dispatcher: __lua, arg: 10`, i.e. "run Lua function #10". Hyprland has no
+idea what that function does. The fix is to give each bind a
+**description** (`hl.bind` accepts a `description` option), then show the
+descriptions in rofi.
+
+There are three parts:
+
+**1. `create_bind` takes a description.** In `keybinds.lua` (already in the
+step 1.16 code above):
+```lua
+local function create_bind(keybinds, action, flags, desc)
+    ...
+        local opts = {}
+        for k, v in pairs(get_flags(key) or {}) do
+            opts[k] = v
+        end
+        opts.description = desc
+
+        hl.bind(key, action, opts)
+```
+- Every bind now passes a 4th argument:
+  `create_bind(vars.kbTerminal, ..., nil, "Apps: terminal")`. `nil` = "no
+  flags".
+- **Why copy the flags?** `locked`, `repeating` etc. are *shared* tables. If
+  we wrote `opts.description` into `locked` directly, every locked bind
+  would end up with the last description written. Copying gives each bind
+  its own table.
+- The `"Apps: "` / `"Windows: "` prefix groups lines in the list. Typing
+  `win` in rofi filters to the window actions.
+
+**2. Two variables** (in the step 1.4 code above):
+```lua
+    keybindsCmd = "pkill rofi || ~/.config/hypr/scripts/keybinds.py | rofi -dmenu -i -markup-rows -p Keybinds",
+    kbShowKeybinds = "SUPER + slash",
+```
+- `pkill rofi ||`: the same toggle trick as the launcher. Press again to
+  close.
+- `-dmenu`: rofi shows whatever lines it's given on stdin. `-i` = case-
+  insensitive search. `-markup-rows` lets lines use `<b>bold</b>`.
+- `slash` is the key's real name (`/`). Find any key's name with `wev`.
+
+**3. The script.** **Write:** `~/.config/hypr/scripts/keybinds.py`, then
+`chmod +x ~/.config/hypr/scripts/keybinds.py`:
+```python
+#!/usr/bin/env python3
+"""Print every Hyprland keybind that has a description, one line per action.
+
+Used by the keybind cheat sheet (Super + /):
+    keybinds.py | rofi -dmenu -i -markup-rows -p Keybinds
+
+Descriptions come from the 4th argument of create_bind() in hyprland/keybinds.lua.
+"""
+
+import html
+import json
+import re
+import subprocess
+
+# Modifier bits in `modmask` (from the Wayland/XKB modifier order)
+MODS = [(64, "SUPER"), (4, "CTRL"), (8, "ALT"), (1, "SHIFT")]
+
+# Friendlier names for keys that read badly
+KEY_NAMES = {
+    "mouse:272": "Left click",
+    "mouse:273": "Right click",
+    "mouse_down": "Scroll down",
+    "mouse_up": "Scroll up",
+    "slash": "/",
+    "comma": ",",
+    "period": ".",
+    "minus": "-",
+    "equal": "=",
+    "backslash": "\\",
+    "return": "Return",
+    "escape": "Escape",
+    "space": "Space",
+    "tab": "Tab",
+    "left": "Left",
+    "right": "Right",
+    "up": "Up",
+    "down": "Down",
+    "xf86monbrightnessup": "Brightness Up key",
+    "xf86monbrightnessdown": "Brightness Down key",
+    "xf86audioplay": "Play key",
+    "xf86audiopause": "Pause key",
+    "xf86audionext": "Next key",
+    "xf86audioprev": "Previous key",
+    "xf86audiostop": "Stop key",
+    "xf86audiomute": "Mute key",
+    "xf86audiomicmute": "Mic Mute key",
+    "xf86audioraisevolume": "Volume Up key",
+    "xf86audiolowervolume": "Volume Down key",
+}
+
+
+def key_label(bind):
+    mods = [name for bit, name in MODS if bind["modmask"] & bit]
+    key = bind["key"]
+
+    # A bind on SUPER_L itself with `release` = "tap Super on its own"
+    if key in ("SUPER_L", "SUPER_R") and bind["release"]:
+        return "SUPER (tap)"
+
+    key = KEY_NAMES.get(key.lower(), key)
+    if len(key) == 1:
+        key = key.upper()
+    return " + ".join(mods + [key])
+
+
+def main():
+    binds = json.loads(subprocess.run(["hyprctl", "binds", "-j"], capture_output=True, text=True).stdout)
+
+    # Group keys by description, keeping the order the binds were created in
+    actions = {}
+    for bind in binds:
+        desc = bind.get("description", "")
+        if not desc:
+            continue
+        keys = actions.setdefault(desc, [])
+        label = key_label(bind)
+        if label not in keys:
+            keys.append(label)
+
+    # Collapse numbered series ("go to workspace 1" … "go to workspace 10", each
+    # bound to one "<mods> + <digit>") into a single line: "<mods> + 1…0"
+    lines = []
+    series = {}  # "go to workspace " -> index in lines
+    for desc, keys in actions.items():
+        m = re.fullmatch(r"(.*?)(\d+)", desc)
+        if m and len(keys) == 1 and re.fullmatch(r".* \+ \d", keys[0]):
+            prefix, num = m.groups()
+            key_prefix, digit = keys[0].rsplit(" + ", 1)
+            if prefix in series:
+                entry = lines[series[prefix]]
+                entry["last"], entry["last_digit"] = num, digit
+                continue
+            series[prefix] = len(lines)
+            lines.append({"prefix": prefix, "first": num, "last": num,
+                          "key_prefix": key_prefix, "first_digit": digit, "last_digit": digit})
+            continue
+        lines.append({"keys": keys, "desc": desc})
+
+    for line in lines:
+        if "keys" in line:
+            keys, desc = "  ·  ".join(line["keys"]), line["desc"]
+        elif line["first"] == line["last"]:
+            keys = f"{line['key_prefix']} + {line['first_digit']}"
+            desc = f"{line['prefix']}{line['first']}"
+        else:
+            keys = f"{line['key_prefix']} + {line['first_digit']}…{line['last_digit']}"
+            desc = f"{line['prefix']}{line['first']}–{line['last']}"
+        print(f"<b>{html.escape(keys)}</b>    {html.escape(desc)}")
+
+
+if __name__ == "__main__":
+    main()
+```
+- `hyprctl binds -j`: every bind as JSON (`modmask`, `key`, `release`,
+  `description`, …).
+- `modmask` is a bit field. SUPER = 64, CTRL = 4, ALT = 8, SHIFT = 1, so
+  SUPER + SHIFT = 65. `bind["modmask"] & bit` tests one bit.
+- `actions` is a dict from description to a list of keys. Python dicts keep
+  insertion order, so lines follow `keybinds.lua`. Binds with the same
+  description (e.g. `SUPER + Z` and `SUPER + Left click`) merge into one
+  line.
+- The "series" part collapses `go to workspace 1` … `10` (40 binds) into four
+  lines like `SUPER + 1…0  go to workspace 1–10`.
+- `html.escape`: `-markup-rows` treats `<`, `>`, `&` as markup, so they must
+  be escaped.
+
+**Run:** `luac -p variables.lua hyprland/keybinds.lua && hyprctl reload`,
+then press `Super + /`.
+
+**Check:** a searchable list of about 70 lines appears. Run
+`scripts/keybinds.py` in a terminal to see the raw output. If a new bind is
+missing from the list, it has no description.
+
+**Commit:** `git add -A && git commit -m "hypr: keybind descriptions + rofi cheat sheet"`
+
+> In Phase 7 our own launcher can read the same descriptions to show a
+> nicer overlay, so writing them now isn't wasted work.
+
+---
+
 ## Common errors
 
 | Symptom | Likely cause |
@@ -1870,6 +2086,10 @@ What was actually done, and where it differs from the steps above:
 | Two `hyprpaper` processes | a systemd user service (`hyprpaper.service`) **and** `execs.lua` both started it | `systemctl --user disable --now hyprpaper.service`. All autostart now lives in `execs.lua` |
 | A new 18-line `hyprland.conf` appeared | Hyprland writes a placeholder "STUB" `.conf` when none exists. Harmless: the Lua config is the one loaded | deleted it. If it comes back after a login, ignore it (`echo hyprland.conf >> .gitignore`) |
 
+**Added after testing:**
+- Step 1.20: keybind descriptions and a rofi cheat sheet on `Super + /`
+  (`scripts/keybinds.py`).
+
 **Things learned along the way:**
 - Special workspaces are hidden drawer workspaces that slide over the
   current one. 3 fingers up shows `special`, 3 down hides it, and
@@ -1886,6 +2106,7 @@ What was actually done, and where it differs from the steps above:
   2. "switch to Lua config"
   3. "ignore app maximize requests"
   4. "hyprlock: enable blurred background…"
+  5. "keybind descriptions + rofi cheat sheet"
 - Old config kept as `hyprland.conf.old`. Backup in
   `~/raunak/dotfiles/hypr-backup-2026-10-02/`.
 - Still temporary: waybar (→ Phase 5), hyprpaper (→ 4), rofi (→ 7),
