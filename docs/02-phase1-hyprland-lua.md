@@ -230,7 +230,7 @@ return {
     launcherCmd                = "pkill rofi || rofi -show drun",               -- Phase 7
     clipboardCmd               = "pkill rofi || cliphist list | rofi -dmenu | cliphist decode | wl-copy", -- Phase 7
     lockCmd                    = "hyprlock",                                    -- Phase 10
-    keybindsCmd                = "pkill rofi || ~/.config/hypr/scripts/keybinds.py | rofi -dmenu -i -markup-rows -p Keybinds", -- Phase 7+
+    keybindsCmd                = "pkill rofi || ~/.config/hypr/scripts/keybinds.py | rofi -dmenu -i -markup-rows -p Keybinds -theme-str 'window { width: 65%; }'", -- Phase 7+
 
     -- Touchpad
     touchpadDisableTyping      = true,
@@ -1903,7 +1903,7 @@ local function create_bind(keybinds, action, flags, desc)
 
 **2. Two variables** (in the step 1.4 code above):
 ```lua
-    keybindsCmd = "pkill rofi || ~/.config/hypr/scripts/keybinds.py | rofi -dmenu -i -markup-rows -p Keybinds",
+    keybindsCmd = "pkill rofi || ~/.config/hypr/scripts/keybinds.py | rofi -dmenu -i -markup-rows -p Keybinds -theme-str 'window { width: 65%; }'",
     kbShowKeybinds = "SUPER + slash",
 ```
 - `pkill rofi ||`: the same toggle trick as the launcher. Press again to
@@ -1911,6 +1911,8 @@ local function create_bind(keybinds, action, flags, desc)
 - `-dmenu`: rofi shows whatever lines it's given on stdin. `-i` = case-
   insensitive search. `-markup-rows` lets lines use `<b>bold</b>`.
 - `slash` is the key's real name (`/`). Find any key's name with `wev`.
+- `-theme-str 'window { width: 65%; }'`: widens rofi **for this menu only**
+  (your `config.rasi` uses 50%, which cut off the longest rows).
 
 **3. The script.** **Write:** `~/.config/hypr/scripts/keybinds.py`, then
 `chmod +x ~/.config/hypr/scripts/keybinds.py`:
@@ -2013,16 +2015,19 @@ def main():
             continue
         lines.append({"keys": keys, "desc": desc})
 
+    # One row per key combination, so long rows never get cut off
+    rows = []
     for line in lines:
         if "keys" in line:
-            keys, desc = "  ·  ".join(line["keys"]), line["desc"]
+            rows += [(key, line["desc"]) for key in line["keys"]]
         elif line["first"] == line["last"]:
-            keys = f"{line['key_prefix']} + {line['first_digit']}"
-            desc = f"{line['prefix']}{line['first']}"
+            rows.append((f"{line['key_prefix']} + {line['first_digit']}", f"{line['prefix']}{line['first']}"))
         else:
-            keys = f"{line['key_prefix']} + {line['first_digit']}…{line['last_digit']}"
-            desc = f"{line['prefix']}{line['first']}–{line['last']}"
-        print(f"<b>{html.escape(keys)}</b>    {html.escape(desc)}")
+            rows.append((f"{line['key_prefix']} + {line['first_digit']}…{line['last_digit']}",
+                         f"{line['prefix']}{line['first']}–{line['last']}"))
+
+    for key, desc in rows:
+        print(f"<b>{html.escape(key)}</b>    {html.escape(desc)}")
 
 
 if __name__ == "__main__":
@@ -2033,9 +2038,11 @@ if __name__ == "__main__":
 - `modmask` is a bit field. SUPER = 64, CTRL = 4, ALT = 8, SHIFT = 1, so
   SUPER + SHIFT = 65. `bind["modmask"] & bit` tests one bit.
 - `actions` is a dict from description to a list of keys. Python dicts keep
-  insertion order, so lines follow `keybinds.lua`. Binds with the same
-  description (e.g. `SUPER + Z` and `SUPER + Left click`) merge into one
-  line.
+  insertion order, so rows follow `keybinds.lua`.
+- **One row per key combination.** An action with several keys (e.g.
+  `SUPER + Z` and `SUPER + Left click`) gets one row each, with the same
+  description. Merging them into one row made rows too long and rofi cut
+  them off.
 - The "series" part collapses `go to workspace 1` … `10` (40 binds) into four
   lines like `SUPER + 1…0  go to workspace 1–10`.
 - `html.escape`: `-markup-rows` treats `<`, `>`, `&` as markup, so they must
@@ -2044,7 +2051,7 @@ if __name__ == "__main__":
 **Run:** `luac -p variables.lua hyprland/keybinds.lua && hyprctl reload`,
 then press `Super + /`.
 
-**Check:** a searchable list of about 70 lines appears. Run
+**Check:** a searchable list of about 90 rows appears, one key combination per row. Run
 `scripts/keybinds.py` in a terminal to see the raw output. If a new bind is
 missing from the list, it has no description.
 
