@@ -2161,9 +2161,18 @@ What was actually done, and where it differs from the steps above:
   2. "switch to Lua config"
   3. "ignore app maximize requests"
   4. "hyprlock: enable blurred background…"
-  5. "keybind descriptions + rofi cheat sheet"
-- Old config kept as `hyprland.conf.old`. Backup in
-  `~/raunak/dotfiles/hypr-backup-2026-10-02/`.
+  5. "keybind descriptions + rofi cheat sheet" (plus layout fixes)
+  6. "remove old .conf (backed up) and Python cache"
+- **Cleanup:** `hyprland.conf.old` was deleted once the Lua config was
+  stable. The old config lives on in the backup
+  `~/raunak/dotfiles/hypr-backup-2026-10-02/` and in git history
+  (`git show 5ef7448:hyprland.conf`). `.gitignore` now also ignores
+  `__pycache__/` and the stub `hyprland.conf` Hyprland may write.
+- Files in `~/.config/hypr` now:
+  - config: `hyprland.lua`, `variables.lua`, `hyprland/`, `utils/`,
+    `scheme/`, `scripts/keybinds.py`
+  - temporary tools: `hyprlock.conf` + `hyprlock.png`, `hyprpaper.conf`
+  - tooling: `.luarc.json`, `.gitignore`
 - Still temporary: waybar (→ Phase 5), hyprpaper (→ 4), rofi (→ 7),
   hyprlock (→ 10), playerctl/brightnessctl keys (→ 8).
 
