@@ -267,6 +267,12 @@ return {
     activeWindowBorderColour   = "rgba(" .. scheme.primary .. "e6)",
     inactiveWindowBorderColour = "rgba(" .. scheme.onSurfaceVariant .. "11)",
 
+    -- Layer animations: rofi, waybar, later the shell's panels.
+    -- Speed is in units of 100 ms (2.5 = 250 ms). Smaller = faster.
+    layersInSpeed              = 2.5,
+    layersOutSpeed             = 2,
+    fadeLayersSpeed            = 2.5,
+
     -- Misc
     volumeStep                 = 10,
     volumeMax                  = 100,
@@ -636,6 +642,8 @@ are Material 3 motion curves.
 
 **Write:** `~/.config/hypr/hyprland/animations.lua`
 ```lua
+local vars = require("variables")
+
 hl.config({
     animations = {
         enabled = true,
@@ -649,9 +657,9 @@ hl.curve("emphasizedDecel", { type = "bezier", points = { { 0.05, 0.7 }, { 0.1, 
 hl.curve("standard", { type = "bezier", points = { { 0.2, 0 }, { 0, 1 } } })
 
 -- Animation configs
-hl.animation({ leaf = "layersIn", enabled = true, speed = 5, bezier = "emphasizedDecel", style = "slide" })
-hl.animation({ leaf = "layersOut", enabled = true, speed = 4, bezier = "emphasizedAccel", style = "slide" })
-hl.animation({ leaf = "fadeLayers", enabled = true, speed = 5, bezier = "standard" })
+hl.animation({ leaf = "layersIn", enabled = true, speed = vars.layersInSpeed, bezier = "emphasizedDecel", style = "slide" })
+hl.animation({ leaf = "layersOut", enabled = true, speed = vars.layersOutSpeed, bezier = "emphasizedAccel", style = "slide" })
+hl.animation({ leaf = "fadeLayers", enabled = true, speed = vars.fadeLayersSpeed, bezier = "standard" })
 
 hl.animation({ leaf = "windowsIn", enabled = true, speed = 5, bezier = "emphasizedDecel" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 3, bezier = "emphasizedAccel" })
@@ -685,6 +693,10 @@ hl.animation({ leaf = "border", enabled = true, speed = 6, bezier = "standard" }
   slide vertically 15% while fading. That's the special-workspace drop-down.
 - `layersIn`/`layersOut` animate *layer surfaces*: bars, launchers, and later
   your shell's panels.
+- **Layer speeds come from `variables.lua`** (`layersInSpeed = 2.5`,
+  `layersOutSpeed = 2`, `fadeLayersSpeed = 2.5`, so 250/200/250 ms).
+  Caelestia uses 5/4/5 (500/400/500 ms). That felt slow for rofi, so they
+  were halved on 2026-10-02. Check the live values with `hyprctl animations`.
 
 ---
 
@@ -2142,6 +2154,8 @@ What was actually done, and where it differs from the steps above:
 | A new 18-line `hyprland.conf` appeared | Hyprland writes a placeholder "STUB" `.conf` when none exists. Harmless: the Lua config is the one loaded | deleted it. If it comes back after a login, ignore it (`echo hyprland.conf >> .gitignore`) |
 
 **Added after testing:**
+- Faster layer animations (rofi, waybar, later shell panels): speeds moved to
+  `variables.lua` (`layersInSpeed`, `layersOutSpeed`, `fadeLayersSpeed`).
 - Step 1.20: keybind descriptions and a rofi cheat sheet on `Super + /`
   (`scripts/keybinds.py`).
 
