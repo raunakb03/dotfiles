@@ -1122,6 +1122,10 @@ end
 ---- Window rules ----
 ----------------------
 
+-- Ignore "maximize me" requests from apps (kitty sends one when it opens),
+-- so new windows tile normally
+hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
+
 -- Every non-fullscreen window is slightly see-through (blur shows behind it)
 hl.window_rule({ match = { fullscreen = false }, opacity = vars.windowOpacity .. " override" })
 
@@ -1240,6 +1244,12 @@ hl.layer_rule({ match = { namespace = "rofi" }, animation = "popin 80%", blur = 
 - `match = { [field] = match }`: `[field]` uses the *value* of `field` as
   the key. With `field = "class"`, this builds `{ class = "kitty" }`.
   (Caelestia does the same thing in three lines.)
+- `suppress_event = "maximize"` (not in Caelestia; added 2026-10-02): some
+  apps, including kitty, ask to be **maximized** when they open. Without
+  this rule, every new kitty covered the whole workspace (`fullscreen: 1` in
+  `hyprctl clients`) while the other windows tiled invisibly behind it. Your
+  old `hyprland.conf` had the same rule. Caelestia doesn't need it because
+  foot never asks. Maximizing by hand (`Super + Alt + F`) still works.
 - `tag = "+" .. tag`: `+name` *adds* the tag. A bare `name` would toggle it.
 - Match strings are **regexes**: `"feh|imv|swappy"` = any of the three.
   `[0-9]+` = one or more digits.
