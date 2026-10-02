@@ -1,5 +1,8 @@
 # Phase 0: Safety & tooling
 
+> **Status: ✅ completed 2026-10-02.** See [Completion notes](#completion-notes)
+> at the end for what was actually done and where it differs from the steps.
+
 Before touching any config, make sure you can always get back to a working
 desktop and that your editor helps you instead of guessing.
 
@@ -245,11 +248,39 @@ quickshell -c my-first-shell
 ---
 
 ## Phase 0 done when
-- [ ] You've tested the TTY escape hatch
-- [ ] Backup folder exists
-- [ ] `~/.config/hypr` and `my-first-shell` are git repos with a first commit
-- [ ] Phase 1 packages installed
-- [ ] `hl.` and QML autocomplete work in your editor
-- [ ] You've seen a hot reload and a `console.log` in `qs log`
+- [x] You've tested the TTY escape hatch
+- [x] Backup folder exists
+- [x] `~/.config/hypr` and `my-first-shell` are git repos with a first commit
+- [x] Phase 1 packages installed
+- [x] `hl.` and QML autocomplete work in your editor
+- [x] You've seen a hot reload and a `console.log` in `qs log`
+
+---
+
+## Completion notes
+
+What was actually done, and where it differs from the steps above:
+
+- **0.2 Backup** is at `~/raunak/dotfiles/hypr-backup-2026-10-02/`, not
+  `~/hypr-backup-…`. It's identical to the old `hyprland.conf` and includes
+  `hyprlock.png`.
+- **0.3** The first commit in `~/.config/hypr` was made *before* the
+  `.gitignore` existed, so the 31 MB `hyprlock.png` got committed. Fix
+  (worth remembering for any "oops, committed a file" moment):
+  ```bash
+  echo '*.png' > .gitignore
+  git rm --cached hyprlock.png        # untrack it, keep the file on disk
+  git add .gitignore .luarc.json
+  git commit --amend -m "..."         # rewrite the (only, unpushed) commit
+  git reflog expire --expire=now --all && git gc --prune=now   # really delete the old blob
+  ```
+  `.git` went from 29 MB to 6 KB. Only rewrite history like this for commits
+  you haven't pushed or shared.
+- **0.4 / 0.6** `.gitignore` and `.qmlls.ini` were added after the first
+  commit. Running the shell once filled in `.qmlls.ini` (with `importPaths`
+  for `/usr/lib/qt6/qml`).
+- **Repos at the end of Phase 0:**
+  - `~/.config/hypr`: 1 commit (`.gitignore`, `.luarc.json`, the old `.conf` files)
+  - `my-first-shell`: "Initial commit" → "First shell.qml: hello bar" → "Phase 0 complete"
 
 Next: [`02-phase1-hyprland-lua.md`](02-phase1-hyprland-lua.md)
