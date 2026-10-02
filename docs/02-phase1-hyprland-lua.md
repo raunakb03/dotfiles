@@ -51,22 +51,26 @@ hyprland.lua
 ```
 
 ### What changes compared to your old config
-Caelestia's layout replaces some of your old binds. After the switch:
+This setup uses Caelestia's layout, but **keeps four of your old binds**
+(chosen 2026-10-02): terminal, browser, lock and vim-style focus. After the
+switch:
 
-| Action | Old bind | New bind |
-| --- | --- | --- |
-| Terminal (kitty) | `Super + Return` | `Super + T` |
-| File manager (nautilus) | `Super + F` | `Super + E` |
-| Browser (zen) | `Super + B` | `Super + W` |
-| Launcher (rofi) | `Super + Space` | tap `Super` on its own |
-| Fullscreen | (none) | `Super + F` |
-| Focus window | `Super + H/J/K/L` | `Super + Arrow keys` |
-| Lock (hyprlock) | `Super + Escape` | `Super + L` |
-| Special workspace | `Super + S` | `Super + S` (same) |
-| Close window | `Super + Q` | `Super + Q` (same) |
+| Action | Old bind | New bind | Caelestia default |
+| --- | --- | --- | --- |
+| Terminal (kitty) | `Super + Return` | `Super + Return` (kept) | `Super + T` |
+| Browser (zen) | `Super + B` | `Super + B` (kept) | `Super + W` |
+| Lock (hyprlock) | `Super + Escape` | `Super + Escape` (kept) | `Super + L` |
+| Focus window | `Super + H/J/K/L` | `Super + H/J/K/L` (kept, arrows removed) | `Super + Arrow keys` |
+| File manager (nautilus) | `Super + F` | `Super + E` | `Super + E` |
+| Launcher (rofi) | `Super + Space` | tap `Super` on its own | same |
+| Fullscreen | (none) | `Super + F` | same |
+| Move window | (none) | `Super + Shift + Arrow keys` | same |
+| Special workspace | `Super + S` | `Super + S` | same |
+| Close window | `Super + Q` | `Super + Q` | same |
 
-Want an old bind back? Every `kb…` name can be overridden in
-`~/.config/myshell/hypr-vars.lua` (step 1.17).
+Want another old bind back? Every `kb…` name can be changed in
+`variables.lua`, or overridden in `~/.config/myshell/hypr-vars.lua`
+(step 1.17).
 
 ---
 
@@ -330,6 +334,12 @@ return {
     kbToggleWindowFloating     = "SUPER + ALT + Space",
     kbCloseWindow              = "SUPER + Q",
 
+    -- Focus windows (vim style: H = left, J = down, K = up, L = right)
+    kbFocusLeft                = "SUPER + H",
+    kbFocusDown                = "SUPER + J",
+    kbFocusUp                  = "SUPER + K",
+    kbFocusRight               = "SUPER + L",
+
     -- Special workspace toggles
     kbSpecialWs                = "SUPER + S",
     kbSystemMonitorWs          = "CTRL + SHIFT + Escape",
@@ -338,8 +348,8 @@ return {
     kbTodoWs                   = "SUPER + R",
 
     -- Apps
-    kbTerminal                 = "SUPER + T",
-    kbBrowser                  = "SUPER + W",
+    kbTerminal                 = "SUPER + Return",
+    kbBrowser                  = "SUPER + B",
     kbEditor                   = "SUPER + C",
     kbFileExplorer             = "SUPER + E",
     kbAudioSettings            = "CTRL + ALT + V",
@@ -359,7 +369,7 @@ return {
     -- Misc
     kbLauncher                 = "SUPER + SUPER_L",
     kbExit                     = "CTRL + SUPER + ALT + Delete",
-    kbLock                     = "SUPER + L",
+    kbLock                     = "SUPER + Escape",
     kbSleep                    = "SUPER + SHIFT + L",
     kbClipboard                = "SUPER + V",
 }
@@ -1429,8 +1439,12 @@ create_bind(vars.kbGroupLockActive, hl.dsp.group.lock_active())
 ---- Window actions ----
 ------------------------
 
+create_bind(vars.kbFocusLeft, hl.dsp.focus({ direction = "left" }))
+create_bind(vars.kbFocusDown, hl.dsp.focus({ direction = "down" }))
+create_bind(vars.kbFocusUp, hl.dsp.focus({ direction = "up" }))
+create_bind(vars.kbFocusRight, hl.dsp.focus({ direction = "right" }))
+
 for _, dir in ipairs({ "left", "right", "up", "down" }) do
-    create_bind("SUPER + " .. dir, hl.dsp.focus({ direction = dir }))
     create_bind("SUPER + SHIFT + " .. dir, hl.dsp.window.move({ direction = dir }))
 end
 
@@ -1552,6 +1566,11 @@ create_bind(
   launcher key gets the `release` flag. If you change `kbLauncher` to
   something like `SUPER + Space`, it fires on press instead.
 - `i % 10`: `%` is modulo, so for `i = 10` we get key `0`.
+- **Focus vs move:** Caelestia binds both in one loop over the arrow keys.
+  Here focus has its own `kbFocus…` variables (your vim-style H/J/K/L), so
+  only *moving* windows stays in the arrow-key loop. To also move with
+  `Super + Shift + H/J/K/L`, you'd first have to move `kbSleep` off
+  `Super + Shift + L`.
 - `workspace = "e+0"`: `e` = "existing/open workspaces on this monitor",
   `+0` = the current one. It moves a window *out* of the special workspace
   onto the normal one behind it.
@@ -1611,7 +1630,7 @@ idea:
 ```lua
 return {
     -- Examples (uncomment to use):
-    -- kbTerminal = "SUPER + Return",   -- my old terminal bind
+    -- kbFileExplorer = "SUPER + F",   -- my old file manager bind (then move kbWindowFullscreen too!)
     -- windowRounding = 10,
 }
 ```
@@ -1786,10 +1805,10 @@ fails → `hyprctl configerrors`, then check the matching step.
 
 **Binds**
 - [ ] Tap `Super` alone → rofi opens. Tap again → it closes
-- [ ] `Super + T` kitty · `Super + W` zen · `Super + E` nautilus · `Super + C` nvim
+- [ ] `Super + Return` kitty · `Super + B` zen · `Super + E` nautilus · `Super + C` nvim
 - [ ] `Super + 1…0` switch workspace · `Super + Alt + 1…0` move window
 - [ ] `Super + scroll` next/previous workspace
-- [ ] `Super + Arrows` focus · `Super + Shift + Arrows` move window
+- [ ] `Super + H/J/K/L` focus (and `Super + Arrows` do nothing) · `Super + Shift + Arrows` move window
 - [ ] `Super + F` fullscreen · `Super + Alt + F` maximise · `Super + Alt + Space` float
 - [ ] `Super + Z` + drag moves · `Super + X` + drag resizes (or `Super` + left/right mouse button)
 - [ ] `Super + Comma` makes a group (tab bar appears) · `Alt + Tab` cycles through it
@@ -1797,7 +1816,7 @@ fails → `hyprctl configerrors`, then check the matching step.
 - [ ] `Ctrl + Shift + Escape` opens btop on its own special workspace (starts it the first time)
 - [ ] `Super + V` clipboard history · `Super + Shift + S` region screenshot → paste it somewhere
 - [ ] Volume, mute, brightness and media keys work
-- [ ] `Super + L` locks (hyprlock)
+- [ ] `Super + Escape` locks (hyprlock)
 
 **Gestures** (touchpad)
 - [ ] 4-finger horizontal swipe changes workspace
