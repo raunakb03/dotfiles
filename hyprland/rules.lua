@@ -26,6 +26,10 @@ end
 ---- Window rules ----
 ----------------------
 
+-- Ignore "maximize me" requests from apps (kitty sends one when it opens),
+-- so new windows tile normally
+hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
+
 -- Every non-fullscreen window is slightly see-through (blur shows behind it)
 hl.window_rule({ match = { fullscreen = false }, opacity = vars.windowOpacity .. " override" })
 
