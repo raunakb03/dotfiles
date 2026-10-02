@@ -96,16 +96,19 @@ def main():
             continue
         lines.append({"keys": keys, "desc": desc})
 
+    # One row per key combination, so long rows never get cut off
+    rows = []
     for line in lines:
         if "keys" in line:
-            keys, desc = "  ·  ".join(line["keys"]), line["desc"]
+            rows += [(key, line["desc"]) for key in line["keys"]]
         elif line["first"] == line["last"]:
-            keys = f"{line['key_prefix']} + {line['first_digit']}"
-            desc = f"{line['prefix']}{line['first']}"
+            rows.append((f"{line['key_prefix']} + {line['first_digit']}", f"{line['prefix']}{line['first']}"))
         else:
-            keys = f"{line['key_prefix']} + {line['first_digit']}…{line['last_digit']}"
-            desc = f"{line['prefix']}{line['first']}–{line['last']}"
-        print(f"<b>{html.escape(keys)}</b>    {html.escape(desc)}")
+            rows.append((f"{line['key_prefix']} + {line['first_digit']}…{line['last_digit']}",
+                         f"{line['prefix']}{line['first']}–{line['last']}"))
+
+    for key, desc in rows:
+        print(f"<b>{html.escape(key)}</b>    {html.escape(desc)}")
 
 
 if __name__ == "__main__":
