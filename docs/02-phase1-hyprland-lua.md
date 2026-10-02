@@ -230,7 +230,7 @@ return {
     launcherCmd                = "pkill rofi || rofi -show drun",               -- Phase 7
     clipboardCmd               = "pkill rofi || cliphist list | rofi -dmenu | cliphist decode | wl-copy", -- Phase 7
     lockCmd                    = "hyprlock",                                    -- Phase 10
-    keybindsCmd                = "pkill rofi || ~/.config/hypr/scripts/keybinds.py | rofi -dmenu -i -markup-rows -p Keybinds -theme-str 'window { width: 65%; }'", -- Phase 7+
+    keybindsCmd                = "pkill rofi || ~/.config/hypr/scripts/keybinds.py",       -- Phase 7+
 
     -- Touchpad
     touchpadDisableTyping      = true,
@@ -1903,25 +1903,24 @@ local function create_bind(keybinds, action, flags, desc)
 
 **2. Two variables** (in the step 1.4 code above):
 ```lua
-    keybindsCmd = "pkill rofi || ~/.config/hypr/scripts/keybinds.py | rofi -dmenu -i -markup-rows -p Keybinds -theme-str 'window { width: 65%; }'",
+    keybindsCmd = "pkill rofi || ~/.config/hypr/scripts/keybinds.py",
     kbShowKeybinds = "SUPER + slash",
 ```
 - `pkill rofi ||`: the same toggle trick as the launcher. Press again to
   close.
-- `-dmenu`: rofi shows whatever lines it's given on stdin. `-i` = case-
-  insensitive search. `-markup-rows` lets lines use `<b>bold</b>`.
 - `slash` is the key's real name (`/`). Find any key's name with `wev`.
-- `-theme-str 'window { width: 65%; }'`: widens rofi **for this menu only**
-  (your `config.rasi` uses 50%, which cut off the longest rows).
+- The script starts rofi itself, so the long rofi options live in one place
+  (the script) instead of a very long string here.
 
 **3. The script.** **Write:** `~/.config/hypr/scripts/keybinds.py`, then
 `chmod +x ~/.config/hypr/scripts/keybinds.py`:
 ```python
 #!/usr/bin/env python3
-"""Print every Hyprland keybind that has a description, one line per action.
+"""Keybind cheat sheet (Super + /): every Hyprland bind that has a description,
+one key combination per row, shown in rofi.
 
-Used by the keybind cheat sheet (Super + /):
-    keybinds.py | rofi -dmenu -i -markup-rows -p Keybinds
+    keybinds.py            open the list in rofi
+    keybinds.py --print    just print the rows (for testing)
 
 Descriptions come from the 4th argument of create_bind() in hyprland/keybinds.lua.
 """
@@ -1930,6 +1929,20 @@ import html
 import json
 import re
 import subprocess
+import sys
+
+# Monospace font for the key column, so the descriptions line up
+KEY_FONT = "JetBrainsMono Nerd Font"
+
+# Layout overrides for THIS menu only. Colours and fonts still come from
+# ~/.config/rofi/config.rasi, whose 4-column icon grid would cut every row off.
+ROFI_THEME = """
+window       { width: 75%; }
+prompt       { padding: 0.5% 32px 0% 0%; }
+listview     { columns: 1; lines: 15; scrollbar: false; }
+element      { orientation: horizontal; padding: 6px 12px; }
+element-text { horizontal-align: 0; }
+"""
 
 # Modifier bits in `modmask` (from the Wayland/XKB modifier order)
 MODS = [(64, "SUPER"), (4, "CTRL"), (8, "ALT"), (1, "SHIFT")]
@@ -2026,8 +2039,22 @@ def main():
             rows.append((f"{line['key_prefix']} + {line['first_digit']}…{line['last_digit']}",
                          f"{line['prefix']}{line['first']}–{line['last']}"))
 
-    for key, desc in rows:
-        print(f"<b>{html.escape(key)}</b>    {html.escape(desc)}")
+    # Pad every key to the same width (in a monospace font) so descriptions form a column
+    width = max(len(key) for key, _ in rows) + 3
+    text = "\n".join(
+        f'<span font_family="{KEY_FONT}"><b>{html.escape(key.ljust(width))}</b></span>{html.escape(desc)}'
+        for key, desc in rows
+    )
+
+    if "--print" in sys.argv:
+        print(text)
+        return
+
+    subprocess.run(
+        ["rofi", "-dmenu", "-i", "-markup-rows", "-no-show-icons",
+         "-p", "Keybinds", "-theme-str", ROFI_THEME],
+        input=text, text=True, stdout=subprocess.DEVNULL,
+    )
 
 
 if __name__ == "__main__":
@@ -2047,12 +2074,33 @@ if __name__ == "__main__":
   lines like `SUPER + 1…0  go to workspace 1–10`.
 - `html.escape`: `-markup-rows` treats `<`, `>`, `&` as markup, so they must
   be escaped.
+- **Aligned columns:** each key is padded with spaces to the same length
+  (`key.ljust(width)`) and drawn in a monospace font
+  (`<span font_family=...>`), so the descriptions start at the same x
+  position. With a normal font, spaces and letters have different widths and
+  nothing lines up.
+- **`ROFI_THEME` overrides the layout for this menu only.**
+  `~/.config/rofi/config.rasi` is designed as an app-icon grid
+  (`listview { columns: 4; lines: 3; }`, `element { orientation: vertical; }`),
+  which squeezed every row into a quarter of the width and cut it off with
+  `…`. `-theme-str` is applied *on top of* your config, so colours and fonts
+  stay:
+  - `listview { columns: 1; lines: 15; }`: one column, 15 rows visible
+    (scroll for more)
+  - `element { orientation: horizontal; ... }`: compact single-line rows
+  - `element-text { horizontal-align: 0; }`: left-aligned (0 = left, 0.5 = centre)
+  - `window { width: 75%; }`: wide enough for the longest row
+  - `prompt { padding: ... 0%; }`: your theme's `-0.5%` left padding was
+    cutting off the "K" of "Keybinds"
+- `-no-show-icons`: no icon column (your config turns icons on for the
+  launcher).
+- `--print`: prints the rows instead of opening rofi, handy for testing in a
+  terminal.
 
 **Run:** `luac -p variables.lua hyprland/keybinds.lua && hyprctl reload`,
-then press `Super + /`.
+then press `Super + /`. Test without rofi: `~/.config/hypr/scripts/keybinds.py --print`.
 
-**Check:** a searchable list of about 90 rows appears, one key combination per row. Run
-`scripts/keybinds.py` in a terminal to see the raw output. If a new bind is
+**Check:** a searchable list of about 90 rows appears, one key combination per row.  If a new bind is
 missing from the list, it has no description.
 
 **Commit:** `git add -A && git commit -m "hypr: keybind descriptions + rofi cheat sheet"`
