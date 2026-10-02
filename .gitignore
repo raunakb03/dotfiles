@@ -1,0 +1,2 @@
+# Large binary images don't belong in a config repo
+*.png
