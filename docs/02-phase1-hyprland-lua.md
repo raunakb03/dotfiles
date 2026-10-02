@@ -1,5 +1,8 @@
 # Phase 1: Hyprland in Lua
 
+> **Status: ✅ completed 2026-10-02.** See [Completion notes](#completion-notes)
+> at the end for what was actually done and the fixes found while testing.
+
 **Goal:** rebuild Caelestia's Hyprland behaviour (gaps, blur, animations,
 window rules, special workspaces, keybinds) as *your own* Lua config, and
 understand every line of it.
@@ -1803,34 +1806,34 @@ Go through this list after the switch and tick each item. Anything that
 fails → `hyprctl configerrors`, then check the matching step.
 
 **Look & feel**
-- [ ] Rounded corners (15 px), 1 px tinted border on the focused window
-- [ ] Windows slightly see-through with blur behind them (kitty stays opaque)
-- [ ] Windows slide/fade in and out; workspaces slide
-- [ ] A single window on a workspace has larger outer gaps
+- [x] Rounded corners (15 px), 1 px tinted border on the focused window
+- [x] Windows slightly see-through with blur behind them (kitty stays opaque)
+- [x] Windows slide/fade in and out; workspaces slide
+- [x] A single window on a workspace has larger outer gaps
 
 **Autostart** (this login)
-- [ ] waybar and your wallpaper are there (still the temporary tools)
-- [ ] `pgrep -a cliphist` or `pgrep -af "wl-paste"` shows two watchers
-- [ ] `pgrep -a polkit-gnome` is running
+- [x] waybar and your wallpaper are there (still the temporary tools)
+- [x] `pgrep -a cliphist` or `pgrep -af "wl-paste"` shows two watchers
+- [x] `pgrep -a polkit-gnome` is running
 
 **Binds**
-- [ ] Tap `Super` alone → rofi opens. Tap again → it closes
-- [ ] `Super + Return` kitty · `Super + B` zen · `Super + E` nautilus · `Super + C` nvim
-- [ ] `Super + 1…0` switch workspace · `Super + Alt + 1…0` move window
-- [ ] `Super + scroll` next/previous workspace
-- [ ] `Super + H/J/K/L` focus (and `Super + Arrows` do nothing) · `Super + Shift + Arrows` move window
-- [ ] `Super + F` fullscreen · `Super + Alt + F` maximise · `Super + Alt + Space` float
-- [ ] `Super + Z` + drag moves · `Super + X` + drag resizes (or `Super` + left/right mouse button)
-- [ ] `Super + Comma` makes a group (tab bar appears) · `Alt + Tab` cycles through it
-- [ ] `Super + S` opens/closes the special workspace
-- [ ] `Ctrl + Shift + Escape` opens btop on its own special workspace (starts it the first time)
-- [ ] `Super + V` clipboard history · `Super + Shift + S` region screenshot → paste it somewhere
-- [ ] Volume, mute, brightness and media keys work
-- [ ] `Super + Escape` locks (hyprlock)
+- [x] Tap `Super` alone → rofi opens. Tap again → it closes
+- [x] `Super + Return` kitty · `Super + B` zen · `Super + E` nautilus · `Super + C` nvim
+- [x] `Super + 1…0` switch workspace · `Super + Alt + 1…0` move window
+- [x] `Super + scroll` next/previous workspace
+- [x] `Super + H/J/K/L` focus (and `Super + Arrows` do nothing) · `Super + Shift + Arrows` move window
+- [x] `Super + F` fullscreen · `Super + Alt + F` maximise · `Super + Alt + Space` float
+- [x] `Super + Z` + drag moves · `Super + X` + drag resizes (or `Super` + left/right mouse button)
+- [x] `Super + Comma` makes a group (tab bar appears) · `Alt + Tab` cycles through it
+- [x] `Super + S` opens/closes the special workspace
+- [x] `Ctrl + Shift + Escape` opens btop on its own special workspace (starts it the first time)
+- [x] `Super + V` clipboard history · `Super + Shift + S` region screenshot → paste it somewhere
+- [x] Volume, mute, brightness and media keys work
+- [x] `Super + Escape` locks (hyprlock)
 
 **Gestures** (touchpad)
-- [ ] 4-finger horizontal swipe changes workspace
-- [ ] 3-finger up opens the special workspace, 3-finger down closes it
+- [x] 4-finger horizontal swipe changes workspace
+- [x] 3-finger up opens the special workspace, 3-finger down closes it
 
 **Commit** any fixes, then tick Phase 1 in `docs/00-roadmap.md`. 🎉
 
@@ -1847,6 +1850,46 @@ fails → `hyprctl configerrors`, then check the matching step.
 | Autostart change has no effect | `hyprland.start` only runs at login. Log out and in |
 | A bind does nothing | Run `hyprctl binds` and look for it. Check for a clash with another bind |
 | An app ignores a window rule | Check its real class with `hyprctl clients` |
+
+## Completion notes
+
+What was actually done, and where it differs from the steps above:
+
+**Your choices (already folded into the steps):**
+- You kept four of your old binds: `Super + Return` terminal, `Super + B`
+  browser, `Super + Escape` lock, and `Super + H/J/K/L` focus via the
+  `kbFocus…` variables. The arrow keys now only *move* windows (with Shift).
+
+**Problems found while testing, and their fixes:**
+
+| Problem | Cause | Fix |
+| --- | --- | --- |
+| New kitty windows didn't tile on any workspace | kitty asks to be **maximized** when it opens (`fullscreen: 1` in `hyprctl clients`), covering the workspace while other windows tiled behind it | `suppress_event = "maximize"` rule for all windows in `rules.lua` (now in step 1.14) |
+| No blur visible | kitty was fully solid: tagged `opaque` and no `background_opacity` in `kitty.conf`. Zen/Firefox at 0.95 only show a faint blur | `background_opacity 0.8` in `~/.config/kitty/kitty.conf`. Kitty does its own transparency and Hyprland blurs behind it, like Caelestia's foot (`alpha=0.78` + `opaque`) |
+| Lock screen completely see-through | the `background {}` block in `hyprlock.conf` was commented out, and `misc.session_lock_xray = true` lets the desktop show through a transparent lock | enabled `background` with `hyprlock.png`, `blur_passes = 3`. Also commented out the profile `image` block, whose `thunder.png` doesn't exist |
+| Two `hyprpaper` processes | a systemd user service (`hyprpaper.service`) **and** `execs.lua` both started it | `systemctl --user disable --now hyprpaper.service`. All autostart now lives in `execs.lua` |
+| A new 18-line `hyprland.conf` appeared | Hyprland writes a placeholder "STUB" `.conf` when none exists. Harmless: the Lua config is the one loaded | deleted it. If it comes back after a login, ignore it (`echo hyprland.conf >> .gitignore`) |
+
+**Things learned along the way:**
+- Special workspaces are hidden drawer workspaces that slide over the
+  current one. 3 fingers up shows `special`, 3 down hides it, and
+  `Super + Alt + S` puts a window into it.
+- `Super + M` / `D` / `R` open the music / communication / todo specials.
+  They're empty until apps are configured in `variables.specialApps`.
+- **4 fingers down suspends the laptop.**
+- `hyprctl clients` (look at `fullscreen`, `floating`, `class`) is the first
+  thing to check when a window behaves oddly.
+
+**State at the end of Phase 1:**
+- `~/.config/hypr` commits:
+  1. "Initial snapshot…"
+  2. "switch to Lua config"
+  3. "ignore app maximize requests"
+  4. "hyprlock: enable blurred background…"
+- Old config kept as `hyprland.conf.old`. Backup in
+  `~/raunak/dotfiles/hypr-backup-2026-10-02/`.
+- Still temporary: waybar (→ Phase 5), hyprpaper (→ 4), rofi (→ 7),
+  hyprlock (→ 10), playerctl/brightnessctl keys (→ 8).
 
 Next: **Phase 2: Quickshell & QML fundamentals.** Its guide is written when
 we start it.

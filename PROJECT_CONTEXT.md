@@ -39,7 +39,8 @@ When assisting with this project, strictly follow these rules:
       at `~/my-first-shell-old/` (not part of this repo).
 - [x] Roadmap plus guides for Phase 0 and Phase 1 written
 - [x] Phase 0: Safety & tooling (done 2026-10-02; backup at `~/raunak/dotfiles/hypr-backup-2026-10-02`)
-- [ ] Phase 1: Hyprland in Lua (next up, starting at step 1.1)
+- [x] Phase 1: Hyprland in Lua (done 2026-10-02; fixes recorded in the guide's Completion notes)
+- [ ] Phase 2: Quickshell & QML fundamentals (next up; guide not written yet)
 
 ## 🗺️ Roadmap
 See [`docs/00-roadmap.md`](docs/00-roadmap.md).
