@@ -2229,5 +2229,4 @@ What was actually done, and where it differs from the steps above:
 - Still temporary: waybar (→ Phase 5), hyprpaper (→ 4), rofi (→ 7),
   hyprlock (→ 10), playerctl/brightnessctl keys (→ 8).
 
-Next: **Phase 2: Quickshell & QML fundamentals.** Its guide is written when
-we start it.
+Next: [`03-phase2-qml-fundamentals.md`](03-phase2-qml-fundamentals.md)

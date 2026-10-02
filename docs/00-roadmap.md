@@ -69,7 +69,7 @@ Every step in a phase guide has the same parts:
   old `hyprland.conf` is no longer loaded. waybar, rofi and hyprpaper still
   run *for now*.
 
-## Phase 2: Quickshell & QML fundamentals
+## Phase 2: Quickshell & QML fundamentals → [`03-phase2-qml-fundamentals.md`](03-phase2-qml-fundamentals.md)
 - **Goal:** understand what `shell.qml` actually is.
 - **Read:** `shell/shell.qml`, `shell/modules/drawers/Drawers.qml`.
 - **Concepts:** QML objects, properties and bindings, ids, signals and
