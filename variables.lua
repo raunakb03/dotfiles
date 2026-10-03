@@ -56,7 +56,7 @@ return {
 
     -- Animation speeds, in units of 100 ms (2.5 = 250 ms). Smaller = faster.
     -- Caelestia's originals are in the comments.
-    layersInSpeed              = 2.5, -- 5   rofi, waybar, shell panels appearing
+    layersInSpeed              = 2.5, -- 5   rofi, shell panels appearing
     layersOutSpeed             = 2,   -- 4   ... disappearing
     fadeLayersSpeed            = 2.5, -- 5   ... their fade
     windowsInSpeed             = 3,   -- 5   window opening
