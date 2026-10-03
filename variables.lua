@@ -13,7 +13,6 @@ return {
     audioSettings              = "pavucontrol",
 
     -- Temporary tools: each one is replaced by our own shell in a later phase
-    barCmd                     = "waybar",                                      -- Phase 5
     shellCmd                   = "qs -c my-first-shell -n -d",                 -- our own shell (draws the wallpaper)
     launcherCmd                = "pkill rofi || rofi -show drun",               -- Phase 7
     clipboardCmd               = "pkill rofi || cliphist list | rofi -dmenu | cliphist decode | wl-copy", -- Phase 7

@@ -23,7 +23,6 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("mpris-proxy")
 
     -- TEMPORARY: replaced by our own shell in later phases
-    hl.exec_cmd(vars.barCmd)          -- Phase 5
 
     -- Our shell (bar, wallpaper, ...)
     hl.exec_cmd(vars.shellCmd)
