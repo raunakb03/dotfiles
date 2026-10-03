@@ -40,6 +40,10 @@ Singleton {
         readonly property int barInnerWidth: 32 // width of the pills inside the bar
         readonly property int barWidth: barInnerWidth + root.padding.small * 2 // the whole bar
         readonly property int popoutWidth: 300 // width of the popouts' content
+        readonly property int launcherWidth: 600
+        readonly property int launcherItemHeight: 56
+        readonly property int wallpaperWidth: 200 // thumbnail size in the wallpaper picker
+        readonly property int wallpaperHeight: 130
     }
 
     readonly property QtObject font: QtObject {

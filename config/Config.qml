@@ -11,6 +11,7 @@ Singleton {
     property alias appearance: adapter.appearance
     property alias bar: adapter.bar
     property alias border: adapter.border
+    property alias paths: adapter.paths
 
     FileView {
         path: Quickshell.env("HOME") + "/.config/myshell/shell.json"
@@ -38,6 +39,10 @@ Singleton {
                 property real paddingScale: 1
                 property real fontScale: 1
                 property real animDurationScale: 1
+            }
+
+            property JsonObject paths: JsonObject {
+                property string wallpaperDir: "~/Pictures/Wallpapers" // for the launcher's wallpaper picker
             }
 
             // The frame around the screen
