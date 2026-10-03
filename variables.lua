@@ -13,7 +13,7 @@ return {
     audioSettings              = "pavucontrol",
 
     -- Temporary tools: each one is replaced by our own shell in a later phase
-    shellCmd                   = "qs -c my-first-shell -n -d",                 -- our own shell (draws the wallpaper)
+    shellCmd                   = "qs -c my-first-shell -n",                    -- our own shell (no -d: Hyprland already runs it in the background)
     clipboardCmd               = "pkill rofi || cliphist list | rofi -dmenu | cliphist decode | wl-copy", -- Phase 7
     lockCmd                    = "hyprlock",                                    -- Phase 10
     keybindsCmd                = "pkill rofi || ~/.config/hypr/scripts/keybinds.py",       -- Phase 7+
