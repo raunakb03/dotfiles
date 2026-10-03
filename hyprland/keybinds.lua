@@ -227,7 +227,9 @@ create_bind(vars.kbColorPicker, hl.dsp.exec_cmd("hyprpicker -a"), nil, "Utilitie
 create_bind(vars.kbShowKeybinds, hl.dsp.exec_cmd(vars.keybindsCmd), nil, "Utilities: show this keybind list")
 
 -- Restart our shell (if it crashed, or after installing fonts)
-create_bind(vars.kbRestartShell, hl.dsp.exec_cmd("qs kill -c my-first-shell; " .. vars.shellCmd), release,
+-- The sleep matters: `qs kill` returns before the old shell has fully exited, and with -n the
+-- new one would see it still running and quit, leaving no shell at all
+create_bind(vars.kbRestartShell, hl.dsp.exec_cmd("qs kill -c my-first-shell; sleep 0.5; " .. vars.shellCmd), release,
     "Utilities: restart the shell")
 
 -------------------------------
