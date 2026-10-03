@@ -7,26 +7,42 @@ import qs.services
 // The keys themselves are bound in ~/.config/hypr/hyprland/keybinds.lua.
 //
 // Note: after editing this file, restart the shell (Ctrl + Super + Alt + R). A hot reload
-// re-creates the shortcut, but Hyprland keeps the old registration and the new one stays deaf.
+// re-creates the shortcuts, but Hyprland keeps the old registrations and the new ones stay deaf.
 Scope {
-    GlobalShortcut {
-        // The Super-tap bind fires on key *release*, so Hyprland sends only "released".
-        // `hyprctl dispatch 'hl.dsp.global(...)'` sends only "pressed". A press-type bind sends
-        // both. Toggle on whichever comes first, but never twice for one key press.
+    LauncherShortcut {
+        name: "launcher"
+        description: "Open or close the launcher"
+    }
+
+    LauncherShortcut {
+        name: "clipboard"
+        description: "Open the launcher on the clipboard history"
+        text: ">clip "
+    }
+
+    LauncherShortcut {
+        name: "keybinds"
+        description: "Open the launcher on the keybindings"
+        text: ">keys "
+    }
+
+    // Toggles the launcher, starting with `text` in the search field.
+    // A release-type bind (the Super tap) sends only "released"; `hyprctl dispatch` sends only
+    // "pressed"; a normal bind sends both. Toggle on whichever comes first, never twice per press.
+    component LauncherShortcut: GlobalShortcut {
+        property string text: ""
         property bool handledPress: false
 
         appid: "myshell"
-        name: "launcher"
-        description: "Open or close the launcher"
 
         onPressed: {
             handledPress = true;
-            ShellState.toggleLauncher();
+            ShellState.toggleLauncher(text);
         }
 
         onReleased: {
             if (!handledPress)
-                ShellState.toggleLauncher();
+                ShellState.toggleLauncher(text);
             handledPress = false;
         }
     }

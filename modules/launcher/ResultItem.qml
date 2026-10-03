@@ -5,13 +5,13 @@ import qs.components
 import qs.config
 import qs.services
 
-// One app in the launcher: icon, name, and its description
+// One row in the launcher's list: an app, a clipboard entry, a keybind or a mode.
+// `modelData` is a plain object made by Launcher.qml:
+//   { name, detail, image (icon file or ""), icon (Material name), activate() }
 Item {
     id: root
 
-    required property DesktopEntry modelData
-    // iconPath(name, true) returns "" when no installed icon theme has that icon
-    readonly property string iconSource: Quickshell.iconPath(modelData.icon, true)
+    required property var modelData
 
     signal activated
 
@@ -25,21 +25,21 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         spacing: Appearance.spacing.normal
 
-        // App icons come from the icon theme; iconPath finds the file for a name like "firefox"
+        // An app's icon from the icon theme…
         IconImage {
             anchors.verticalCenter: parent.verticalCenter
             implicitSize: 36
-            visible: root.iconSource !== ""
-            source: root.iconSource
+            visible: root.modelData.image !== ""
+            source: root.modelData.image
         }
 
-        // No icon installed for this app: show a generic one instead of a "missing image" pattern
+        // …or a Material icon (also the fallback when an app has no installed icon)
         MaterialIcon {
             anchors.verticalCenter: parent.verticalCenter
             width: 36
             horizontalAlignment: Text.AlignHCenter
-            visible: root.iconSource === ""
-            text: "apps"
+            visible: root.modelData.image === ""
+            text: root.modelData.icon
             font.pointSize: Appearance.font.size.large
             color: Colours.palette.m3onSurfaceVariant
         }
@@ -52,13 +52,15 @@ Item {
                 width: parent.width
                 text: root.modelData.name
                 elide: Text.ElideRight
+                maximumLineCount: 1
             }
 
             StyledText {
                 width: parent.width
-                text: root.modelData.comment || root.modelData.genericName
+                text: root.modelData.detail
                 visible: text !== ""
                 elide: Text.ElideRight
+                maximumLineCount: 1
                 font.pointSize: Appearance.font.size.small
                 color: Colours.palette.m3onSurfaceVariant
             }
