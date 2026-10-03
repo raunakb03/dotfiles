@@ -130,7 +130,7 @@ Every step in a phase guide has the same parts:
 - **Done when:** hovering a bar icon opens its popout from the bar edge, and
   clicks outside the panels reach the windows below.
 
-## Phase 7: Launcher
+## Phase 7: Launcher → [`08-phase7-launcher.md`](08-phase7-launcher.md)
 - **Read:** `shell/modules/launcher/**`, `shell/utils/Searcher.qml`,
   `shell/utils/scripts/fuzzysort.js`.
 - **Build:** app list from `DesktopEntries` with fuzzy search, `>` actions,

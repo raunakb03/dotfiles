@@ -15,7 +15,8 @@ Start here: **[`docs/00-roadmap.md`](docs/00-roadmap.md)**
 | 4: Wallpaper & theming | [`docs/05-phase4-theming.md`](docs/05-phase4-theming.md) |
 | 5: The bar | [`docs/06-phase5-bar.md`](docs/06-phase5-bar.md) |
 | 6: Drawers & popouts | [`docs/07-phase6-drawers.md`](docs/07-phase6-drawers.md) |
-| 7+ | written as each phase is built |
+| 7: Launcher | [`docs/08-phase7-launcher.md`](docs/08-phase7-launcher.md) |
+| 8+ | written as each phase is built |
 
 ## Project Structure
 - `shell.qml`: the main QML entry point for the UI (created in Phase 0, step 0.7).
