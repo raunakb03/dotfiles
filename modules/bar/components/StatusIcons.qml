@@ -39,11 +39,11 @@ StyledRect {
         MaterialIcon {
             anchors.horizontalCenter: parent.horizontalCenter
             text: {
-                if (Network.wired)
+                if (NetworkService.wired)
                     return "lan";
-                if (!Network.wifi)
-                    return Network.wifiEnabled ? "signal_wifi_0_bar" : "signal_wifi_off";
-                const bars = Math.round(Network.strength * 4); // 0-4
+                if (!NetworkService.wifi)
+                    return NetworkService.wifiEnabled ? "signal_wifi_0_bar" : "signal_wifi_off";
+                const bars = Math.round(NetworkService.strength * 4); // 0-4
                 return bars >= 4 ? "signal_wifi_4_bar" : `network_wifi_${Math.max(1, bars)}_bar`;
             }
         }
