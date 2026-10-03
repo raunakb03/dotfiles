@@ -89,7 +89,9 @@ StyledRect {
 
             // Open at this icon's vertical centre, in window coordinates
             onEntered: root.popouts.open(icon.name, icon.mapToItem(null, 0, icon.height / 2).y)
-            onExited: root.popouts.scheduleClose()
+            // Only the icon that owns the open popout may close it. Neighbouring hover areas
+            // overlap slightly, so the next icon's "entered" can arrive before this "exited".
+            onExited: if (root.popouts.currentName === icon.name) root.popouts.scheduleClose()
             onClicked: icon.clicked()
             onWheel: event => icon.wheel(event)
         }

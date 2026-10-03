@@ -12,17 +12,25 @@ Item {
 
     // Remember the last popout while it slides closed, so its content doesn't vanish mid-animation
     property string shownName: ""
+    // True when going straight from one popout to another (e.g. audio -> network):
+    // only then should the popout glide to its new position and size
+    property bool switching: false
+    property string previousName: ""
     readonly property Item content: loader.item
     readonly property real padding: Appearance.padding.large
     readonly property real openWidth: (content?.implicitWidth ?? 0) + padding * 2
     readonly property real openHeight: (content?.implicitHeight ?? 0) + padding * 2
-    readonly property real margin: Config.border.thickness + Config.border.rounding
+    // Distance from the screen's top/bottom edge: room for the curved joins, and the frame if there is one
+    readonly property real margin: Config.border.thickness + Appearance.rounding.extraLarge
 
     Connections {
         target: root.popouts
         function onCurrentNameChanged(): void {
-            if (root.popouts.currentName !== "")
-                root.shownName = root.popouts.currentName;
+            const name = root.popouts.currentName;
+            root.switching = root.previousName !== "" && name !== "";
+            root.previousName = name;
+            if (name !== "")
+                root.shownName = name;
         }
     }
 
@@ -41,11 +49,12 @@ Item {
     }
 
     Behavior on height {
+        enabled: root.switching
         Anim {}
     }
 
     Behavior on y {
-        enabled: root.width > 0 // jump into place when opening, glide when switching
+        enabled: root.switching // jump into place when opening, glide when switching
         Anim {}
     }
 

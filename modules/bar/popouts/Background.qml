@@ -11,7 +11,7 @@ Item {
     required property Item wrapper
     required property bool barOnRight
 
-    readonly property real radius: Math.min(Config.border.rounding, wrapper.width / 2, wrapper.height / 2)
+    readonly property real radius: Math.min(Appearance.rounding.extraLarge, wrapper.width / 2, wrapper.height / 2)
     readonly property real barEdge: barOnRight ? wrapper.x + wrapper.width : wrapper.x
 
     anchors.fill: parent

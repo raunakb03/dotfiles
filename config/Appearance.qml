@@ -17,6 +17,7 @@ Singleton {
         readonly property int small: Math.round(8 * root.roundingScale)
         readonly property int normal: Math.round(12 * root.roundingScale)
         readonly property int large: Math.round(16 * root.roundingScale)
+        readonly property int extraLarge: Math.round(28 * root.roundingScale) // panels and popouts
         readonly property int full: 1000
     }
 
