@@ -3,11 +3,14 @@ import Quickshell.Bluetooth
 import Quickshell.Services.UPower
 import qs.components
 import qs.config
+import qs.modules.bar.popouts
 import qs.services
 
-// Volume, network, Bluetooth and battery, in one pill
+// Volume, network, Bluetooth and battery, in one pill. Hovering an icon opens its popout.
 StyledRect {
     id: root
+
+    required property PopoutState popouts
 
     readonly property UPowerDevice battery: UPower.displayDevice
 
@@ -23,21 +26,16 @@ StyledRect {
         spacing: Appearance.spacing.small
 
         // Volume: click to mute, scroll to change
-        MaterialIcon {
-            anchors.horizontalCenter: parent.horizontalCenter
+        StatusIcon {
+            name: "audio"
             text: Audio.muted ? "volume_off" : Audio.volume >= 0.5 ? "volume_up" : Audio.volume > 0 ? "volume_down" : "volume_mute"
-
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                onClicked: Audio.toggleMute()
-                onWheel: event => Audio.setVolume(Audio.volume + (event.angleDelta.y > 0 ? 0.05 : -0.05))
-            }
+            onClicked: Audio.toggleMute()
+            onWheel: event => Audio.setVolume(Audio.volume + (event.angleDelta.y > 0 ? 0.05 : -0.05))
         }
 
         // Network: Wi-Fi bars, Ethernet, or off
-        MaterialIcon {
-            anchors.horizontalCenter: parent.horizontalCenter
+        StatusIcon {
+            name: "network"
             text: {
                 if (NetworkService.wired)
                     return "lan";
@@ -49,8 +47,8 @@ StyledRect {
         }
 
         // Bluetooth: off, on, or connected to something
-        MaterialIcon {
-            anchors.horizontalCenter: parent.horizontalCenter
+        StatusIcon {
+            name: "bluetooth"
             text: {
                 if (!Bluetooth.defaultAdapter?.enabled)
                     return "bluetooth_disabled";
@@ -59,8 +57,8 @@ StyledRect {
         }
 
         // Battery: level in 7 steps, or charging
-        MaterialIcon {
-            anchors.horizontalCenter: parent.horizontalCenter
+        StatusIcon {
+            name: "battery"
             visible: root.battery.isLaptopBattery
             color: root.battery.percentage < 0.15 && root.battery.state !== UPowerDeviceState.Charging ? Colours.palette.m3error : Colours.palette.m3onSurface
             text: {
@@ -69,6 +67,31 @@ StyledRect {
                 const level = Math.round(root.battery.percentage * 7); // 0-7
                 return level >= 7 ? "battery_full" : `battery_${level}_bar`;
             }
+        }
+    }
+
+    // An icon that opens the popout called `name` while hovered
+    component StatusIcon: MaterialIcon {
+        id: icon
+
+        required property string name
+
+        signal clicked
+        signal wheel(var event)
+
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        MouseArea {
+            anchors.fill: parent
+            anchors.margins: -Appearance.spacing.small / 2 // no gaps between icons, so moving down doesn't flicker
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+
+            // Open at this icon's vertical centre, in window coordinates
+            onEntered: root.popouts.open(icon.name, icon.mapToItem(null, 0, icon.height / 2).y)
+            onExited: root.popouts.scheduleClose()
+            onClicked: icon.clicked()
+            onWheel: event => icon.wheel(event)
         }
     }
 }

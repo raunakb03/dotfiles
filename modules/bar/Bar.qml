@@ -4,26 +4,18 @@ import Quickshell
 import qs.components
 import qs.config
 import qs.modules.bar.components
+import qs.modules.bar.popouts
 import qs.services
 
-// Caelestia-style vertical bar on the left edge of each screen
-PanelWindow {
+// Caelestia-style vertical bar. Since Phase 6 it's not a window of its own: it lives inside
+// the drawer window (modules/drawers/ContentWindow.qml), which also draws its background.
+Item {
     id: root
 
-    required property ShellScreen modelData
-    readonly property bool onRight: Config.bar.position === "right"
+    required property ShellScreen screen
+    required property PopoutState popouts
 
-    screen: modelData
-
-    // Glued to top + bottom + one side edge (set in shell.json: bar.position)
-    anchors {
-        top: true
-        bottom: true
-        left: !onRight
-        right: onRight
-    }
-    implicitWidth: Appearance.sizes.barInnerWidth + Appearance.padding.small * 2
-    color: Colours.palette.m3surface
+    implicitWidth: Appearance.sizes.barWidth
 
     ColumnLayout {
         anchors.fill: parent
@@ -37,7 +29,7 @@ PanelWindow {
 
         Workspaces {
             Layout.alignment: Qt.AlignHCenter
-            screen: root.modelData
+            screen: root.screen
         }
 
         ActiveWindow {
@@ -55,6 +47,7 @@ PanelWindow {
 
         StatusIcons {
             Layout.alignment: Qt.AlignHCenter
+            popouts: root.popouts
         }
     }
 }
