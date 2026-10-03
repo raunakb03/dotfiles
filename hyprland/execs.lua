@@ -24,7 +24,9 @@ hl.on("hyprland.start", function()
 
     -- TEMPORARY: replaced by our own shell in later phases
     hl.exec_cmd(vars.barCmd)          -- Phase 5
-    hl.exec_cmd(vars.wallpaperCmd)    -- Phase 4
+
+    -- Our shell (bar, wallpaper, ...)
+    hl.exec_cmd(vars.shellCmd)
     hl.exec_cmd("playerctld daemon")  -- Phase 8 (media keys use playerctl until then)
 end)
 

@@ -14,7 +14,7 @@ return {
 
     -- Temporary tools: each one is replaced by our own shell in a later phase
     barCmd                     = "waybar",                                      -- Phase 5
-    wallpaperCmd               = "hyprpaper",                                   -- Phase 4
+    shellCmd                   = "qs -c my-first-shell -n -d",                 -- our own shell (draws the wallpaper)
     launcherCmd                = "pkill rofi || rofi -show drun",               -- Phase 7
     clipboardCmd               = "pkill rofi || cliphist list | rofi -dmenu | cliphist decode | wl-copy", -- Phase 7
     lockCmd                    = "hyprlock",                                    -- Phase 10
@@ -163,6 +163,7 @@ return {
     kbScreenshotRegion         = "SUPER + SHIFT + S",
     kbColorPicker              = "SUPER + SHIFT + C",
     kbShowKeybinds             = "SUPER + slash",
+    kbRestartShell             = "CTRL + SUPER + ALT + R",
 
     -- Media
     kbMediaToggle              = "CTRL + SUPER + Space",

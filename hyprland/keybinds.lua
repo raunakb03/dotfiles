@@ -226,6 +226,10 @@ create_bind(vars.kbColorPicker, hl.dsp.exec_cmd("hyprpicker -a"), nil, "Utilitie
 -- Keybind cheat sheet: every bind with a description, searchable in rofi
 create_bind(vars.kbShowKeybinds, hl.dsp.exec_cmd(vars.keybindsCmd), nil, "Utilities: show this keybind list")
 
+-- Restart our shell (if it crashed, or after installing fonts)
+create_bind(vars.kbRestartShell, hl.dsp.exec_cmd("qs kill -c my-first-shell; " .. vars.shellCmd), release,
+    "Utilities: restart the shell")
+
 -------------------------------
 ---- Brightness and media ----
 -------------------------------
