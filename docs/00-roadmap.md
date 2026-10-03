@@ -94,18 +94,20 @@ Every step in a phase guide has the same parts:
 - **Done when:** a test window built only from your components changes live
   when you edit `shell.json`.
 
-## Phase 4: Wallpaper & Material You theming
+## Phase 4: Wallpaper & Material You theming → [`05-phase4-theming.md`](05-phase4-theming.md)
 - **Goal:** pick a wallpaper and the whole desktop recolours itself.
-- **Read:** `shell/services/Colours.qml`, `shell/services/Wallpapers.qml`,
+- **Read:** `shell/services/Colours.qml`, `shell/utils/Paths.qml`,
   `shell/modules/background/`, `caelestia/hypr/scheme/default.lua`.
 - **Build:**
-  - `modules/background/`: draws the wallpaper (replaces hyprpaper)
-  - `scripts/scheme.py`: your own script using the `materialyoucolor` Python
-    library to write `~/.local/state/myshell/scheme.json` and
-    `~/.config/hypr/scheme/current.lua`
-  - a `Colours` singleton that watches `scheme.json` and exposes an M3 palette
-- **Done when:** `scheme.py <image>` recolours the shell live and Hyprland
-  borders after `hyprctl reload`.
+  - `scripts/set-wallpaper.py`: your own script using the `materialyoucolor`
+    Python library. It writes `~/.local/state/myshell/{wallpaper,scheme}.json`
+    and `~/.config/hypr/scheme/current.lua`
+  - `Colours` reads `scheme.json` live. `Wallpaper` + `modules/background/`
+    draw the wallpaper (replaces hyprpaper)
+  - Hyprland autostarts the shell (`qs -c my-first-shell -n -d`), plus a
+    restart bind
+- **Done when:** `set-wallpaper.py <image>` changes the wallpaper, fades the
+  bar to new colours, and Hyprland borders follow automatically.
 
 ## Phase 5: The bar
 - **Goal:** Caelestia's vertical bar.

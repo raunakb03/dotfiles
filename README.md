@@ -12,7 +12,8 @@ Start here: **[`docs/00-roadmap.md`](docs/00-roadmap.md)**
 | 1: Hyprland in Lua | [`docs/02-phase1-hyprland-lua.md`](docs/02-phase1-hyprland-lua.md) |
 | 2: QML fundamentals | [`docs/03-phase2-qml-fundamentals.md`](docs/03-phase2-qml-fundamentals.md) |
 | 3: Foundation layer | [`docs/04-phase3-foundation.md`](docs/04-phase3-foundation.md) |
-| 4+ | written when each phase starts |
+| 4: Wallpaper & theming | [`docs/05-phase4-theming.md`](docs/05-phase4-theming.md) |
+| 5+ | written when each phase starts |
 
 ## Project Structure
 - `shell.qml`: the main QML entry point for the UI (created in Phase 0, step 0.7).

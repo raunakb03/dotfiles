@@ -1236,5 +1236,4 @@ What was actually done, and where it differs from the steps above:
 | `shell.json` edits ignored | Invalid JSON (e.g. a trailing comma). Check the log. Fix the file and save again |
 | Clicking does nothing | `StateLayer` not *inside* the pill, or something above it covers it. Later siblings are drawn on top and get clicks first |
 
-Next: **Phase 4: Wallpaper & Material You theming.** Its guide is written
-when we start it.
+Next: [`05-phase4-theming.md`](05-phase4-theming.md)
