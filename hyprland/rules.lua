@@ -145,6 +145,8 @@ hl.layer_rule({ match = { namespace = "hyprpicker" }, animation = "fade" })     
 hl.layer_rule({ match = { namespace = "selection" }, animation = "fade" })               -- slurp
 hl.layer_rule({ match = { namespace = "rofi" }, animation = "popin 80%", blur = true })  -- TEMPORARY until Phase 7
 
--- Our shell: the wallpaper fades in instead of sliding
-hl.layer_rule({ match = { namespace = "myshell-background" }, animation = "fade" })
+-- Our shell: the wallpaper and the drawer window (frame + bar + popouts) fade in instead of sliding;
+-- the invisible exclusion windows aren't animated at all
+hl.layer_rule({ match = { namespace = "myshell-(background|drawers)" }, animation = "fade" })
+hl.layer_rule({ match = { namespace = "myshell-exclusion" }, no_anim = true })
 
