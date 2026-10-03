@@ -565,6 +565,10 @@ and add, below `kbShowKeybinds`:
     kbRestartShell             = "CTRL + SUPER + ALT + R",
 ```
 - `-d` = **daemonize**: run in the background, detached from any terminal.
+  > **Changed 2026-10-03 (Phase 7):** `-d` was removed. Hyprland already runs the shell in
+  > the background, and with `-d` Quickshell 0.3.1 occasionally crashed while the original
+  > process exited (a "Quickshell has crashed" dialog). The restart bind also gained a
+  > `sleep 0.5`. See `08-phase7-launcher.md`, Completion notes.
 - `-n` = **no duplicate**: if it's already running, don't start a second
   one.
 

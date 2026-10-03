@@ -104,7 +104,7 @@ Every step in a phase guide has the same parts:
     and `~/.config/hypr/scheme/current.lua`
   - `Colours` reads `scheme.json` live. `Wallpaper` + `modules/background/`
     draw the wallpaper (replaces hyprpaper)
-  - Hyprland autostarts the shell (`qs -c my-first-shell -n -d`), plus a
+  - Hyprland autostarts the shell (`qs -c my-first-shell -n`), plus a
     restart bind
 - **Done when:** `set-wallpaper.py <image>` changes the wallpaper, fades the
   bar to new colours, and Hyprland borders follow automatically.

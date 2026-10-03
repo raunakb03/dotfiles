@@ -41,6 +41,9 @@ Phases 0–4 docs are step-by-step guides the user typed through. Keep them as t
   "Current Progress" in `PROJECT_CONTEXT.md`. If unclear, ask.
 - When the user changes something themselves, or a fix is needed, record it in that phase's
   Completion notes so the docs always match the real setup.
-- The shell is autostarted by Hyprland (`qs -c my-first-shell -n -d`). Logs:
+- The shell is autostarted by Hyprland (`qs -c my-first-shell -n`). Logs:
   `qs log -c my-first-shell -f`; restart: `Ctrl + Super + Alt + R`. Fonts or environment
-  changes need a restart, not just hot reload.
+  changes need a restart, not just hot reload. Editing `modules/Shortcuts.qml` also needs a
+  restart (hot reload leaves the global shortcut deaf). Restart with a pause:
+  `qs kill -c my-first-shell; sleep 0.5; qs -c my-first-shell -n` (without the pause the new
+  instance sees the old one, exits because of `-n`, and nothing is left running).

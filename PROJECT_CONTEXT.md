@@ -25,7 +25,7 @@ When assisting with this project, strictly follow these rules:
    Claude implements and the phase doc explains what was built (format in `CLAUDE.md`).
 5. **The docs live in `docs/`:** `docs/00-roadmap.md` is the master plan. Each phase gets
    its own `docs/NN-*.md`. Tick off progress in the roadmap.
-6. **Execution Command:** autostarted by Hyprland as `qs -c my-first-shell -n -d`. For manual
+6. **Execution Command:** autostarted by Hyprland as `qs -c my-first-shell -n`. For manual
    runs, `qs kill -c my-first-shell` first, then `quickshell -c my-first-shell`
    (logs: `qs log -c my-first-shell -f`).
    Once a C++ plugin exists (Phase 9), the command gains a `QML2_IMPORT_PATH=...` prefix.

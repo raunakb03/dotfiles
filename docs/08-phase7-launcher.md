@@ -226,7 +226,11 @@ FolderListModel { folder: "file://" + root.dir; nameFilters: ["*.jpg", "*.jpeg",
 ## Debugging
 
 - **Super does nothing:** `hyprctl globalshortcuts` must list `myshell:launcher`. If not,
-  the shell isn't running, or `Shortcuts {}` is missing from `shell.qml`.
+  the shell isn't running, or `Shortcuts {}` is missing from `shell.qml`. If it's listed
+  but nothing happens, restart the shell (`Ctrl + Super + Alt + R`): a hot reload of
+  `Shortcuts.qml` leaves the shortcut deaf.
+- **Is the shell running?** `qs list --all` shows the instance and its process ID.
+  `coredumpctl list` shows crashes.
 - **Opens but you can't type:** keyboard focus. Check `keyboardFocus` in
   `ContentWindow.qml` and that `search.forceActiveFocus()` runs.
 - **Opens on the wrong monitor:** `ShellState` uses `Hyprland.focusedMonitor`. Check
@@ -244,6 +248,8 @@ FolderListModel { folder: "file://" + root.dir; nameFilters: ["*.jpg", "*.jpeg",
 | Launcher stays open after clicking elsewhere | `HyprlandFocusGrab` inactive, or `windows` doesn't include the drawer window |
 | Typing goes to the app behind | `keyboardFocus` still `None` |
 | Two launchers on two monitors | Comparing with something other than the focused monitor's name |
+| Works from `hyprctl dispatch` but not from the key | Handling only `onPressed`. A release-type bind sends only `onReleased` |
+| No shell after pressing the restart key | No pause between `qs kill` and starting with `-n` |
 | Shell feels slow scrolling wallpapers | `sourceSize` missing on the thumbnail `Image` (decoding full-size images) |
 
 ## Completion notes
@@ -262,6 +268,26 @@ Built and tested on 2026-10-03:
   home. Tests used an absolute path.
 - **Hot reload and a new folder** (`modules/launcher/`): needed one extra save, as in
   Phase 6.
+- **"Pressing Super does nothing"** (your first check). Two separate causes:
+  1. **Hot reload breaks global shortcuts.** Editing `Shortcuts.qml` re-creates the
+     `GlobalShortcut`, but Hyprland keeps the old registration and the new object never
+     receives anything. Even `hyprctl dispatch 'hl.dsp.global(...)'` stopped working until
+     a **full restart**. Now noted at the top of `Shortcuts.qml`.
+  2. **Release-type binds send only "released".** The Super-tap bind has the `release`
+     flag, so Hyprland sends the shortcut a *released* event only, while `hyprctl dispatch`
+     sends only *pressed*. The first version reacted to `onPressed` only, so it worked from
+     the terminal but not from the key. **Fix:** toggle on whichever event comes first
+     (`handledPress` flag), never twice per key press. Caelestia toggles on `onReleased`
+     for the same reason.
+- **"Quickshell has crashed" dialog** during the restarts. `coredumpctl` showed a
+  SIGSEGV in Quickshell's own Wayland clean-up while the **original process of a `-d`
+  (daemonize) start was exiting**. That's a Quickshell 0.3.1 bug, not our QML, and the
+  background copy kept running. **Fix:** `shellCmd` no longer uses `-d` (Hyprland already
+  runs it in the background).
+- **The shell vanished after a restart:** `qs kill` returns before the old instance has
+  exited. The new one, started with `-n` (no duplicates), saw it still running and quit.
+  **Fix:** the restart bind now runs `qs kill …; sleep 0.5; qs …`. Verified with three
+  restarts in a row: one instance each time, no new crash dumps, shortcut registered.
 - **Still on rofi:** the clipboard history (`Super + V`) and the keybind cheat sheet
   (`Super + /`). The `rofi` layer rule stays for them. Moving clipboard history into the
   launcher (a `>clip` mode) is a natural follow-up.
@@ -270,7 +296,9 @@ Commits (`my-first-shell`):
 1. "fuzzy search, Apps/Wallpapers/ShellState services, launcher sizes, wallpaperDir setting"
 2. "launcher (apps + wallpaper picker), global shortcut, keyboard focus and focus grab"
 
-`~/.config/hypr`: "Super tap opens the shell's launcher instead of rofi".
+`~/.config/hypr`: "Super tap opens the shell's launcher instead of rofi", "start the shell
+without -d", "restart bind waits for the old shell to exit".
+Also `my-first-shell`: "launcher shortcut: handle release-only events".
 
 ## Check it
 
