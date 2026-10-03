@@ -79,6 +79,13 @@ file goes with it, which is why we copy `LICENSE` too.
 **Check:** `fc-list | grep -i "material symbols"` prints at least one line,
 and `ls assets/fonts` shows both files.
 
+> **Restart Quickshell after installing a font.** A running Quickshell
+> loads the list of installed fonts once, when it starts. Hot reload
+> re-reads your `.qml` files but **not** the font list. If Quickshell was
+> already running when you installed Material Symbols, press `Ctrl + C`
+> in its terminal and start it again (`quickshell -c my-first-shell`).
+> Otherwise the icons in step 3.4 show up as words.
+
 **Commit:** `git add -A && git commit -m "phase3: fonts"`
 
 ---
@@ -696,7 +703,10 @@ PanelWindow {
 **Run:** icons appear next to the monitor name, the time and the date.
 
 **Check:** if you see the *words* `schedule` / `calendar_month` instead of
-icons, the icon font isn't installed. Go back to 3.0.
+icons, either the icon font isn't installed (go back to 3.0), or, more
+likely, **Quickshell was started before you installed it**. Restart it:
+`Ctrl + C` in its terminal, then `quickshell -c my-first-shell`. (This
+happened during the first run-through on 2026-10-03.)
 
 **Try it:** change the clock's `fill: 1` to `0`, and `"schedule"` to
 `"alarm"`.
@@ -1189,7 +1199,7 @@ committed. It's *your* settings, not the shell's code, the same idea as
 
 | Symptom / log message | Likely cause |
 | --- | --- |
-| Words like `schedule` instead of icons | `ttf-material-symbols-variable` not installed (step 3.0). Restart the shell after installing |
+| Words like `schedule` instead of icons | Quickshell was running when the font was installed. **Restart it** (hot reload doesn't reload fonts). Or the font isn't installed (step 3.0) |
 | Text still in the old font | `assets/fonts/GoogleSansFlex.ttf` missing or misnamed. The `FontLoader` falls back to `sans-serif` |
 | `module "qs.components" is not installed` | Folder not named exactly `components/`, or no `.qml` files in it yet |
 | `StyledText is not a type` inside `MaterialIcon.qml` | `StyledText.qml` isn't in the same `components/` folder |
