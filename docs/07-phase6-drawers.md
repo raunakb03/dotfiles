@@ -8,7 +8,13 @@
 
 Caelestia's signature look: a **frame** around the screen with rounded inner corners,
 merged with the bar. And **popouts** that slide out of the bar when you hover the
-status icons:
+status icons.
+
+> **Your setup (2026-10-03):** you turned the frame **off**
+> (`"border": { "thickness": 0, "rounding": 0 }` in `shell.json`), so only the bar is
+> drawn. The popouts still slide out of it. The sketch below shows the frame as
+> Caelestia has it. Set the values back to `10` / `25` to try it.
+
 
 ```
 ┌──────────────────────────────────────────────────────┬────┐
@@ -242,7 +248,8 @@ All four have the same shape: an `Item` with a fixed `implicitWidth`, and a
 | I want to… | Edit |
 | --- | --- |
 | a thicker or thinner frame, rounder or sharper corners | `"border": { "thickness": 10, "rounding": 25 }` in `~/.config/myshell/shell.json` (live) |
-| no frame at all | `"thickness": 0` |
+| no frame at all (your current setting) | `"border": { "thickness": 0, "rounding": 0 }` |
+| rounder or squarer popouts | `rounding.extraLarge` in `config/Appearance.qml` (separate from the frame since the fixes below) |
 | wider popouts | `sizes.popoutWidth` in `config/Appearance.qml` |
 | a longer or shorter close delay | `interval: 300` in `PopoutState.qml` |
 | show more Wi-Fi networks | `.slice(0, 8)` in `NetworkPopout.qml` |
@@ -308,10 +315,29 @@ Problems found while building (2026-10-03), and their fixes:
 - **Not done (later):** our own tray menu popout (tray menus are still the apps' own
   menus). Popouts for the window title/workspaces. Caelestia's gooey "blob" deformation
   while panels move. Power-profile buttons (daemon not installed).
-- **Now redundant:** `nm-applet` in the tray (the network popout replaces it). It's
-  autostarted by the system (`/etc/xdg/autostart/nm-applet.desktop`). To stop it, a
-  user override: `printf '[Desktop Entry]\nHidden=true\n' > ~/.config/autostart/nm-applet.desktop`.
-  Not done yet; your choice.
+- **`nm-applet`:** redundant now that the network popout exists. Disabled (see the fixes below).
+
+**Fixes after your first check (2026-10-03):**
+- **The frame:** you didn't like it, so it's turned off in `shell.json` (thickness and
+  rounding 0). The popouts used the frame's rounding and margin, so they would have
+  become square and touched the screen edges. They now use their own
+  `Appearance.rounding.extraLarge` (28 px).
+- **Moving from one icon to the next closed the popout.** The icons' hover areas
+  overlap slightly, so the *next* icon's `entered` can arrive **before** the previous
+  icon's `exited`. That late `exited` started the close timer after the new popout had
+  opened. **Fix:** an icon's `onExited` only schedules a close if *it* owns the open
+  popout (`popouts.currentName === icon.name`).
+- **The popout sometimes appeared in the wrong place, then slid down.** The "glide"
+  animation on `y` (and `height`) was enabled whenever the container had any width,
+  including while a previous popout was still sliding closed. **Fix:** `Wrapper.switching`
+  is true only when going *directly* from one open popout to another. Only then do `y`
+  and `height` animate. A fresh open jumps straight into place.
+- **nm-applet disabled:** `~/.config/autostart/nm-applet.desktop` with `Hidden=true`
+  overrides the system's `/etc/xdg/autostart` entry (files in your home take priority
+  over `/etc/xdg`). The running copy was stopped with
+  `systemctl --user stop 'app-nm\x2dapplet@autostart.service'`. After
+  `systemctl --user daemon-reload`, systemd no longer generates a unit for it. To undo:
+  delete that file.
 
 Commits (`my-first-shell`):
 1. "border settings, popout width, shadow colour; ListItem, StyledSwitch,
@@ -324,7 +350,9 @@ Commits (`my-first-shell`):
 ## Check it
 
 These need a real mouse and keyboard. Please check:
-- [ ] The frame and bar look like one shape, and windows stay inside the frame
+- [ ] No frame now: the bar is on the right, windows fill the rest of the screen
+- [ ] Moving the mouse **straight from one status icon to the next** switches the popout (it doesn't close)
+- [ ] Opening a popout puts it in the right place immediately (no slide from the top)
 - [ ] Hovering each status icon opens its popout; moving into the popout keeps it open; leaving closes it
 - [ ] **Audio:** switching output device works (if you have more than one, e.g. headphones), the slider changes volume
 - [ ] **Network:** clicking your connected network disconnects, clicking again reconnects
