@@ -6,7 +6,8 @@
 
 ## What you got
 
-Caelestia's vertical bar on the left edge of every monitor, replacing waybar:
+Caelestia's vertical bar on the edge of every monitor, replacing waybar. It's on the
+**left** by default. You chose the **right** (`"position": "right"` in `shell.json`, added 2026-10-03):
 
 ```
 ┌────┐
@@ -79,10 +80,12 @@ Open each file next to this doc as you read: every file has comments, and the se
 
 ```qml
 PanelWindow {
-    anchors { top: true; bottom: true; left: true }
+    readonly property bool onRight: Config.bar.position === "right"
+    anchors { top: true; bottom: true; left: !onRight; right: onRight }
     implicitWidth: Appearance.sizes.barInnerWidth + Appearance.padding.small * 2
 ```
-- **Three anchors make a vertical bar:** glued to top, bottom and left, so it's full height, and its width is our choice (32 + 2×8 = 48 px).
+- **Three anchors make a vertical bar:** glued to top, bottom and one side, so it's full height, and its width is our choice (32 + 2×8 = 48 px).
+- **Which side** comes from `shell.json` (`bar.position`, `"left"` or `"right"`). Anchors are bindings like everything else, so editing the file moves the bar live.
 - **Exclusive zone:** a `PanelWindow` anchored to one edge automatically *reserves* its width, so Hyprland tiles windows next to it, never under it. (The wallpaper set `exclusionMode: Ignore` to opt out. The bar wants the default.)
 
 ```qml
@@ -200,7 +203,8 @@ PwObjectTracker { objects: [root.sink] }
 
 - `SystemTray.items`: apps that registered a tray icon (the StatusNotifierItem protocol).
 - `IconImage` (from `Quickshell.Widgets`) understands the special `image://icon/…` URLs tray items use.
-- Left click → `activate()`. Right click → `display(window, x, y)` shows the app's own menu at that position. Caelestia instead draws the menu itself in a popout (we'll do that in Phase 6).
+- Left click → `activate()`. Right click → `display(window, x, y)` shows the app's own menu at that position, beside the bar on the side facing the screen (`x` depends on `bar.position`).
+- **nm-applet** (the network icon in the tray) is autostarted by the system (`/etc/xdg/autostart/nm-applet.desktop`), not by our config. It ignores `activate()`, so **left click does nothing; right-click opens its Wi-Fi menu.** It becomes redundant once Phase 6 adds our own network popout. Caelestia instead draws the menu itself in a popout (we'll do that in Phase 6).
 - `visible: … length > 0`: the pill disappears when there are no tray apps.
 
 ## Logo: `OsIcon.qml`
@@ -219,6 +223,7 @@ MultiEffect { source: logo; colorization: 1; colorizationColor: Colours.palette.
 
 | I want to… | Edit |
 | --- | --- |
+| move the bar to the other side | `"position": "left"` / `"right"` inside `"bar"` in `~/.config/myshell/shell.json` (live) |
 | show 10 workspace buttons instead of 5 | add `"workspaces": { "shown": 10 }` inside `"bar"` in `~/.config/myshell/shell.json` (live) |
 | make the bar wider or narrower | `sizes.barInnerWidth` in `config/Appearance.qml` |
 | reorder or remove items | the order of children in `modules/bar/Bar.qml` |
@@ -268,6 +273,8 @@ Problems found while building (2026-10-03), and their fixes:
 - **`signalStrength` scale:** confirmed 0–1 (0.74 while `nmcli` reported 100).
 - **`list<NetworkDevice>` property:** made a plain `var`, since model values don't always convert to typed lists.
 - **Hyprland:** waybar removed from `variables.lua` and `execs.lua`. The shell's autostart moved out of the "TEMPORARY" block.
+- **Bar on the right (user request):** added `bar.position` to `Config.qml`, anchors in `Bar.qml` follow it, and tray menus open toward the screen. `shell.json` set to `"right"`.
+- **Clicks on status icons:** only volume does something (click = mute, scroll = volume, a small extra). Wi-Fi, Bluetooth and battery are display-only until Phase 6's popouts. That's expected.
 - **Not done (later phases):** popouts on hover (audio, network, battery details, tray menus) → Phase 6. The power button → Phase 8 (session menu). App-specific window icons.
 
 Commits (`my-first-shell`):
