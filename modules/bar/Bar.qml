@@ -6,8 +6,11 @@ import qs.services
 
 PanelWindow {
     id: root
+
     required property ShellScreen modelData
+
     screen: modelData
+
     anchors {
         top: true
         left: true
@@ -16,36 +19,79 @@ PanelWindow {
     implicitHeight: 36
     color: Colours.palette.m3surface
 
-    StyledText {
+    Row {
         anchors.left: parent.left
         anchors.leftMargin: Appearance.padding.normal
         anchors.verticalCenter: parent.verticalCenter
-        color: Colours.palette.m3onSurfaceVariant
-        font.pointSize: Appearance.font.size.smaller
-        text: root.modelData.name
+        spacing: Appearance.spacing.small
+
+        MaterialIcon {
+            anchors.verticalCenter: parent.verticalCenter
+            color: Colours.palette.m3onSurfaceVariant
+            text: "desktop_windows"
+        }
+
+        StyledText {
+            anchors.verticalCenter: parent.verticalCenter
+            color: Colours.palette.m3onSurfaceVariant
+            font.pointSize: Appearance.font.size.smaller
+            text: root.modelData.name
+        }
     }
 
     StyledRect {
         anchors.centerIn: parent
-        implicitWidth: clock.implicitWidth + Appearance.padding.normal * 2
-        implicitHeight: clock.implicitHeight + Appearance.padding.small
+        implicitWidth: clockRow.implicitWidth + Appearance.padding.normal * 2
+        implicitHeight: clockRow.implicitHeight + Appearance.padding.small
         radius: Appearance.rounding.full
         color: Colours.palette.m3surfaceContainerHigh
 
-        StyledText {
-            id: clock
+        // Grow/shrink smoothly when the text gets longer/shorter
+        Behavior on implicitWidth {
+            Anim {}
+        }
+
+        StateLayer {
+            onClicked: Config.bar.showSeconds = !Config.bar.showSeconds
+        }
+
+        Row {
+            id: clockRow
 
             anchors.centerIn: parent
-            color: Colours.palette.m3primary
-            font.family: Appearance.font.family.mono
-            text: Time.time
+            spacing: Appearance.spacing.small
+
+            MaterialIcon {
+                anchors.verticalCenter: parent.verticalCenter
+                color: Colours.palette.m3primary
+                fill: 1
+                text: "schedule"
+            }
+
+            StyledText {
+                anchors.verticalCenter: parent.verticalCenter
+                color: Colours.palette.m3primary
+                font.family: Appearance.font.family.mono
+                text: Time.format(Config.bar.showSeconds ? "hh:mm:ss" : "hh:mm")
+            }
         }
     }
 
-    StyledText {
+    Row {
+        visible: Config.bar.showDate
         anchors.right: parent.right
         anchors.rightMargin: Appearance.padding.normal
         anchors.verticalCenter: parent.verticalCenter
-        text: Time.format("dddd d MMMM")
+        spacing: Appearance.spacing.small
+
+        MaterialIcon {
+            anchors.verticalCenter: parent.verticalCenter
+            text: "calendar_month"
+        }
+
+        StyledText {
+            anchors.verticalCenter: parent.verticalCenter
+            text: Time.format("dddd d MMMM")
+        }
     }
 }

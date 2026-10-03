@@ -5,11 +5,12 @@ import Quickshell
 
 Singleton {
     id: root
-    readonly property real roundingScale: 1
-    readonly property real spacingScale: 1
-    readonly property real paddingScale: 1
-    readonly property real fontScale: 1
-    readonly property real animDurationScale: 1
+
+    readonly property real roundingScale: Config.appearance.roundingScale
+    readonly property real spacingScale: Config.appearance.spacingScale
+    readonly property real paddingScale: Config.appearance.paddingScale
+    readonly property real fontScale: Config.appearance.fontScale
+    readonly property real animDurationScale: Config.appearance.animDurationScale
 
     readonly property QtObject rounding: QtObject {
         readonly property int small: Math.round(8 * root.roundingScale)
