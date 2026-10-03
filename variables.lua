@@ -14,7 +14,6 @@ return {
 
     -- Temporary tools: each one is replaced by our own shell in a later phase
     shellCmd                   = "qs -c my-first-shell -n -d",                 -- our own shell (draws the wallpaper)
-    launcherCmd                = "pkill rofi || rofi -show drun",               -- Phase 7
     clipboardCmd               = "pkill rofi || cliphist list | rofi -dmenu | cliphist decode | wl-copy", -- Phase 7
     lockCmd                    = "hyprlock",                                    -- Phase 10
     keybindsCmd                = "pkill rofi || ~/.config/hypr/scripts/keybinds.py",       -- Phase 7+

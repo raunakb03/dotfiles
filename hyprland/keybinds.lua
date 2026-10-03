@@ -76,7 +76,7 @@ end
 local launcher_default = normalise_keybind("SUPER + SUPER_L")
 create_bind(
     vars.kbLauncher,
-    hl.dsp.exec_cmd(vars.launcherCmd),
+    hl.dsp.global("myshell:launcher"), -- handled by the shell (modules/Shortcuts.qml)
     function(key)
         return normalise_keybind(key) == launcher_default and release or nil
     end,
