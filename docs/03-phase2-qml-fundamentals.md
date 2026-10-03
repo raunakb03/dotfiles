@@ -1,5 +1,8 @@
 # Phase 2: Quickshell & QML fundamentals
 
+> **Status: ✅ completed 2026-10-03.** See [Completion notes](#completion-notes)
+> at the end.
+
 **Goal:** understand what a Quickshell config actually *is*, and be able to
 explain every line of a small multi-file shell. By the end you'll have a bar
 on every monitor with a live clock, split into files the way Caelestia does
@@ -758,14 +761,31 @@ first.
 ---
 
 ## Phase 2 done when
-- [ ] Your repo has `shell.qml`, `modules/bar/Bar.qml`, `services/Time.qml`
+- [x] Your repo has `shell.qml`, `modules/bar/Bar.qml`, `services/Time.qml`
       and the bar shows monitor name · time · date
-- [ ] You can explain binding vs assignment, and broke one on purpose (2.3)
-- [ ] You can explain what `Variants`, `modelData` and `required` do
-- [ ] You can explain file = type, `import qs.…`, and what makes a singleton
-- [ ] You answered the 2.9 questions
+- [x] You can explain binding vs assignment, and broke one on purpose (2.3)
+- [x] You can explain what `Variants`, `modelData` and `required` do
+- [x] You can explain file = type, `import qs.…`, and what makes a singleton
+- [x] You answered the 2.9 questions
 
 ---
+
+## Completion notes
+
+What was actually done, and where it differs from the steps above:
+
+- **Final files** match steps 2.7–2.8 exactly (`shell.qml`,
+  `modules/bar/Bar.qml`, `services/Time.qml`). The only difference is fewer
+  blank lines between properties and children.
+- Verified 2026-10-03: loads with no errors or warnings, and shows
+  `eDP-1 · hh:mm:ss · Saturday 3 October` across the top.
+- **Commits:** the whole phase went into one commit ("Add bar in it's own
+  file") instead of one per step. That's fine, but per-step commits make it
+  easier to go back to a working state, so try it in Phase 3.
+- **waybar wasn't running** at check time. It only starts at login (from
+  `execs.lua`), so it will be back after the next login. Start it by hand
+  with `waybar & disown` if you want it now. It gets replaced in Phase 5
+  anyway.
 
 ## Common errors
 

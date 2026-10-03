@@ -185,7 +185,7 @@ Every step in a phase guide has the same parts:
 ## Progress
 - [x] Phase 0: Safety & tooling (2026-10-02)
 - [x] Phase 1: Hyprland in Lua (2026-10-02)
-- [ ] Phase 2: QML fundamentals
+- [x] Phase 2: QML fundamentals (2026-10-03)
 - [ ] Phase 3: Foundation layer
 - [ ] Phase 4: Theming
 - [ ] Phase 5: Bar
