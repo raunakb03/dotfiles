@@ -90,7 +90,7 @@ create_bind(
 create_bind(vars.kbLock, hl.dsp.exec_cmd(vars.lockCmd), nil, "Session: lock screen")
 create_bind(vars.kbExit, hl.dsp.exit(), nil, "Session: exit Hyprland (log out)")
 create_bind(vars.kbSleep, hl.dsp.exec_cmd(vars.sleepCmd), locked, "Session: suspend")
-create_bind(vars.kbClipboard, hl.dsp.exec_cmd(vars.clipboardCmd), nil, "Utilities: clipboard history")
+create_bind(vars.kbClipboard, hl.dsp.global("myshell:clipboard"), nil, "Utilities: clipboard history")
 
 --------------------
 ---- Workspaces ----
@@ -223,8 +223,8 @@ create_bind(vars.kbScreenshotRegion, hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-
     "Utilities: screenshot a region (to clipboard)")
 create_bind(vars.kbColorPicker, hl.dsp.exec_cmd("hyprpicker -a"), nil, "Utilities: colour picker")
 
--- Keybind cheat sheet: every bind with a description, searchable in rofi
-create_bind(vars.kbShowKeybinds, hl.dsp.exec_cmd(vars.keybindsCmd), nil, "Utilities: show this keybind list")
+-- Keybind cheat sheet: every bind with a description, searchable in the shell's launcher
+create_bind(vars.kbShowKeybinds, hl.dsp.global("myshell:keybinds"), nil, "Utilities: show this keybind list")
 
 -- Restart our shell (if it crashed, or after installing fonts)
 -- The sleep matters: `qs kill` returns before the old shell has fully exited, and with -n the

@@ -12,11 +12,11 @@ return {
     fileExplorer               = "nautilus",
     audioSettings              = "pavucontrol",
 
+    -- Our shell (bar, wallpaper, launcher, ...); no -d: Hyprland already runs it in the background
+    shellCmd                   = "qs -c my-first-shell -n",
+
     -- Temporary tools: each one is replaced by our own shell in a later phase
-    shellCmd                   = "qs -c my-first-shell -n",                    -- our own shell (no -d: Hyprland already runs it in the background)
-    clipboardCmd               = "pkill rofi || cliphist list | rofi -dmenu | cliphist decode | wl-copy", -- Phase 7
     lockCmd                    = "hyprlock",                                    -- Phase 10
-    keybindsCmd                = "pkill rofi || ~/.config/hypr/scripts/keybinds.py",       -- Phase 7+
 
     -- Touchpad
     touchpadDisableTyping      = true,
@@ -55,7 +55,7 @@ return {
 
     -- Animation speeds, in units of 100 ms (2.5 = 250 ms). Smaller = faster.
     -- Caelestia's originals are in the comments.
-    layersInSpeed              = 2.5, -- 5   rofi, shell panels appearing
+    layersInSpeed              = 2.5, -- 5   shell panels and other layers appearing
     layersOutSpeed             = 2,   -- 4   ... disappearing
     fadeLayersSpeed            = 2.5, -- 5   ... their fade
     windowsInSpeed             = 3,   -- 5   window opening

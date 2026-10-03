@@ -143,7 +143,6 @@ hl.workspace_rule({ workspace = "f[1]s[false]", gaps_out = vars.singleWindowGaps
 
 hl.layer_rule({ match = { namespace = "hyprpicker" }, animation = "fade" })              -- Colour picker
 hl.layer_rule({ match = { namespace = "selection" }, animation = "fade" })               -- slurp
-hl.layer_rule({ match = { namespace = "rofi" }, animation = "popin 80%", blur = true })  -- TEMPORARY until Phase 7
 
 -- Our shell: the wallpaper and the drawer window (frame + bar + popouts) fade in instead of sliding;
 -- the invisible exclusion windows aren't animated at all
