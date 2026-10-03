@@ -109,7 +109,7 @@ Every step in a phase guide has the same parts:
 - **Done when:** `set-wallpaper.py <image>` changes the wallpaper, fades the
   bar to new colours, and Hyprland borders follow automatically.
 
-## Phase 5: The bar
+## Phase 5: The bar → [`06-phase5-bar.md`](06-phase5-bar.md)
 - **Goal:** Caelestia's vertical bar.
 - **Read:** `shell/modules/bar/Bar.qml`, `BarWrapper.qml`, `components/**`.
 - **Build:** OS icon, workspaces (`Quickshell.Hyprland`), active window, tray

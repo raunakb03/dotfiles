@@ -723,4 +723,4 @@ What was actually done, and where it differs from the steps above:
 | Borders didn't change colour | `hyprctl configerrors`, and check `scheme/current.lua` was written (`head` it) |
 | Wallpaper slides in from the side at login | The `myshell-background` layer rule is missing (4.5) |
 
-Next: **Phase 5: The bar.** Its guide is written when we start it.
+Next: [`06-phase5-bar.md`](06-phase5-bar.md)

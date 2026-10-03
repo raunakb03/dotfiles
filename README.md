@@ -13,7 +13,8 @@ Start here: **[`docs/00-roadmap.md`](docs/00-roadmap.md)**
 | 2: QML fundamentals | [`docs/03-phase2-qml-fundamentals.md`](docs/03-phase2-qml-fundamentals.md) |
 | 3: Foundation layer | [`docs/04-phase3-foundation.md`](docs/04-phase3-foundation.md) |
 | 4: Wallpaper & theming | [`docs/05-phase4-theming.md`](docs/05-phase4-theming.md) |
-| 5+ | written when each phase starts |
+| 5: The bar | [`docs/06-phase5-bar.md`](docs/06-phase5-bar.md) |
+| 6+ | written as each phase is built |
 
 ## Project Structure
 - `shell.qml`: the main QML entry point for the UI (created in Phase 0, step 0.7).
