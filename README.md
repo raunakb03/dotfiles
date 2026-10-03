@@ -11,7 +11,8 @@ Start here: **[`docs/00-roadmap.md`](docs/00-roadmap.md)**
 | 0: Safety & tooling | [`docs/01-phase0-safety-and-tooling.md`](docs/01-phase0-safety-and-tooling.md) |
 | 1: Hyprland in Lua | [`docs/02-phase1-hyprland-lua.md`](docs/02-phase1-hyprland-lua.md) |
 | 2: QML fundamentals | [`docs/03-phase2-qml-fundamentals.md`](docs/03-phase2-qml-fundamentals.md) |
-| 3+ | written when each phase starts |
+| 3: Foundation layer | [`docs/04-phase3-foundation.md`](docs/04-phase3-foundation.md) |
+| 4+ | written when each phase starts |
 
 ## Project Structure
 - `shell.qml`: the main QML entry point for the UI (created in Phase 0, step 0.7).

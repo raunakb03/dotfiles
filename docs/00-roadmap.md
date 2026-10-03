@@ -78,7 +78,7 @@ Every step in a phase guide has the same parts:
 - **Done when:** you've built small exercises (a clock bar on every monitor, a
   singleton shared by two windows) and can explain every line.
 
-## Phase 3: Foundation layer
+## Phase 3: Foundation layer → [`04-phase3-foundation.md`](04-phase3-foundation.md)
 - **Goal:** the building blocks every later module relies on.
 - **Read:** `shell/components/*.qml`, `shell/utils/Paths.qml`,
   `shell/plugin/src/Caelestia/Config/tokens.hpp` (as a list of values only).
@@ -89,7 +89,8 @@ Every step in a phase guide has the same parts:
   - `Appearance` tokens: rounding, spacing, padding, font sizes, animation
     durations and curves
   - `StyledRect`, `StyledText`, `MaterialIcon`, `Anim`, `CAnim`, `StateLayer`
-- **Install:** `ttf-material-symbols-variable` (AUR) and a UI font.
+- **Install:** `ttf-material-symbols-variable` (official repos), plus the
+  Google Sans Flex font file bundled into `assets/fonts/`.
 - **Done when:** a test window built only from your components changes live
   when you edit `shell.json`.
 

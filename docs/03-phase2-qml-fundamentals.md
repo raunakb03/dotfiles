@@ -799,5 +799,4 @@ What was actually done, and where it differs from the steps above:
 | Text stopped updating | You assigned to a bound property in code (2.3 experiment) |
 | Nothing changes on save | The shell isn't running, or `settings.watchFiles` is missing |
 
-Next: **Phase 3: Foundation layer** (config file, appearance tokens, styled
-components). Its guide is written when we start it.
+Next: [`04-phase3-foundation.md`](04-phase3-foundation.md)

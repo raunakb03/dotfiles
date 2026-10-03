@@ -41,7 +41,7 @@ When assisting with this project, strictly follow these rules:
 - [x] Phase 0: Safety & tooling (done 2026-10-02; backup at `~/raunak/dotfiles/hypr-backup-2026-10-02`)
 - [x] Phase 1: Hyprland in Lua (done 2026-10-02; fixes recorded in the guide's Completion notes)
 - [x] Phase 2: Quickshell & QML fundamentals (done 2026-10-03; `shell.qml` + `modules/bar/Bar.qml` + `services/Time.qml`)
-- [ ] Phase 3: Foundation layer (next up; guide not written yet)
+- [ ] Phase 3: Foundation layer (next up; guide `docs/04-phase3-foundation.md` written 2026-10-03, start at step 3.0)
 
 ## 🗺️ Roadmap
 See [`docs/00-roadmap.md`](docs/00-roadmap.md).
