@@ -47,7 +47,8 @@ When assisting with this project, strictly follow these rules:
 - [x] Phase 2: Quickshell & QML fundamentals (done 2026-10-03; `shell.qml` + `modules/bar/Bar.qml` + `services/Time.qml`)
 - [x] Phase 3: Foundation layer (done 2026-10-03; Colours/Appearance/Config singletons, components/, shell.json at ~/.config/myshell/)
 - [x] Phase 4: Wallpaper & Material You theming (done 2026-10-03; set-wallpaper.py, live Colours, Background; hyprpaper retired; shell autostarted by Hyprland: login check pending)
-- [ ] Phase 5: The bar (built by Claude 2026-10-03, doc `docs/06-phase5-bar.md`; waiting for the user's check)
+- [x] Phase 5: The bar (done 2026-10-03; vertical bar, position from shell.json, currently right; waybar retired)
+- [ ] Phase 6: Drawers & popouts (in progress)
 
 ## 🗺️ Roadmap
 See [`docs/00-roadmap.md`](docs/00-roadmap.md).

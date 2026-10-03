@@ -1,6 +1,6 @@
 # Phase 5: The bar
 
-> **Status: 🔍 built 2026-10-03. Waiting for your check** (see [Check it](#check-it)).
+> **Status: ✅ completed 2026-10-03** (checked by you on your desktop).
 > Implemented by Claude. This doc explains what was built so you can understand,
 > change and debug it.
 
@@ -288,12 +288,12 @@ Commits (`my-first-shell`):
 ## Check it
 
 Before this phase is marked complete, please check on your desktop:
-- [ ] The bar is on the left, and windows tile next to it (not under it)
-- [ ] Clicking and scrolling workspaces works, and the pill slides
-- [ ] The title follows the focused window and shows "Desktop" on an empty workspace
-- [ ] Volume click/scroll works. Wi-Fi, Bluetooth and battery icons look right
-- [ ] Tray icon: left click and right click work
-- [ ] After the next login, the bar starts by itself (and waybar doesn't)
+- [x] The bar is on the left, and windows tile next to it (not under it)
+- [x] Clicking and scrolling workspaces works, and the pill slides
+- [x] The title follows the focused window and shows "Desktop" on an empty workspace
+- [x] Volume click/scroll works. Wi-Fi, Bluetooth and battery icons look right
+- [x] Tray icon: left click and right click work
+- [ ] After the next login, the bar starts by itself (and waybar doesn't). Still to confirm after a login
 
 ## Questions
 

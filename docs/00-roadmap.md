@@ -191,7 +191,7 @@ Every step in a phase guide has the same parts:
 - [x] Phase 2: QML fundamentals (2026-10-03)
 - [x] Phase 3: Foundation layer (2026-10-03)
 - [x] Phase 4: Theming (2026-10-03)
-- [ ] Phase 5: Bar
+- [x] Phase 5: Bar (2026-10-03)
 - [ ] Phase 6: Drawers
 - [ ] Phase 7: Launcher
 - [ ] Phase 8: Notifications / OSD / session
