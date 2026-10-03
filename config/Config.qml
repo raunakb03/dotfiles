@@ -42,6 +42,10 @@ Singleton {
             property JsonObject bar: JsonObject {
                 property bool showSeconds: true
                 property bool showDate: true
+
+                property JsonObject workspaces: JsonObject {
+                    property int shown: 5 // how many workspace buttons per group
+                }
             }
         }
     }

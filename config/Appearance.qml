@@ -13,6 +13,7 @@ Singleton {
     readonly property real animDurationScale: Config.appearance.animDurationScale
 
     readonly property QtObject rounding: QtObject {
+        readonly property int extraSmall: Math.round(4 * root.roundingScale)
         readonly property int small: Math.round(8 * root.roundingScale)
         readonly property int normal: Math.round(12 * root.roundingScale)
         readonly property int large: Math.round(16 * root.roundingScale)
@@ -20,15 +21,22 @@ Singleton {
     }
 
     readonly property QtObject spacing: QtObject {
+        readonly property int extraSmall: Math.round(4 * root.spacingScale)
         readonly property int small: Math.round(8 * root.spacingScale)
         readonly property int normal: Math.round(12 * root.spacingScale)
         readonly property int large: Math.round(16 * root.spacingScale)
     }
 
     readonly property QtObject padding: QtObject {
+        readonly property int extraSmall: Math.round(4 * root.paddingScale)
         readonly property int small: Math.round(8 * root.paddingScale)
         readonly property int normal: Math.round(12 * root.paddingScale)
         readonly property int large: Math.round(16 * root.paddingScale)
+    }
+
+    // Fixed sizes of specific parts of the shell, in pixels
+    readonly property QtObject sizes: QtObject {
+        readonly property int barInnerWidth: 32 // width of the pills inside the bar
     }
 
     readonly property QtObject font: QtObject {
