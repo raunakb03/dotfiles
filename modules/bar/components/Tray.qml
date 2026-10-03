@@ -39,8 +39,8 @@ StyledRect {
                     if (event.button === Qt.LeftButton)
                         modelData.activate();
                     else if (modelData.hasMenu)
-                        // Show the app's own menu next to the icon
-                        modelData.display(QsWindow.window, mapToItem(null, width, 0).x, mapToItem(null, 0, 0).y);
+                        // Show the app's own menu beside the bar, on the side facing the screen
+                        modelData.display(QsWindow.window, mapToItem(null, Config.bar.position === "right" ? 0 : width, 0).x, mapToItem(null, 0, 0).y);
                     else
                         modelData.secondaryActivate();
                 }

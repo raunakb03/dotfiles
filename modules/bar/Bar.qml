@@ -11,13 +11,16 @@ PanelWindow {
     id: root
 
     required property ShellScreen modelData
+    readonly property bool onRight: Config.bar.position === "right"
 
     screen: modelData
 
+    // Glued to top + bottom + one side edge (set in shell.json: bar.position)
     anchors {
         top: true
         bottom: true
-        left: true
+        left: !onRight
+        right: onRight
     }
     implicitWidth: Appearance.sizes.barInnerWidth + Appearance.padding.small * 2
     color: Colours.palette.m3surface

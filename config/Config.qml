@@ -42,6 +42,7 @@ Singleton {
             property JsonObject bar: JsonObject {
                 property bool showSeconds: true
                 property bool showDate: true
+                property string position: "left" // which screen edge: "left" or "right"
 
                 property JsonObject workspaces: JsonObject {
                     property int shown: 5 // how many workspace buttons per group
