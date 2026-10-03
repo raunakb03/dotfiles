@@ -1,5 +1,8 @@
 # Phase 3: Foundation layer
 
+> **Status: ✅ completed 2026-10-03.** See [Completion notes](#completion-notes)
+> at the end.
+
 **Goal:** build the small building blocks that *every* later part of the
 shell uses, the same ones Caelestia has in `components/`, `services/` and
 its config. By the end, your bar is restyled from them and controlled by a
@@ -1181,19 +1184,45 @@ committed. It's *your* settings, not the shell's code, the same idea as
 ---
 
 ## Phase 3 done when
-- [ ] Icons render as icons (not words), and text is Google Sans Flex
-- [ ] The repo has `services/Colours.qml`, `config/Appearance.qml`,
+- [x] Icons render as icons (not words), and text is Google Sans Flex
+- [x] The repo has `services/Colours.qml`, `config/Appearance.qml`,
       `config/Config.qml`, the six files in `components/`, and the font in
       `assets/fonts/`
-- [ ] Clicking the clock toggles seconds, with a hover highlight and a
+- [x] Clicking the clock toggles seconds, with a hover highlight and a
       smooth width animation
-- [ ] Editing `~/.config/myshell/shell.json` changes the bar live, and
+- [x] Editing `~/.config/myshell/shell.json` changes the bar live, and
       clicking changes the file
-- [ ] You can explain: design tokens, `Behavior`, `QtObject` groups,
+- [x] You can explain: design tokens, `Behavior`, `QtObject` groups,
       `property alias`, and the three `FileView` handlers
-- [ ] One commit per step
+- [x] One commit per step
 
 ---
+
+## Completion notes
+
+What was actually done, and where it differs from the steps above:
+
+- **Final files** match the guide. A few explanatory comments were left out
+  of `Appearance.qml`, `MaterialIcon.qml` and `StateLayer.qml`.
+- **Icons showed as words** (`schedule`, `calendar_month`) in step 3.4.
+  Quickshell had been started at 03:30, before Material Symbols was
+  installed at 12:49. A running Quickshell loads the font list once at
+  startup, and hot reload doesn't refresh it. **Fix:** restart Quickshell.
+  (The guide now says this in 3.0, 3.4 and Common errors.)
+- **Bug found in review: `CAnim.qml` contained `Anim.qml`'s code** (a
+  `NumberAnimation`). It loaded with no error and no visible effect, because
+  colours never change yet. In Phase 4 every colour change would have jumped
+  instead of fading. Fixed to `ColorAnimation` with `slowEffects` /
+  `effects`. Lesson: a wrong animation *type* fails silently, so compare
+  against the guide when something "works but looks off".
+- **Errors while editing 3.6** ("Duplicate property name" in
+  `Appearance.qml`) were fixed during the step. A fresh load is clean.
+- **The first long `cp` command wrapped when pasted** and ran as two
+  commands. A shorter version with `SRC=…` and a `*` wildcard worked.
+- **Settings:** `~/.config/myshell/shell.json` was created on first run, and
+  clicking the clock wrote `"showSeconds": false`. Both directions verified.
+- **Commits:** "fonts", "styled components", then steps 3.4–3.6 plus the
+  `CAnim` fix together in one commit.
 
 ## Common errors
 
