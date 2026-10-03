@@ -1,5 +1,7 @@
 import QtQuick
 import Quickshell
+import qs.components
+import qs.config
 import qs.services
 
 PanelWindow {
@@ -11,26 +13,39 @@ PanelWindow {
         left: true
         right: true
     }
-    implicitHeight: 30
-    color: "#1e1e2e"
-    Text {
+    implicitHeight: 36
+    color: Colours.palette.m3surface
+
+    StyledText {
         anchors.left: parent.left
-        anchors.leftMargin: 12
+        anchors.leftMargin: Appearance.padding.normal
         anchors.verticalCenter: parent.verticalCenter
-        color: "#cdd6f4"
+        color: Colours.palette.m3onSurfaceVariant
+        font.pointSize: Appearance.font.size.smaller
         text: root.modelData.name
     }
-    Text {
+
+    StyledRect {
         anchors.centerIn: parent
-        color: "#cdd6f4"
-        text: Time.time
+        implicitWidth: clock.implicitWidth + Appearance.padding.normal * 2
+        implicitHeight: clock.implicitHeight + Appearance.padding.small
+        radius: Appearance.rounding.full
+        color: Colours.palette.m3surfaceContainerHigh
+
+        StyledText {
+            id: clock
+
+            anchors.centerIn: parent
+            color: Colours.palette.m3primary
+            font.family: Appearance.font.family.mono
+            text: Time.time
+        }
     }
 
-    Text {
+    StyledText {
         anchors.right: parent.right
-        anchors.rightMargin: 12
+        anchors.rightMargin: Appearance.padding.normal
         anchors.verticalCenter: parent.verticalCenter
-        color: "#cdd6f4"
         text: Time.format("dddd d MMMM")
     }
 }
