@@ -1,10 +1,12 @@
 import QtQuick
 import QtQuick.Effects
 import Quickshell
+import Quickshell.Hyprland
 import Quickshell.Wayland
 import qs.config
 import qs.modules.bar
 import qs.modules.bar.popouts
+import qs.modules.launcher
 import qs.services
 
 // One transparent, full-screen window per monitor. It draws the frame, the bar and the
@@ -14,11 +16,12 @@ PanelWindow {
     id: root
 
     readonly property bool barOnRight: Config.bar.position === "right"
+    readonly property bool launcherOpen: ShellState.launcherScreen === screen?.name
 
     WlrLayershell.namespace: "myshell-drawers"
     WlrLayershell.layer: WlrLayer.Top
-    // Typing a Wi-Fi password needs the keyboard; otherwise never take it
-    WlrLayershell.keyboardFocus: popouts.locked ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+    // The launcher and the Wi-Fi password field need the keyboard; otherwise never take it
+    WlrLayershell.keyboardFocus: popouts.locked || launcherOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
     exclusionMode: ExclusionMode.Ignore // the Exclusions windows reserve the space instead
 
     anchors {
@@ -38,6 +41,17 @@ PanelWindow {
         Region {
             item: wrapper
         }
+
+        Region {
+            item: launcher
+        }
+    }
+
+    // While the launcher is open, clicking anywhere outside this window closes it
+    HyprlandFocusGrab {
+        active: root.launcherOpen
+        windows: [root]
+        onCleared: ShellState.closeLauncher()
     }
 
     PopoutState {
@@ -66,6 +80,10 @@ PanelWindow {
             wrapper: wrapper
             barOnRight: root.barOnRight
         }
+
+        LauncherBackground {
+            panel: launcher
+        }
     }
 
     Bar {
@@ -84,5 +102,13 @@ PanelWindow {
 
         popouts: popouts
         barOnRight: root.barOnRight
+    }
+
+    Launcher {
+        id: launcher
+
+        open: root.launcherOpen
+        // Centred in the part of the screen the bar doesn't cover
+        centreX: root.barOnRight ? (root.width - Appearance.sizes.barWidth) / 2 : Appearance.sizes.barWidth + (root.width - Appearance.sizes.barWidth) / 2
     }
 }
