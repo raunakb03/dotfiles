@@ -288,6 +288,18 @@ Built and tested on 2026-10-03:
   exited. The new one, started with `-n` (no duplicates), saw it still running and quit.
   **Fix:** the restart bind now runs `qs kill …; sleep 0.5; qs …`. Verified with three
   restarts in a row: one instance each time, no new crash dumps, shortcut registered.
+- **"The UI is broken, the windows are smaller"** (after the restarts above). Hyprland
+  reserved `[48, 10, 48, 10]` (left, top, right, bottom): space for a 48 px bar on **both**
+  sides plus a 10 px frame, although `shell.json` says bar on the right and no frame.
+  **Cause, a startup race:** the drawer and exclusion windows were created *before*
+  `shell.json` had been read, so they started with the **defaults** (bar left, 10 px frame).
+  When the real values arrived a moment later, the zones that went to **0** were not
+  released by Hyprland. (Changing them later, e.g. 3 → 0, worked fine. Only that very
+  first change was lost.) Before Phase 7 the shell ran in a terminal and was rarely
+  restarted, which is why it hadn't shown up. **Fix:** `Config.loaded` becomes true once
+  the file is read, and `Drawers.qml` creates its windows only then
+  (`model: Config.loaded ? Quickshell.screens : []`). Verified with three restarts:
+  `[0, 0, 48, 0]` every time.
 - **Still on rofi:** the clipboard history (`Super + V`) and the keybind cheat sheet
   (`Super + /`). The `rofi` layer rule stays for them. Moving clipboard history into the
   launcher (a `>clip` mode) is a natural follow-up.

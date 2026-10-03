@@ -294,6 +294,7 @@ All four have the same shape: an `Item` with a fixed `implicitWidth`, and a
 | `Cannot override FINAL property` | A property name already used by the base type (we hit it with `left`/`top` in `InvertedCorner`) |
 | `"size" is a read-only property` | A `Behavior` on a `readonly property`. Make it a plain property |
 | Popout closes while moving the mouse into it | Close delay too short, or the popout's `HoverHandler` is missing |
+| Windows smaller than they should be after a (re)start | Windows created before `shell.json` loaded. Fixed in Phase 7 with `Config.loaded` (see `08-phase7-launcher.md`) |
 | Keyboard stuck in the shell | `keyboardFocus` stuck on `OnDemand`. `popouts.locked` didn't reset. Press Esc in the field, or restart the shell |
 
 ## Completion notes
