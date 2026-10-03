@@ -3,7 +3,9 @@
 ## 🎯 Goal
 Build a Caelestia-style Wayland desktop from scratch: the Hyprland config (Lua), a
 **Quickshell** shell (QML), and a custom **Qt/C++ plugin** where QML isn't enough.
-Every line is written and understood by me. Nothing is installed or run from Caelestia.
+Every line is understood by me. Nothing is installed or run from Caelestia.
+Phases 0–4 I typed myself from step-by-step guides. From Phase 5, Claude implements each
+phase and documents it in `docs/` so I can learn from it (see `CLAUDE.md`).
 
 The [Caelestia Shell](https://github.com/caelestia-dots/shell) and
 [Caelestia dots](https://github.com/caelestia-dots/caelestia) are cloned at
@@ -19,11 +21,13 @@ When assisting with this project, strictly follow these rules:
    calculator). All CMake, C++ and QML is written from scratch in this repository.
 3. **Reference, don't copy:** Read the Caelestia clones to see how they solved a problem,
    then write our own version and explain it.
-4. **Step-by-step:** Introduce concepts one small piece at a time. Explain the *why*
-   alongside the *how*. Follow the step format in `docs/00-roadmap.md`.
-5. **The guide lives in `docs/`:** `docs/00-roadmap.md` is the master plan. Each phase gets
-   its own `docs/NN-*.md`, written when that phase starts. Tick off progress in the roadmap.
-6. **Execution Command:** `quickshell -c my-first-shell` (logs: `qs log -c my-first-shell -f`).
+4. **Explain everything:** small commits, and the *why* alongside the *how*. From Phase 5,
+   Claude implements and the phase doc explains what was built (format in `CLAUDE.md`).
+5. **The docs live in `docs/`:** `docs/00-roadmap.md` is the master plan. Each phase gets
+   its own `docs/NN-*.md`. Tick off progress in the roadmap.
+6. **Execution Command:** autostarted by Hyprland as `qs -c my-first-shell -n -d`. For manual
+   runs, `qs kill -c my-first-shell` first, then `quickshell -c my-first-shell`
+   (logs: `qs log -c my-first-shell -f`).
    Once a C++ plugin exists (Phase 9), the command gains a `QML2_IMPORT_PATH=...` prefix.
    Keep it documented in `README.md`.
 7. **Documentation:** Always update `README.md` whenever the build process, directory
