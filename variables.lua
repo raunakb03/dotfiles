@@ -145,7 +145,7 @@ return {
     -- Special workspace toggles
     kbSpecialWs                = "SUPER + S",
     kbSystemMonitorWs          = "CTRL + SHIFT + Escape",
-    kbMusicWs                  = "SUPER + M",
+    kbMusicWs                  = "",                -- disabled (was SUPER + M)
     kbCommunicationWs          = "SUPER + D",
     kbTodoWs                   = "SUPER + R",
 
