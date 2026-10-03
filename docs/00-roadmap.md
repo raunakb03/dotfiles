@@ -192,7 +192,7 @@ Every step in a phase guide has the same parts:
 - [x] Phase 3: Foundation layer (2026-10-03)
 - [x] Phase 4: Theming (2026-10-03)
 - [x] Phase 5: Bar (2026-10-03)
-- [ ] Phase 6: Drawers
+- [x] Phase 6: Drawers (2026-10-03)
 - [ ] Phase 7: Launcher
 - [ ] Phase 8: Notifications / OSD / session
 - [ ] Phase 9: Dashboard + C++

@@ -48,7 +48,8 @@ When assisting with this project, strictly follow these rules:
 - [x] Phase 3: Foundation layer (done 2026-10-03; Colours/Appearance/Config singletons, components/, shell.json at ~/.config/myshell/)
 - [x] Phase 4: Wallpaper & Material You theming (done 2026-10-03; set-wallpaper.py, live Colours, Background; hyprpaper retired; shell autostarted by Hyprland: login check pending)
 - [x] Phase 5: The bar (done 2026-10-03; vertical bar, position from shell.json, currently right; waybar retired)
-- [ ] Phase 6: Drawers & popouts (built by Claude 2026-10-03, doc `docs/07-phase6-drawers.md`; waiting for the user's check)
+- [x] Phase 6: Drawers & popouts (done 2026-10-03; drawer window + exclusions, popouts for audio/network/bluetooth/battery; frame turned off by user; nm-applet disabled)
+- [ ] Phase 7: Launcher (next up)
 
 ## 🗺️ Roadmap
 See [`docs/00-roadmap.md`](docs/00-roadmap.md).

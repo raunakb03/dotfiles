@@ -1,6 +1,6 @@
 # Phase 6: Drawers & popouts
 
-> **Status: 🔍 built 2026-10-03. Waiting for your check** (see [Check it](#check-it)).
+> **Status: ✅ completed 2026-10-03** (clicks checked by you on your desktop).
 > Implemented by Claude. This doc explains what was built so you can understand,
 > change and debug it.
 
@@ -350,16 +350,16 @@ Commits (`my-first-shell`):
 ## Check it
 
 These need a real mouse and keyboard. Please check:
-- [ ] No frame now: the bar is on the right, windows fill the rest of the screen
-- [ ] Moving the mouse **straight from one status icon to the next** switches the popout (it doesn't close)
-- [ ] Opening a popout puts it in the right place immediately (no slide from the top)
-- [ ] Hovering each status icon opens its popout; moving into the popout keeps it open; leaving closes it
-- [ ] **Audio:** switching output device works (if you have more than one, e.g. headphones), the slider changes volume
-- [ ] **Network:** clicking your connected network disconnects, clicking again reconnects
-- [ ] **Network password:** clicking a *new* secured network shows the password field, you can type, Esc cancels (tested only as far as the field appearing)
-- [ ] **Bluetooth:** the switch turns Bluetooth off/on, clicking a paired device connects it
-- [ ] Clicks right next to the frame reach your windows
-- [ ] Tray right-click menu still opens
+- [x] No frame now: the bar is on the right, windows fill the rest of the screen
+- [x] Moving the mouse **straight from one status icon to the next** switches the popout (it doesn't close)
+- [x] Opening a popout puts it in the right place immediately (no slide from the top)
+- [x] Hovering each status icon opens its popout; moving into the popout keeps it open; leaving closes it
+- [x] **Audio:** switching output device works (if you have more than one, e.g. headphones), the slider changes volume
+- [x] **Network:** clicking your connected network disconnects, clicking again reconnects
+- [ ] **Network password:** clicking a *new* secured network shows the password field, you can type, Esc cancels (not tried yet; it only appears for a new secured network)
+- [x] **Bluetooth:** the switch turns Bluetooth off/on, clicking a paired device connects it
+- [x] Clicks right next to the frame reach your windows
+- [x] Tray right-click menu still opens
 
 ## Questions
 
