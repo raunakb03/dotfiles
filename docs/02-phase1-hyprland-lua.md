@@ -1915,6 +1915,11 @@ fails → `hyprctl configerrors`, then check the matching step.
 
 ## 1.20 Extra: a keybind cheat sheet (`Super + /`)
 
+> **Replaced in Phase 7 (2026-10-03):** the cheat sheet is now the shell launcher's `>keys`
+> mode (`Super + /`), and `scripts/keybinds.py` was deleted. The **descriptions** you
+> added to every bind here are still what it shows. Part 1 below is still current, parts
+> 2–3 are history. See `08-phase7-launcher.md`.
+
 *Added 2026-10-02, after Phase 1. Not part of Caelestia.*
 
 **Why:** about 70 different actions are hard to remember. `hyprctl binds`

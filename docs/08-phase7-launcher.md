@@ -25,8 +25,14 @@ bottom edge of the screen, replacing rofi:
 | --- | --- |
 | nothing | every app, A→Z |
 | `zen`, `zn`, `brow` | apps whose name (or generic name / keywords) contain those letters **in order**, best match first |
+| `>` | the list of modes below (Enter picks one) |
 | `>wall` | a horizontal strip of wallpaper thumbnails from `~/raunak/Wallpapers` |
 | `>wall ber` | wallpapers whose file name matches `ber` |
+| `>clip` (or **`Super + V`**) | clipboard history, newest at the bottom; Enter copies it back |
+| `>keys` (or **`Super + /`**) | all your keybindings, searchable by action or key |
+
+Since 2026-10-03 the launcher replaces **all** of rofi: the clipboard history and the
+keybind cheat sheet used to be rofi menus.
 
 | Key | Action |
 | --- | --- |
@@ -69,9 +75,11 @@ bottom edge of the screen, replacing rofi:
 | `services/ShellState.qml` | which monitor shows the launcher | `services/ShellState.qml` (per-screen `ScreenState`) |
 | `services/Apps.qml` | installed apps: list, search, launch | `modules/launcher/services/Apps.qml` |
 | `services/Wallpapers.qml` | images in the wallpaper folder: list, search, set | `services/Wallpapers.qml` |
+| `services/Clipboard.qml` | `cliphist list` → entries; copy one back | `caelestia clipboard` (in the CLI, uses fuzzel) |
+| `services/Keybinds.qml` | `hyprctl binds -j` → readable rows (ported from the old `keybinds.py`) | n/a (Caelestia has no cheat sheet) |
 | `utils/fuzzy.js` | our own fuzzy matching | `utils/scripts/fuzzysort.js` (a third-party library) + `Searcher.qml` |
 | `modules/launcher/Launcher.qml` | the panel: lists, search field, keys | `modules/launcher/Content.qml` + `ContentList.qml` + `AppList.qml` + `WallpaperList.qml` |
-| `modules/launcher/AppItem.qml` | one app row | `modules/launcher/items/AppItem.qml` |
+| `modules/launcher/ResultItem.qml` | one row: app, clipboard entry, keybind or mode | `modules/launcher/items/AppItem.qml`, `ActionItem.qml` |
 | `modules/launcher/WallpaperItem.qml` | one wallpaper thumbnail | `modules/launcher/items/WallpaperItem.qml` |
 | `modules/launcher/LauncherBackground.qml` | background + curved joins to the bottom edge | part of `drawers/ContentWindow.qml` (blob) |
 | `modules/drawers/ContentWindow.qml` | + launcher, keyboard focus, focus grab, mask | `drawers/ContentWindow.qml` |
@@ -174,6 +182,31 @@ FolderListModel { folder: "file://" + root.dir; nameFilters: ["*.jpg", "*.jpeg",
 - `set(path)` runs your Phase 4 script with `Quickshell.execDetached([...])`. It
   writes `wallpaper.json` and `scheme.json`, and the shell already watches both. The
   launcher doesn't need to know anything about colours.
+
+## Modes: one list, many sources
+
+```qml
+readonly property string mode: …            // "apps", ">", ">wall", ">clip" or ">keys", from the text's prefix
+readonly property var results: switch (mode) { … }   // always rows of { name, detail, image, icon, activate() }
+```
+- Every mode except wallpapers produces the **same row shape**, so one `ListView` and one
+  delegate (`ResultItem.qml`) show apps, clipboard entries, keybindings and the mode menu.
+  `activate` is a JavaScript arrow function stored in the row, so Enter/click simply calls
+  `modelData.activate()` without knowing what kind of row it is.
+- **Adding a mode** means one entry in `modes`, one `case` in `results`, and (optionally) a
+  shortcut. Nothing else changes.
+- **`Clipboard.qml`** runs `cliphist list` with a `Process` and a `StdioCollector`, which
+  collects all output and then fires `streamFinished`. Each line is `id<TAB>preview`.
+  Copying runs `cliphist decode <id> | wl-copy`.
+- **`Keybinds.qml`** runs `hyprctl binds -j` the same way, then does in JavaScript what
+  `keybinds.py` did in Python: modifier bits → names, friendly key names, and collapsing
+  the workspace-number series into `SUPER + 1…0`.
+- Both are **refreshed every time the launcher opens**, so new copies and new binds show up.
+
+**Opening straight into a mode:** `ShellState.toggleLauncher(">clip ")` remembers the text
+in `launcherText`, and the launcher puts it in the search field when it opens. Three global
+shortcuts (`launcher`, `clipboard`, `keybinds`) share one inline component,
+`LauncherShortcut` in `Shortcuts.qml`.
 
 ## The panel: `Launcher.qml`
 
@@ -300,15 +333,21 @@ Built and tested on 2026-10-03:
   the file is read, and `Drawers.qml` creates its windows only then
   (`model: Config.loaded ? Quickshell.screens : []`). Verified with three restarts:
   `[0, 0, 48, 0]` every time.
-- **Still on rofi:** the clipboard history (`Super + V`) and the keybind cheat sheet
-  (`Super + /`). The `rofi` layer rule stays for them. Moving clipboard history into the
-  launcher (a `>clip` mode) is a natural follow-up.
+- **Rofi removed completely (your request):** clipboard history and the keybind cheat sheet
+  became launcher modes (`>clip`, `>keys`), opened by `Super + V` / `Super + /` through two
+  more global shortcuts. `keybinds.py` was ported to `services/Keybinds.qml` and deleted
+  from `~/.config/hypr/scripts/`. The `rofi` layer rule and the `clipboardCmd` /
+  `keybindsCmd` variables are gone. Tested on the live shell: both shortcuts open their
+  mode with real data (135 clipboard entries; all binds, workspace series collapsed), and
+  a test copy showed the `>` mode menu. rofi itself is still installed. Remove it with
+  `sudo pacman -Rs rofi` if you like.
 
 Commits (`my-first-shell`):
 1. "fuzzy search, Apps/Wallpapers/ShellState services, launcher sizes, wallpaperDir setting"
 2. "launcher (apps + wallpaper picker), global shortcut, keyboard focus and focus grab"
 
-`~/.config/hypr`: "Super tap opens the shell's launcher instead of rofi", "start the shell
+`~/.config/hypr`: "clipboard history and keybind list open in the shell's launcher; rofi
+no longer used", "Super tap opens the shell's launcher instead of rofi", "start the shell
 without -d", "restart bind waits for the old shell to exit".
 Also `my-first-shell`: "launcher shortcut: handle release-only events".
 
@@ -320,6 +359,9 @@ Also `my-first-shell`: "launcher shortcut: handle release-only events".
 - [ ] Esc closes it, and clicking outside closes it
 - [ ] `>wall`: ←/→ move, Enter sets the wallpaper and the colours change
 - [ ] Clicking an app or a thumbnail works too
+- [ ] `Super + V` opens the clipboard history; Enter copies the entry (paste it somewhere)
+- [ ] `Super + /` opens the keybindings; typing filters them
+- [ ] Typing `>` shows the three modes; Enter on one switches to it
 
 ## Questions
 
