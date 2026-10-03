@@ -118,7 +118,7 @@ Every step in a phase guide has the same parts:
   power button.
 - **Done when:** the bar replaces waybar (remove waybar from `execs.lua`).
 
-## Phase 6: Drawers architecture (the Caelestia look)
+## Phase 6: Drawers architecture (the Caelestia look) → [`07-phase6-drawers.md`](07-phase6-drawers.md)
 - **Goal:** the rounded screen border with panels that grow out of the edges.
 - **Read:** `shell/modules/drawers/*` (`ContentWindow`, `Panels`,
   `Interactions`, `Regions`, `Exclusions`), `shell/modules/bar/popouts/`.

@@ -275,7 +275,7 @@ Problems found while building (2026-10-03), and their fixes:
 - **Hyprland:** waybar removed from `variables.lua` and `execs.lua`. The shell's autostart moved out of the "TEMPORARY" block.
 - **Bar on the right (user request):** added `bar.position` to `Config.qml`, anchors in `Bar.qml` follow it, and tray menus open toward the screen. `shell.json` set to `"right"`.
 - **Clicks on status icons:** only volume does something (click = mute, scroll = volume, a small extra). Wi-Fi, Bluetooth and battery are display-only until Phase 6's popouts. That's expected.
-- **Not done (later phases):** popouts on hover (audio, network, battery details, tray menus) → Phase 6. The power button → Phase 8 (session menu). App-specific window icons.
+- **Not done (later phases):** popouts on hover (audio, network, battery details) → done in Phase 6 ([`07-phase6-drawers.md`](07-phase6-drawers.md)). Custom tray menus are still to do. The power button → Phase 8 (session menu). App-specific window icons.
 
 Commits (`my-first-shell`):
 1. "bar sizes, extraSmall tokens, workspaces setting"
