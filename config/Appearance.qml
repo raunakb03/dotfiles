@@ -37,6 +37,8 @@ Singleton {
     // Fixed sizes of specific parts of the shell, in pixels
     readonly property QtObject sizes: QtObject {
         readonly property int barInnerWidth: 32 // width of the pills inside the bar
+        readonly property int barWidth: barInnerWidth + root.padding.small * 2 // the whole bar
+        readonly property int popoutWidth: 300 // width of the popouts' content
     }
 
     readonly property QtObject font: QtObject {

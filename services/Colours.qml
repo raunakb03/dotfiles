@@ -28,6 +28,7 @@ Singleton {
         property color m3secondaryContainer: "#45455c"
         property color m3onSecondaryContainer: "#b4b2ce"
         property color m3tertiary: "#f5b2e0"
+        property color m3shadow: "#000000"
         property color m3error: "#ffb4ab"
     }
 

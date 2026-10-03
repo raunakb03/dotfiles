@@ -10,6 +10,7 @@ Singleton {
     // Shortcuts, so other files can write Config.bar.showSeconds
     property alias appearance: adapter.appearance
     property alias bar: adapter.bar
+    property alias border: adapter.border
 
     FileView {
         path: Quickshell.env("HOME") + "/.config/myshell/shell.json"
@@ -37,6 +38,12 @@ Singleton {
                 property real paddingScale: 1
                 property real fontScale: 1
                 property real animDurationScale: 1
+            }
+
+            // The frame around the screen
+            property JsonObject border: JsonObject {
+                property int thickness: 10 // pixels, on the sides without the bar
+                property int rounding: 25  // corner radius of the inner edge
             }
 
             property JsonObject bar: JsonObject {
