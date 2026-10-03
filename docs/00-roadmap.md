@@ -190,7 +190,7 @@ Every step in a phase guide has the same parts:
 - [x] Phase 1: Hyprland in Lua (2026-10-02)
 - [x] Phase 2: QML fundamentals (2026-10-03)
 - [x] Phase 3: Foundation layer (2026-10-03)
-- [ ] Phase 4: Theming
+- [x] Phase 4: Theming (2026-10-03)
 - [ ] Phase 5: Bar
 - [ ] Phase 6: Drawers
 - [ ] Phase 7: Launcher

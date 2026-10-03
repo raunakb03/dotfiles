@@ -42,7 +42,8 @@ When assisting with this project, strictly follow these rules:
 - [x] Phase 1: Hyprland in Lua (done 2026-10-02; fixes recorded in the guide's Completion notes)
 - [x] Phase 2: Quickshell & QML fundamentals (done 2026-10-03; `shell.qml` + `modules/bar/Bar.qml` + `services/Time.qml`)
 - [x] Phase 3: Foundation layer (done 2026-10-03; Colours/Appearance/Config singletons, components/, shell.json at ~/.config/myshell/)
-- [ ] Phase 4: Wallpaper & Material You theming (next up; guide `docs/05-phase4-theming.md` written 2026-10-03, start at step 4.0)
+- [x] Phase 4: Wallpaper & Material You theming (done 2026-10-03; set-wallpaper.py, live Colours, Background; hyprpaper retired; shell autostarted by Hyprland: login check pending)
+- [ ] Phase 5: The bar (next up; guide not written yet)
 
 ## 🗺️ Roadmap
 See [`docs/00-roadmap.md`](docs/00-roadmap.md).

@@ -1,5 +1,8 @@
 # Phase 4: Wallpaper & Material You theming
 
+> **Status: ✅ completed 2026-10-03.** See [Completion notes](#completion-notes)
+> at the end. One check is still open: autostart after a fresh login.
+
 **Goal:** pick a wallpaper and the whole desktop recolours itself to match:
 your bar fades to the new colours, and Hyprland's window borders follow.
 And your shell draws the wallpaper itself, replacing hyprpaper.
@@ -662,18 +665,50 @@ started by Hyprland.
 ---
 
 ## Phase 4 done when
-- [ ] `set-wallpaper.py <image>` changes the wallpaper, the bar colours
+- [x] `set-wallpaper.py <image>` changes the wallpaper, the bar colours
       (with a fade) and the Hyprland borders
-- [ ] hyprpaper is gone (`pgrep hyprpaper` prints nothing after a fresh
+- [x] hyprpaper is gone (`pgrep hyprpaper` prints nothing after a fresh
       login) and `hyprpaper.conf` is deleted
 - [ ] After a fresh login the shell starts by itself with your last
       wallpaper and colours
-- [ ] `Ctrl + Super + Alt + R` restarts the shell
+- [x] `Ctrl + Super + Alt + R` restarts the shell
 - [ ] You can explain: source colour → scheme → roles, the file-watching
       pattern, atomic writes, and the four layer-shell layers
 - [ ] One commit per step
 
 ---
+
+## Completion notes
+
+What was actually done, and where it differs from the steps above:
+
+- **Steps 4.0–4.3 typed by you, 4.4–4.5 implemented by Claude** at your
+  request ("getting bored of doing this myself"). The code is identical to
+  the guide, so read 4.4 and 4.5 to understand what was added.
+- **"The colours aren't changing"** (step 4.3): they were. Both test
+  wallpapers were blue, so they gave nearly the same palette
+  (`blue-flowers` → primary `#a1cde0`, `japan-alley` → `#9dcfd9`). Tonal
+  Spot also turns every source colour into a soft pastel. Wallpapers that
+  give clearly different results: `berries-1.jpg` (peach `#f3bb91`),
+  `artificial-valley.jpg` (olive `#cec98c`), `black-hole.png` (pink
+  `#e0bbe1`).
+- **Verified 2026-10-03:**
+  - The running shell hot-reloaded `Background` with no errors, and draws
+    `japan-alley.png` (screenshot of an empty workspace).
+  - `hyprctl layers` shows `myshell-background` and no hyprpaper.
+  - The Hyprland border follows `scheme/current.lua` (`e69dcfd9`).
+  - `hyprctl configerrors` is empty: 129 binds, no duplicates. The restart
+    bind is registered.
+- **Still to check on your next login:** the shell starts by itself (the
+  `hyprland.start` autostart only runs at login). Until then, your shell is
+  the one you started in tmux window 4. After the next login, stop starting
+  it by hand.
+- **Not done (optional):** the 4.2 tidy-up of `Config.qml` to use
+  `Paths.config`.
+- **Commits:** `my-first-shell`: "colour scheme script", "paths and live
+  colours", "wallpaper". `~/.config/hypr`: "shell draws the wallpaper;
+  retire hyprpaper; autostart shell" (`hyprpaper.conf` deleted, still in git
+  history).
 
 ## Common errors
 
