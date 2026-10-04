@@ -91,6 +91,8 @@ create_bind(vars.kbLock, hl.dsp.exec_cmd(vars.lockCmd), nil, "Session: lock scre
 create_bind(vars.kbExit, hl.dsp.exit(), nil, "Session: exit Hyprland (log out)")
 create_bind(vars.kbSleep, hl.dsp.exec_cmd(vars.sleepCmd), locked, "Session: suspend")
 create_bind(vars.kbClipboard, hl.dsp.global("myshell:clipboard"), nil, "Utilities: clipboard history")
+create_bind(vars.kbSidebar, hl.dsp.global("myshell:sidebar"), nil, "Utilities: notification history")
+create_bind(vars.kbSession, hl.dsp.global("myshell:session"), nil, "Session: power menu")
 
 --------------------
 ---- Workspaces ----
@@ -236,15 +238,16 @@ create_bind(vars.kbRestartShell, hl.dsp.exec_cmd("qs kill -c my-first-shell; sle
 ---- Brightness and media ----
 -------------------------------
 
--- TEMPORARY: Phase 8 routes these through the shell so it can show an OSD
-create_bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl set 5%+"), locked_repeating, "Media: brightness up")
-create_bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 5%-"), locked_repeating, "Media: brightness down")
+-- Handled by the shell (services/Brightness.qml, services/Players.qml), so it can show the OSD
+-- and talk to media players directly. If the shell isn't running, these keys do nothing.
+create_bind("XF86MonBrightnessUp", hl.dsp.global("myshell:brightnessUp"), locked_repeating, "Media: brightness up")
+create_bind("XF86MonBrightnessDown", hl.dsp.global("myshell:brightnessDown"), locked_repeating, "Media: brightness down")
 
-create_bind({ vars.kbMediaToggle, "XF86AudioPlay", "XF86AudioPause" }, hl.dsp.exec_cmd("playerctl play-pause"), locked,
+create_bind({ vars.kbMediaToggle, "XF86AudioPlay", "XF86AudioPause" }, hl.dsp.global("myshell:mediaToggle"), locked,
     "Media: play / pause")
-create_bind({ vars.kbMediaNext, "XF86AudioNext" }, hl.dsp.exec_cmd("playerctl next"), locked, "Media: next track")
-create_bind({ vars.kbMediaPrev, "XF86AudioPrev" }, hl.dsp.exec_cmd("playerctl previous"), locked, "Media: previous track")
-create_bind({ vars.kbMediaStop, "XF86AudioStop" }, hl.dsp.exec_cmd("playerctl stop"), locked, "Media: stop")
+create_bind({ vars.kbMediaNext, "XF86AudioNext" }, hl.dsp.global("myshell:mediaNext"), locked, "Media: next track")
+create_bind({ vars.kbMediaPrev, "XF86AudioPrev" }, hl.dsp.global("myshell:mediaPrev"), locked, "Media: previous track")
+create_bind({ vars.kbMediaStop, "XF86AudioStop" }, hl.dsp.global("myshell:mediaStop"), locked, "Media: stop")
 
 ----------------
 ---- Volume ----

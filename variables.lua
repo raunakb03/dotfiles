@@ -176,4 +176,6 @@ return {
     kbLock                     = "SUPER + Escape",
     kbSleep                    = "SUPER + SHIFT + L",
     kbClipboard                = "SUPER + V",
+    kbSidebar                  = "SUPER + N",              -- notification history
+    kbSession                  = "CTRL + ALT + Delete",    -- power menu
 }

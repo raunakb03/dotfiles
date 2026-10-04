@@ -22,11 +22,8 @@ hl.on("hyprland.start", function()
     -- Forward bluetooth headphone buttons to MPRIS
     hl.exec_cmd("mpris-proxy")
 
-    -- Our shell (bar, wallpaper, ...)
+    -- Our shell (bar, wallpaper, notifications, OSD, media keys, ...)
     hl.exec_cmd(vars.shellCmd)
-
-    -- TEMPORARY: replaced by our own shell in later phases
-    hl.exec_cmd("playerctld daemon")  -- Phase 8 (media keys use playerctl until then)
 end)
 
 -- Picture-in-picture windows: shrink and park them in the bottom-right corner
