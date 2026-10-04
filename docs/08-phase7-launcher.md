@@ -266,6 +266,9 @@ shortcuts (`launcher`, `clipboard`, `keybinds`) share one inline component,
   `coredumpctl list` shows crashes.
 - **Opens but you can't type:** keyboard focus. Check `keyboardFocus` in
   `ContentWindow.qml` and that `search.forceActiveFocus()` runs.
+- **Nothing happens in a fullscreen app:** the drawer window must move to
+  `WlrLayer.Overlay` while the launcher is open (see Completion notes). Leave fullscreen
+  with `Super + F` to check whether that's the cause.
 - **Opens on the wrong monitor:** `ShellState` uses `Hyprland.focusedMonitor`. Check
   with `hyprctl monitors` which is focused.
 - **No wallpapers:** the message shows the folder it looked in. Check
@@ -281,6 +284,7 @@ shortcuts (`launcher`, `clipboard`, `keybinds`) share one inline component,
 | Launcher stays open after clicking elsewhere | `HyprlandFocusGrab` inactive, or `windows` doesn't include the drawer window |
 | Typing goes to the app behind | `keyboardFocus` still `None` |
 | Two launchers on two monitors | Comparing with something other than the focused monitor's name |
+| Launcher "doesn't open" in a fullscreen app | It opened *behind* it: the layer must be Overlay while open |
 | Works from `hyprctl dispatch` but not from the key | Handling only `onPressed`. A release-type bind sends only `onReleased` |
 | No shell after pressing the restart key | No pause between `qs kill` and starting with `-n` |
 | Shell feels slow scrolling wallpapers | `sourceSize` missing on the thumbnail `Image` (decoding full-size images) |
@@ -333,6 +337,13 @@ Built and tested on 2026-10-03:
   the file is read, and `Drawers.qml` creates its windows only then
   (`model: Config.loaded ? Quickshell.screens : []`). Verified with three restarts:
   `[0, 0, 48, 0]` every time.
+- **"Super doesn't work" (next day):** the focused terminal was **fullscreen**. Fullscreen
+  windows are drawn above the Top layer, where the drawer window lives, so the launcher
+  *did* open, hidden behind it (along with `Super + V` / `Super + /` and the bar).
+  **Fix:** `WlrLayershell.layer: launcherOpen ? WlrLayer.Overlay : WlrLayer.Top`. While the
+  launcher is open, the drawer window moves to the Overlay layer (above everything), then
+  goes back. Caelestia switches its drawer window to Overlay the same way. Tested over a
+  fullscreen kitty: the launcher (and the bar) show while open.
 - **Rofi removed completely (your request):** clipboard history and the keybind cheat sheet
   became launcher modes (`>clip`, `>keys`), opened by `Super + V` / `Super + /` through two
   more global shortcuts. `keybinds.py` was ported to `services/Keybinds.qml` and deleted
