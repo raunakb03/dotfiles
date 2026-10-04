@@ -13,7 +13,8 @@ return {
     audioSettings              = "pavucontrol",
 
     -- Our shell (bar, wallpaper, launcher, ...); no -d: Hyprland already runs it in the background
-    shellCmd                   = "qs -c my-first-shell -n",
+    -- QML2_IMPORT_PATH: where Qt finds our C++ plugin (MyShell.Engine, built into engine/build/qml)
+    shellCmd                   = "QML2_IMPORT_PATH=$HOME/.config/quickshell/my-first-shell/engine/build/qml qs -c my-first-shell -n",
 
     -- Temporary tools: each one is replaced by our own shell in a later phase
     lockCmd                    = "hyprlock",                                    -- Phase 10
@@ -178,4 +179,5 @@ return {
     kbClipboard                = "SUPER + V",
     kbSidebar                  = "SUPER + N",              -- notification history
     kbSession                  = "CTRL + ALT + Delete",    -- power menu
+    kbDashboard                = "SUPER + A",              -- dashboard (also: touch the top edge)
 }

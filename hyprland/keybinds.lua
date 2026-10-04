@@ -93,6 +93,7 @@ create_bind(vars.kbSleep, hl.dsp.exec_cmd(vars.sleepCmd), locked, "Session: susp
 create_bind(vars.kbClipboard, hl.dsp.global("myshell:clipboard"), nil, "Utilities: clipboard history")
 create_bind(vars.kbSidebar, hl.dsp.global("myshell:sidebar"), nil, "Utilities: notification history")
 create_bind(vars.kbSession, hl.dsp.global("myshell:session"), nil, "Session: power menu")
+create_bind(vars.kbDashboard, hl.dsp.global("myshell:dashboard"), nil, "Utilities: dashboard")
 
 --------------------
 ---- Workspaces ----
