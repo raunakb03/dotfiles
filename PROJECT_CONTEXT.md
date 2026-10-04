@@ -25,10 +25,11 @@ When assisting with this project, strictly follow these rules:
    Claude implements and the phase doc explains what was built (format in `CLAUDE.md`).
 5. **The docs live in `docs/`:** `docs/00-roadmap.md` is the master plan. Each phase gets
    its own `docs/NN-*.md`. Tick off progress in the roadmap.
-6. **Execution Command:** autostarted by Hyprland as `qs -c my-first-shell -n`. For manual
-   runs, `qs kill -c my-first-shell` first, then `quickshell -c my-first-shell`
-   (logs: `qs log -c my-first-shell -f`).
-   Once a C++ plugin exists (Phase 9), the command gains a `QML2_IMPORT_PATH=...` prefix.
+6. **Execution Command:** autostarted by Hyprland (`shellCmd` in `~/.config/hypr/variables.lua`) as
+   `QML2_IMPORT_PATH=$HOME/.config/quickshell/my-first-shell/engine/build/qml qs -c my-first-shell -n`.
+   The prefix tells Qt where the C++ plugin (`engine/`, built with
+   `cmake -S engine -B engine/build && cmake --build engine/build`) lives. For manual runs,
+   `qs kill -c my-first-shell; sleep 0.5` first (logs: `qs log -c my-first-shell -f`).
    Keep it documented in `README.md`.
 7. **Documentation:** Always update `README.md` whenever the build process, directory
    structure, or run commands change.
@@ -51,7 +52,7 @@ When assisting with this project, strictly follow these rules:
 - [x] Phase 6: Drawers & popouts (done 2026-10-03; drawer window + exclusions, popouts for audio/network/bluetooth/battery; frame turned off by user; nm-applet disabled)
 - [x] Phase 7: Launcher (done 2026-10-04; apps, >wall, >clip, >keys; rofi no longer used; shell started without -d)
 - [x] Phase 8: Notifications, OSD, session menu (done 2026-10-04; dunst masked, playerctld dropped)
-- [ ] Phase 9: Dashboard + first C++ service (next up)
+- [ ] Phase 9: Dashboard + first C++ service (built by Claude 2026-10-04, waiting for user check; engine/ plugin MyShell.Engine, Super + A)
 
 ## 🗺️ Roadmap
 See [`docs/00-roadmap.md`](docs/00-roadmap.md).

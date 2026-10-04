@@ -147,7 +147,7 @@ Every step in a phase guide has the same parts:
 - **Done when:** `notify-send` shows your popup, and the volume keys show your
   OSD.
 
-## Phase 9: Dashboard + first real C++ service
+## Phase 9: Dashboard + first real C++ service → [`10-phase9-dashboard.md`](10-phase9-dashboard.md)
 - **Read:** `shell/modules/dashboard/**`, `shell/services/Players.qml`,
   `shell/services/Weather.qml`, `shell/plugin/src/Caelestia/Services/`.
 - **Build:** media controls (`Services.Mpris`), weather, calendar, and the

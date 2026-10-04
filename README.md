@@ -17,7 +17,8 @@ Start here: **[`docs/00-roadmap.md`](docs/00-roadmap.md)**
 | 6: Drawers & popouts | [`docs/07-phase6-drawers.md`](docs/07-phase6-drawers.md) |
 | 7: Launcher | [`docs/08-phase7-launcher.md`](docs/08-phase7-launcher.md) |
 | 8: Notifications, OSD, session | [`docs/09-phase8-notifications-osd-session.md`](docs/09-phase8-notifications-osd-session.md) |
-| 9+ | written as each phase is built |
+| 9: Dashboard + C++ engine | [`docs/10-phase9-dashboard.md`](docs/10-phase9-dashboard.md) |
+| 10+ | written as each phase is built |
 
 ## Project Structure
 - `shell.qml`: the main QML entry point for the UI (created in Phase 0, step 0.7).
@@ -30,8 +31,13 @@ Related, outside this repo:
 - `~/.config/myshell/`: personal overrides.
 
 ## How to Run the Shell
+Hyprland starts it at login. By hand:
 ```bash
-quickshell -c my-first-shell
+# once, and after changing C++ in engine/: build the plugin
+cmake -S engine -B engine/build && cmake --build engine/build
+
+qs kill -c my-first-shell; sleep 0.5
+QML2_IMPORT_PATH=$HOME/.config/quickshell/my-first-shell/engine/build/qml qs -c my-first-shell -n
 ```
 
 - Logs, from another terminal: `qs log -c my-first-shell -f`
