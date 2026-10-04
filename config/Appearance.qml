@@ -47,6 +47,7 @@ Singleton {
         readonly property int notificationWidth: 360 // popups and the sidebar's history
         readonly property int osdHeight: 180         // the volume / brightness bars
         readonly property int sessionButtonSize: 72  // the power menu's buttons
+        readonly property int dashboardWidth: 760    // the dashboard's content
     }
 
     readonly property QtObject font: QtObject {
