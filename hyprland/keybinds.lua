@@ -71,17 +71,8 @@ end
 ---- Launcher ----
 -------------------
 
--- Tapping Super alone opens the launcher, so it must fire on *release*
--- (otherwise Super + T would open the launcher too)
-local launcher_default = normalise_keybind("SUPER + SUPER_L")
-create_bind(
-    vars.kbLauncher,
-    hl.dsp.global("myshell:launcher"), -- handled by the shell (modules/Shortcuts.qml)
-    function(key)
-        return normalise_keybind(key) == launcher_default and release or nil
-    end,
-    "Launcher: open app launcher"
-)
+-- Super + Space (was: tapping Super alone, which also fired on accidental Super presses)
+create_bind(vars.kbLauncher, hl.dsp.global("myshell:launcher"), nil, "Launcher: open app launcher") -- modules/Shortcuts.qml
 
 ---------------
 ---- Misc ----

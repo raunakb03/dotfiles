@@ -172,7 +172,7 @@ return {
     kbVolumeMute               = "SUPER + SHIFT + M",
 
     -- Misc
-    kbLauncher                 = "SUPER + SUPER_L",
+    kbLauncher                 = "SUPER + Space",
     kbExit                     = "CTRL + SUPER + ALT + Delete",
     kbLock                     = "SUPER + Escape",
     kbSleep                    = "SUPER + SHIFT + L",
