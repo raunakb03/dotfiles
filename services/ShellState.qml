@@ -13,6 +13,7 @@ Singleton {
     property string dashboardScreen: ""
     property bool dashboardPinned: false // opened with the key (stays open) rather than by hovering
     property int dashboardTab: 0         // remembered between openings
+    property bool keepAwake: false       // "caffeine": the idle steps (Idle.qml) are paused
     property string launcherText: "" // what the launcher's search field starts with (e.g. ">clip ")
 
     readonly property string focusedScreen: Hyprland.focusedMonitor?.name ?? ""

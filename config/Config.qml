@@ -13,6 +13,7 @@ Singleton {
     property alias border: adapter.border
     property alias paths: adapter.paths
     property alias services: adapter.services
+    property alias idle: adapter.idle
 
     // False until shell.json has been read (or found missing). Until then every value above
     // is a default. Anything that must not start with defaults waits for this (see Drawers.qml).
@@ -47,6 +48,14 @@ Singleton {
                 property real paddingScale: 1
                 property real fontScale: 1
                 property real animDurationScale: 1
+            }
+
+            // When you're away (seconds; 0 = never)
+            property JsonObject idle: JsonObject {
+                property int lockAfter: 300       // 5 min
+                property int screenOffAfter: 330  // 30 s after locking
+                property int suspendAfter: 900    // 15 min
+                property bool inhibitWhenPlaying: true // nothing happens while media plays
             }
 
             // Data the shell fetches

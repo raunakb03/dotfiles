@@ -46,6 +46,14 @@ Item {
                 font.bold: true
             }
 
+            // Keep awake ("caffeine"): pauses the idle lock / screen off / suspend (modules/Idle.qml)
+            IconButton {
+                icon: "coffee"
+                size: 32
+                filled: ShellState.keepAwake
+                onClicked: ShellState.keepAwake = !ShellState.keepAwake
+            }
+
             // Do not disturb: new notifications go straight to this history, no popups
             MaterialIcon {
                 text: Notifs.dnd ? "notifications_off" : "notifications_active"
