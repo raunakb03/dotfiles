@@ -1,6 +1,6 @@
 # Phase 8: Notifications, sidebar, OSD, session menu
 
-> **Status: 🔍 built 2026-10-04. Waiting for your check** (see [Check it](#check-it)).
+> **Status: ✅ completed 2026-10-04** (checked by you).
 > Implemented by Claude. This doc explains what was built so you can understand,
 > change and debug it.
 
@@ -330,15 +330,15 @@ moment, since it's in the same window, and goes away again when the panel closes
 
 ## Check it
 
-- [ ] `notify-send "Hi" "there"` shows a popup at the top right, which goes after ~5 s
-- [ ] A real app's notification (Discord, browser download…) shows with its icon
-- [ ] `Super + N` opens the history; ✕ and "Clear all" work; do-not-disturb stops popups
-- [ ] Volume keys show the OSD; holding a key keeps it open, then it hides
-- [ ] Brightness keys change the brightness **and** show the OSD (holding one repeats)
-- [ ] Play/pause/next on your keyboard control a playing browser video or music
-- [ ] `Ctrl + Alt + Delete` opens the power menu; ↑/↓ move, Escape closes;
+- [x] `notify-send "Hi" "there"` shows a popup at the top right, which goes after ~5 s
+- [x] A real app's notification (Discord, browser download…) shows with its icon
+- [x] `Super + N` opens the history; ✕ and "Clear all" work; do-not-disturb stops popups
+- [x] Volume keys show the OSD; holding a key keeps it open, then it hides
+- [x] Brightness keys change the brightness **and** show the OSD (holding one repeats)
+- [x] Play/pause/next on your keyboard control a playing browser video or music
+- [x] `Ctrl + Alt + Delete` opens the power menu; ↑/↓ move, Escape closes;
       **Lock** works (try only Lock and maybe Suspend)
-- [ ] After your next reboot: notifications still come from the shell (no dunst)
+- [x] After your next reboot: notifications still come from the shell (no dunst)
 
 ## Questions
 
