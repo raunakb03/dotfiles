@@ -54,7 +54,8 @@ When assisting with this project, strictly follow these rules:
 - [x] Phase 8: Notifications, OSD, session menu (done 2026-10-04; dunst masked, playerctld dropped)
 - [x] Phase 9: Dashboard + first C++ service (done 2026-10-04; engine/ plugin MyShell.Engine, Super + A)
 - [x] Phase 10: Lock screen & idle (done 2026-10-04; SessionWatcher in engine, hyprlock unused; recovery: qs ipc -c my-first-shell call lock unlock; open: keyboard dead after some resumes, predates shell, scripts/resume-debug.sh)
-- [ ] Phase 11: Utilities & polish (next up)
+- [-] Phase 11: Utilities & polish (skipped by user 2026-10-04; only screenshots got save+notify via ~/.config/hypr/scripts/screenshot.sh)
+- [ ] Phase 12: App theming (next up)
 
 ## 🗺️ Roadmap
 See [`docs/00-roadmap.md`](docs/00-roadmap.md).

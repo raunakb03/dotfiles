@@ -197,7 +197,7 @@ Every step in a phase guide has the same parts:
 - [x] Phase 8: Notifications / OSD / session (2026-10-04)
 - [x] Phase 9: Dashboard + C++ (2026-10-04)
 - [x] Phase 10: Lock & idle (2026-10-04)
-- [ ] Phase 11: Utilities
+- [-] Phase 11: Utilities (skipped 2026-10-04: by choice, not needed day to day)
 - [ ] Phase 12: App theming (optional)
 
 > **Quickshell version note:** Caelestia's README asks for `quickshell-git`.
