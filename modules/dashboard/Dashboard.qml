@@ -57,9 +57,12 @@ Item {
             column.forceActiveFocus(); // for Escape and the arrow keys
     }
 
+    // Opening: normal speed, slowing down at the end. Closing: quicker, speeding up as it
+    // leaves (a closing panel shouldn't linger).
     Behavior on height {
         Anim {
-            easing.bezierCurve: Appearance.anim.curves.emphasizedDecel
+            duration: root.open ? Appearance.anim.durations.normal : Appearance.anim.durations.small
+            easing.bezierCurve: root.open ? Appearance.anim.curves.emphasizedDecel : Appearance.anim.curves.emphasizedAccel
         }
     }
 

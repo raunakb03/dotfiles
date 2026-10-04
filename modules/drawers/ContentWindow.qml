@@ -227,7 +227,7 @@ PanelWindow {
     // Opened by hovering: close shortly after the mouse leaves both the strip and the dashboard
     Timer {
         running: root.dashboardOpen && !ShellState.dashboardPinned && !dashboard.hovered && !triggerHover.hovered
-        interval: 400
+        interval: 150 // a little slack, so brushing past the edge doesn't flicker it shut
         onTriggered: ShellState.dashboardScreen = ""
     }
 }
