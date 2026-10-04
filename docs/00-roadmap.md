@@ -196,7 +196,7 @@ Every step in a phase guide has the same parts:
 - [x] Phase 7: Launcher (2026-10-04)
 - [x] Phase 8: Notifications / OSD / session (2026-10-04)
 - [x] Phase 9: Dashboard + C++ (2026-10-04)
-- [ ] Phase 10: Lock & idle
+- [x] Phase 10: Lock & idle (2026-10-04)
 - [ ] Phase 11: Utilities
 - [ ] Phase 12: App theming (optional)
 

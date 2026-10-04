@@ -1,6 +1,7 @@
 # Phase 10: Lock screen & idle
 
-> **Status: 🔍 built 2026-10-04. Waiting for your check** (see [Check it](#check-it)).
+> **Status: ✅ completed 2026-10-04** (checked by you). Open item: the old keyboard-after-resume
+> issue (see Completion notes), parked for now.
 > Implemented by Claude. This doc explains what was built so you can understand,
 > change and debug it.
 
