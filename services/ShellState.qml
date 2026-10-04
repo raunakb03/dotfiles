@@ -10,6 +10,9 @@ Singleton {
     property string launcherScreen: ""
     property string sidebarScreen: ""
     property string sessionScreen: ""
+    property string dashboardScreen: ""
+    property bool dashboardPinned: false // opened with the key (stays open) rather than by hovering
+    property int dashboardTab: 0         // remembered between openings
     property string launcherText: "" // what the launcher's search field starts with (e.g. ">clip ")
 
     readonly property string focusedScreen: Hyprland.focusedMonitor?.name ?? ""
@@ -32,6 +35,23 @@ Singleton {
         sessionScreen = sessionScreen !== "" ? "" : focusedScreen;
     }
 
+    function toggleDashboard(): void {
+        if (dashboardScreen !== "" && dashboardPinned) {
+            dashboardScreen = "";
+            return;
+        }
+        dashboardPinned = true;
+        dashboardScreen = focusedScreen;
+    }
+
+    // Hovering the top edge: open until the mouse leaves (see ContentWindow.qml)
+    function hoverDashboard(screen: string): void {
+        if (dashboardScreen !== "")
+            return;
+        dashboardPinned = false;
+        dashboardScreen = screen;
+    }
+
     function closeLauncher(): void {
         launcherScreen = "";
     }
@@ -41,5 +61,6 @@ Singleton {
         launcherScreen = "";
         sidebarScreen = "";
         sessionScreen = "";
+        dashboardScreen = "";
     }
 }
