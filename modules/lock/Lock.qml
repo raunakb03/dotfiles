@@ -19,6 +19,7 @@ Scope {
     readonly property bool checking: pam.active
 
     signal shake
+    signal refocus // after waking up: the surfaces take the keyboard again
 
     function submit(): void {
         if (pam.active || buffer === "")
@@ -108,6 +109,7 @@ Scope {
         id: watcher
 
         onLockRequested: LockState.lock()
+        onResumed: root.refocus()
         onUnlockRequested: LockState.locked = false
         onAboutToSleep: {
             if (sessionLock.secure) // already locked: nothing to wait for

@@ -20,6 +20,32 @@ Item {
     readonly property UPowerDevice battery: UPower.displayDevice
 
     focus: true
+
+    // Keep the keyboard. After a resume the surface sometimes ends up without keyboard focus,
+    // and then every key goes nowhere (while the mouse still works): clicking anywhere on the
+    // lock screen, the window becoming active again, or waking up all take it back.
+    MouseArea {
+        anchors.fill: parent
+        onPressed: root.forceActiveFocus()
+    }
+
+    Connections {
+        target: root.Window.window
+
+        function onActiveChanged(): void {
+            if (root.Window.active)
+                root.forceActiveFocus();
+        }
+    }
+
+    Connections {
+        target: root.lock
+
+        function onRefocus(): void {
+            root.forceActiveFocus();
+        }
+    }
+
     Keys.onPressed: event => {
         root.lock.handleKey(event);
         event.accepted = true;
@@ -174,8 +200,12 @@ Item {
                         }
 
                         Row {
+                            id: dots
+
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.right: parent.right // newest dot on the right; old ones scroll off the left
+                            // Start at the left like normal text; once the field is full,
+                            // keep the newest dot visible and let old ones scroll off the left
+                            x: Math.min(0, parent.width - width)
                             spacing: 6
 
                             Repeater {

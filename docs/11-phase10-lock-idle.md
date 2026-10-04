@@ -311,6 +311,34 @@ with that could already read your files or kill the locker.
 - **Not built** (compared with Caelestia): fingerprint/face unlock, notifications and weather
   on the lock screen, a blurred screenshot of the desktop as background, Caps Lock warning.
 - `hyprlock` is no longer used. Once you're happy: `sudo pacman -Rs hyprlock`.
+- **Your feedback (2026-10-04):**
+  - **Dots right-aligned:** I had anchored them to the right on purpose. They now start on the
+    left (`x: Math.min(0, parent.width - width)`) and only scroll left once the field is full.
+  - **Keyboard dead after opening the lid** (mouse fine, both keyboards dead). This is **older
+    than this shell**: the journal shows boots ending within a minute of a resume on 22, 28,
+    30 and 31 Aug, 2 and 14 Sep, and twice on 4 Oct, while most resumes work fine.
+    - **Ruled out from the logs:** no kernel errors on the failed resumes; the 13:50 one even
+      ended in a clean shutdown (the power button), so the system was alive.
+    - **NVIDIA** uses `NVreg_UseKernelSuspendNotifiers=1`, which is fine. Hyprland runs on the
+      AMD GPU.
+    - **Likely cause:** the internal keyboard (not USB) dies too, which points at keyboard
+      *focus* in Hyprland, not the devices. While locked, keys go only to the lock surface; if
+      it has no keyboard focus, they go nowhere.
+    - **Not reproduced:** a screen off/on cycle kept focus; a real lid close wasn't tested by
+      Claude.
+    - **Hardening:** clicking anywhere on the lock screen, the window becoming active, and
+      logind's "resumed" signal all call `forceActiveFocus()`.
+    - **If it happens again:**
+      1. Click the password field and type.
+      2. If that doesn't help, `Ctrl + Alt + F3`, log in, and run
+         `~/.config/quickshell/my-first-shell/scripts/resume-debug.sh`. It saves Hyprland's
+         log (lost on reboot) to `~/resume-debug-*.txt`.
+      3. Then `qs ipc -c my-first-shell call lock unlock`, and `Ctrl + Alt + F1`.
+      4. If even the TTY has no keyboard, it's below Hyprland (kernel/firmware).
+    - **Your old workaround:** `/etc/systemd/system/reset-input-devices-after-sleep.service`
+      (from 28 Aug) re-plugs every USB keyboard/mouse after each resume. Its `atkbd` part does
+      nothing (the driver is built in), and failures continued after it was installed.
+
 
 ## Check it
 
