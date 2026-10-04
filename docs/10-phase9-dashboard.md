@@ -1,6 +1,6 @@
 # Phase 9: Dashboard + your first C++ plugin
 
-> **Status: 🔍 built 2026-10-04. Waiting for your check** (see [Check it](#check-it)).
+> **Status: ✅ completed 2026-10-04** (checked by you).
 > Implemented by Claude. This doc explains what was built so you can understand,
 > change and debug it.
 
@@ -332,14 +332,14 @@ dimmed. Use the arrows or scroll to change month; click the title to go back to 
 
 ## Check it
 
-- [ ] `Super + A` opens the dashboard; `←`/`→` switch tabs; Escape closes
-- [ ] Touching the top edge (middle) opens it; moving away closes it
-- [ ] Overview: clock, weather (right city? set `weatherLocation` if not), calendar (arrows,
+- [x] `Super + A` opens the dashboard; `←`/`→` switch tabs; Escape closes
+- [x] Touching the top edge (middle) opens it; moving away closes it
+- [x] Overview: clock, weather (right city? set `weatherLocation` if not), calendar (arrows,
       scroll)
-- [ ] Media: play a YouTube video, see title, cover and seek bar move; pause from the dashboard
-- [ ] Performance: CPU % moves when you do something heavy; temperatures look right
-- [ ] Weather tab: hourly and 7 days
-- [ ] After your next reboot: the Performance tab still works (the plugin path is in the
+- [x] Media: play a YouTube video, see title, cover and seek bar move; pause from the dashboard
+- [x] Performance: CPU % moves when you do something heavy; temperatures look right
+- [x] Weather tab: hourly and 7 days
+- [x] After your next reboot: the Performance tab still works (the plugin path is in the
       autostart)
 
 ## Questions
