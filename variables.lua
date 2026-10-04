@@ -17,7 +17,7 @@ return {
     shellCmd                   = "QML2_IMPORT_PATH=$HOME/.config/quickshell/my-first-shell/engine/build/qml qs -c my-first-shell -n",
 
     -- Temporary tools: each one is replaced by our own shell in a later phase
-    lockCmd                    = "hyprlock",                                    -- Phase 10
+    lockCmd                    = "loginctl lock-session",                       -- logind tells our shell to lock
 
     -- Touchpad
     touchpadDisableTyping      = true,
