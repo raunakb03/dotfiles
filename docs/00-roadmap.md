@@ -198,7 +198,7 @@ Every step in a phase guide has the same parts:
 - [x] Phase 9: Dashboard + C++ (2026-10-04)
 - [x] Phase 10: Lock & idle (2026-10-04)
 - [-] Phase 11: Utilities (skipped 2026-10-04: by choice, not needed day to day)
-- [ ] Phase 12: App theming (optional)
+- [x] Phase 12: App theming (optional) (2026-10-04)
 
 > **Quickshell version note:** Caelestia's README asks for `quickshell-git`.
 > You have the stable 0.3.1 package. Stay on stable until a phase needs a

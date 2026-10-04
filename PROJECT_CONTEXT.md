@@ -55,7 +55,7 @@ When assisting with this project, strictly follow these rules:
 - [x] Phase 9: Dashboard + first C++ service (done 2026-10-04; engine/ plugin MyShell.Engine, Super + A)
 - [x] Phase 10: Lock screen & idle (done 2026-10-04; SessionWatcher in engine, hyprlock unused; recovery: qs ipc -c my-first-shell call lock unlock; open: keyboard dead after some resumes, predates shell, scripts/resume-debug.sh)
 - [-] Phase 11: Utilities & polish (skipped by user 2026-10-04; only screenshots got save+notify via ~/.config/hypr/scripts/screenshot.sh)
-- [ ] Phase 12: App theming (built by Claude 2026-10-04, waiting for user check; kitty/btop/GTK via scripts/themes.py)
+- [x] Phase 12: App theming (done 2026-10-04; kitty/btop/GTK via scripts/themes.py; live preview in the wallpaper picker)
 
 ## 🗺️ Roadmap
 See [`docs/00-roadmap.md`](docs/00-roadmap.md).

@@ -1,6 +1,6 @@
 # Phase 12: App theming
 
-> **Status: 🔍 built 2026-10-04. Waiting for your check** (see [Check it](#check-it)).
+> **Status: ✅ completed 2026-10-04** (checked by you, including the live preview).
 > Implemented by Claude. This doc explains what was built so you can understand,
 > change and debug it.
 
@@ -192,10 +192,10 @@ one, and go back if you don't pick anything.
 
 ## Check it
 
-- [ ] Your terminal looks right (readable colours, `ls --color`, git diff colours)
-- [ ] Change the wallpaper: terminal follows right away
-- [ ] btop and Nautilus follow after reopening
-- [ ] Happy to keep this instead of Kanagawa (or swap back, see above)
+- [x] Your terminal looks right (readable colours, `ls --color`, git diff colours)
+- [x] Change the wallpaper: terminal follows right away
+- [x] btop and Nautilus follow after reopening
+- [x] Happy to keep this instead of Kanagawa (or swap back, see above)
 
 ## Questions
 
