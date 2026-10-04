@@ -85,24 +85,11 @@ Scope {
         appid: "myshell"
     }
 
-    // Toggles the launcher, starting with `text` in the search field.
-    // A release-type bind (the Super tap) sends only "released"; `hyprctl dispatch` sends only
-    // "pressed"; a normal bind sends both. Toggle on whichever comes first, never twice per press.
+    // Toggles the launcher, starting with `text` in the search field (e.g. ">clip ")
     component LauncherShortcut: GlobalShortcut {
         property string text: ""
-        property bool handledPress: false
 
         appid: "myshell"
-
-        onPressed: {
-            handledPress = true;
-            ShellState.toggleLauncher(text);
-        }
-
-        onReleased: {
-            if (!handledPress)
-                ShellState.toggleLauncher(text);
-            handledPress = false;
-        }
+        onPressed: ShellState.toggleLauncher(text)
     }
 }

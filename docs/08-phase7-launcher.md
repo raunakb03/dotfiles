@@ -6,6 +6,9 @@
 
 ## What you got
 
+> **Changed 2026-10-04:** the launcher key is now **`Super + Space`** (it was "tap Super"); see
+> Completion notes. Where this doc says "tap Super", read `Super + Space`.
+
 **Tap Super** (press and release it on its own) and the launcher slides up from the
 bottom edge of the screen, replacing rofi:
 
@@ -361,6 +364,18 @@ Commits (`my-first-shell`):
 no longer used", "Super tap opens the shell's launcher instead of rofi", "start the shell
 without -d", "restart bind waits for the old shell to exit".
 Also `my-first-shell`: "launcher shortcut: handle release-only events".
+
+- **Launcher key changed to `Super + Space` (your choice, 2026-10-04).**
+  - **Why:** tapping Super alone also fired on accidental presses, e.g. starting a shortcut and
+    changing your mind, or Super + drag to move a window.
+  - **`keybinds.lua`:** the release-bind logic became a plain
+    `create_bind(vars.kbLauncher, hl.dsp.global("myshell:launcher"), nil, …)`.
+  - **`Shortcuts.qml`:** a normal bind sends "pressed" once, so `LauncherShortcut` simply
+    toggles in `onPressed`. The `handledPress` workaround is gone.
+  - **Side note:** restarting the shell logged a Quickshell crash. It happens *while the old
+    instance exits* (Wayland cleanup in the destructors, the same trace as a report from
+    2026-10-03). Quickshell's crash handler restarts the shell at once, with the same
+    environment. Harmless; it's a 0.3.1 quirk.
 
 ## Check it
 
