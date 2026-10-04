@@ -12,7 +12,13 @@ Item {
     required property string modelData // full path
     readonly property bool current: ListView.isCurrentItem
 
+    readonly property bool hovered: hover.hovered
+
     signal activated
+
+    HoverHandler {
+        id: hover
+    }
 
     implicitWidth: Appearance.sizes.wallpaperWidth
     implicitHeight: Appearance.sizes.wallpaperHeight + name.implicitHeight + Appearance.spacing.small

@@ -154,6 +154,42 @@ user CSS file can redefine them:
 - **Not done:** `adw-gtk-theme` for full GTK 3 theming (a package to install), and Qt apps
   (none in use).
 
+## Live preview in the wallpaper picker (added after your check)
+
+Your request: the colours should change while you *browse* wallpapers, not only when you pick
+one, and go back if you don't pick anything.
+
+- **`set-wallpaper.py`:**
+  - `--preview <image>` writes that image's colours (shell, Hyprland, kitty, btop, GTK) but
+    leaves `wallpaper.json`, the actual wallpaper, alone.
+  - `--restore` writes the current wallpaper's colours again.
+  - A preview takes ~0.2 s.
+- **`Launcher.qml`:** `previewTarget` is the thumbnail under the mouse (`hoveredWallpaper`,
+  from a `HoverHandler` in `WallpaperItem`), or the one you moved to with ← / → / Tab
+  (`keyboardWallpaper`).
+  - Just *opening* the picker previews nothing.
+  - When the target becomes empty (mouse off the thumbnails, picker closed, `>wall` erased),
+    the colours go back.
+- **`Wallpapers.preview(path)`:** one 150 ms debounce for both directions.
+  - Gliding across thumbnails only previews where you stop.
+  - The tiny gap between two thumbnails doesn't trigger a restore in between.
+- **One script at a time:** all runs go through a single `Process`. A request that arrives
+  while one is running waits, and only the newest waiting one is kept, so a slow preview can
+  never land after your final choice.
+- **Choosing** (Enter or click) calls `set()`, which cancels any pending preview and clears
+  `previewing`, so the picker closing afterwards doesn't restore the old colours.
+- **GTK apps** still only pick up colours when they start, so a preview doesn't reach an
+  already-open Nautilus.
+
+**Bugs found while building it:**
+- Selecting the *current* wallpaper on open was tried first and dropped: inside
+  `onTextChanged`, `mode` still had its old value, and ListView resets `currentIndex` to 0 when
+  a new model arrives. "Preview only what you point at" is simpler and avoids both.
+- In testing, synthetic pointer warps didn't produce hover events while the launcher's focus
+  grab was active. The preview/restore logic was therefore tested by feeding the hover value
+  in directly (a scratch-only change): open → unchanged, hover → preview, glide → only the
+  final one, off → restored, close → restored.
+
 ## Check it
 
 - [ ] Your terminal looks right (readable colours, `ls --color`, git diff colours)

@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Set the wallpaper and generate a Material 3 colour scheme from it.
 
-    set-wallpaper.py <image>
+    set-wallpaper.py <image>             set the wallpaper and its colours
+    set-wallpaper.py --preview <image>   only the colours (the wallpaper picker, while you browse)
+    set-wallpaper.py --restore           the colours of the current wallpaper again (picker closed)
 
 Writes three files:
     ~/.local/state/myshell/wallpaper.json   the image path    -> read by the shell's Wallpaper service
@@ -73,24 +75,43 @@ def to_lua(colours: dict[str, str]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def main() -> None:
-    if len(sys.argv) != 2:
-        sys.exit(f"usage: {sys.argv[0]} <image>")
-
-    image_path = Path(sys.argv[1]).expanduser().resolve()
-    if not image_path.is_file():
-        sys.exit(f"not a file: {image_path}")
-
+def apply_colours(image_path: Path) -> tuple[int, dict[str, str]]:
+    """Generate the colours for an image and write them everywhere (shell, Hyprland, apps)."""
     source = source_colour(image_path)
     colours = generate_scheme(source)
-
-    write_atomically(STATE_DIR / "wallpaper.json", json.dumps({"path": str(image_path)}, indent=4) + "\n")
     write_atomically(STATE_DIR / "scheme.json",
                      json.dumps({"source": f"{source & 0xFFFFFF:06x}", "mode": "dark", "colours": colours}, indent=4) + "\n")
     write_atomically(HYPR_SCHEME, to_lua(colours))
     themes.main()  # kitty, btop, GTK
+    return source, colours
 
-    print(f"wallpaper: {image_path}")
+
+def current_wallpaper() -> Path:
+    return Path(json.loads((STATE_DIR / "wallpaper.json").read_text())["path"])
+
+
+def main() -> None:
+    args = sys.argv[1:]
+    if args == ["--restore"]:
+        apply_colours(current_wallpaper())
+        print("colours restored")
+        return
+
+    preview = args[:1] == ["--preview"]
+    if preview:
+        args = args[1:]
+    if len(args) != 1:
+        sys.exit(f"usage: {sys.argv[0]} [--preview] <image> | --restore")
+
+    image_path = Path(args[0]).expanduser().resolve()
+    if not image_path.is_file():
+        sys.exit(f"not a file: {image_path}")
+
+    source, colours = apply_colours(image_path)
+    if not preview:  # a preview leaves the wallpaper itself alone
+        write_atomically(STATE_DIR / "wallpaper.json", json.dumps({"path": str(image_path)}, indent=4) + "\n")
+
+    print(f"{'preview' if preview else 'wallpaper'}: {image_path}")
     print(f"main colour: #{source & 0xFFFFFF:06x}, primary: #{colours['primary']}")
 
 

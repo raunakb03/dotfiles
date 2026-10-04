@@ -114,6 +114,24 @@ Item {
 
     // Every time it opens: start with the requested text (e.g. ">clip " from Super + V),
     // fetch fresh data for the lists that change, and take the keyboard
+    // Wallpaper picker: preview the colours of the wallpaper you point at (mouse) or move to
+    // (← / →). Nothing is previewed just by opening the picker. When the target goes away (mouse
+    // off the thumbnails, picker closed, left >wall mode), the current colours come back.
+    property string hoveredWallpaper: ""
+    property string keyboardWallpaper: ""
+    readonly property string previewTarget: wallpaperMode && open ? (hoveredWallpaper || keyboardWallpaper) : ""
+
+    onPreviewTargetChanged: Wallpapers.preview(previewTarget)
+
+    // Keyboard in the wallpaper strip: move the selection and preview it
+    function moveWallpaper(delta: int): void {
+        if (delta > 0)
+            wallList.incrementCurrentIndex();
+        else
+            wallList.decrementCurrentIndex();
+        keyboardWallpaper = wallList.currentItem?.modelData ?? "";
+    }
+
     onOpenChanged: {
         if (open) {
             Clipboard.refresh();
@@ -177,6 +195,12 @@ Item {
             highlightMoveDuration: Appearance.anim.durations.small
 
             delegate: WallpaperItem {
+                onHoveredChanged: {
+                    if (hovered)
+                        root.hoveredWallpaper = modelData;
+                    else if (root.hoveredWallpaper === modelData)
+                        root.hoveredWallpaper = "";
+                }
                 onActivated: {
                     Wallpapers.set(modelData);
                     ShellState.closeLauncher();
@@ -242,6 +266,7 @@ Item {
             onTextChanged: {
                 resultList.currentIndex = 0;
                 wallList.currentIndex = 0;
+                root.keyboardWallpaper = "";
             }
 
             onAccepted: root.activate()
@@ -249,15 +274,15 @@ Item {
             // The list grows upwards, so "up" means the next item
             Keys.onUpPressed: if (!root.wallpaperMode) resultList.incrementCurrentIndex()
             Keys.onDownPressed: if (!root.wallpaperMode) resultList.decrementCurrentIndex()
-            Keys.onTabPressed: root.currentList.incrementCurrentIndex()
-            Keys.onBacktabPressed: root.currentList.decrementCurrentIndex()
+            Keys.onTabPressed: root.wallpaperMode ? root.moveWallpaper(1) : resultList.incrementCurrentIndex()
+            Keys.onBacktabPressed: root.wallpaperMode ? root.moveWallpaper(-1) : resultList.decrementCurrentIndex()
             // Left/Right move the cursor in the text, except in the wallpaper strip
             Keys.onLeftPressed: event => {
-                if (root.wallpaperMode) wallList.decrementCurrentIndex();
+                if (root.wallpaperMode) root.moveWallpaper(-1);
                 else event.accepted = false;
             }
             Keys.onRightPressed: event => {
-                if (root.wallpaperMode) wallList.incrementCurrentIndex();
+                if (root.wallpaperMode) root.moveWallpaper(1);
                 else event.accepted = false;
             }
         }
