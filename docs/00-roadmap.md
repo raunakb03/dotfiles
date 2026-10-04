@@ -138,7 +138,7 @@ Every step in a phase guide has the same parts:
   bound to Super press-and-release.
 - **Done when:** rofi is gone from `variables.lua`.
 
-## Phase 8: Notifications, sidebar, OSD, session menu
+## Phase 8: Notifications, sidebar, OSD, session menu → [`09-phase8-notifications-osd-session.md`](09-phase8-notifications-osd-session.md)
 - **Read:** `shell/services/Notifs.qml`, `shell/modules/notifications/`,
   `shell/modules/sidebar/`, `shell/modules/osd/`, `shell/modules/session/`,
   `shell/services/Brightness.qml`.
