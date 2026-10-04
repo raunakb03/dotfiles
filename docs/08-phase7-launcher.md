@@ -1,6 +1,6 @@
 # Phase 7: Launcher
 
-> **Status: 🔍 built 2026-10-03. Waiting for your check** (see [Check it](#check-it)).
+> **Status: ✅ completed 2026-10-04** (checked by you: launcher, `Super + V`, `Super + /`, `>`).
 > Implemented by Claude. This doc explains what was built so you can understand,
 > change and debug it.
 
@@ -364,15 +364,15 @@ Also `my-first-shell`: "launcher shortcut: handle release-only events".
 
 ## Check it
 
-- [ ] Tapping Super opens the launcher, and tapping again closes it; Super + T etc. still don't open it
-- [ ] You can type straight away (the cursor is in the search field)
-- [ ] ↑/↓ move the highlight, Enter launches the app, and the launcher closes
-- [ ] Esc closes it, and clicking outside closes it
-- [ ] `>wall`: ←/→ move, Enter sets the wallpaper and the colours change
-- [ ] Clicking an app or a thumbnail works too
-- [ ] `Super + V` opens the clipboard history; Enter copies the entry (paste it somewhere)
-- [ ] `Super + /` opens the keybindings; typing filters them
-- [ ] Typing `>` shows the three modes; Enter on one switches to it
+- [x] Tapping Super opens the launcher, and tapping again closes it; Super + T etc. still don't open it
+- [x] You can type straight away (the cursor is in the search field)
+- [x] ↑/↓ move the highlight, Enter launches the app, and the launcher closes
+- [x] Esc closes it, and clicking outside closes it
+- [x] `>wall`: ←/→ move, Enter sets the wallpaper and the colours change
+- [x] Clicking an app or a thumbnail works too
+- [x] `Super + V` opens the clipboard history; Enter copies the entry (paste it somewhere)
+- [x] `Super + /` opens the keybindings; typing filters them
+- [x] Typing `>` shows the three modes; Enter on one switches to it
 
 ## Questions
 
