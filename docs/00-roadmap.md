@@ -177,7 +177,7 @@ Every step in a phase guide has the same parts:
   mode, toasts, the cava visualiser and qalculate in C++. Optional: a
   Nexus-style settings app.
 
-## Phase 12 (optional): App theming
+## Phase 12 (optional): App theming → [`12-phase12-app-theming.md`](12-phase12-app-theming.md)
 - **Read:** `caelestia/foot`, `fish`, `starship.toml`, `btop`, and the
   gtk/qt sections of `caelestia/manifest.toml`.
 - **Build:** templates filled by `scheme.py` so terminal, prompt, btop and

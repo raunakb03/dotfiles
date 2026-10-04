@@ -19,7 +19,8 @@ Start here: **[`docs/00-roadmap.md`](docs/00-roadmap.md)**
 | 8: Notifications, OSD, session | [`docs/09-phase8-notifications-osd-session.md`](docs/09-phase8-notifications-osd-session.md) |
 | 9: Dashboard + C++ engine | [`docs/10-phase9-dashboard.md`](docs/10-phase9-dashboard.md) |
 | 10: Lock screen & idle | [`docs/11-phase10-lock-idle.md`](docs/11-phase10-lock-idle.md) |
-| 11+ | written as each phase is built |
+| 11: Utilities | skipped (by choice) |
+| 12: App theming | [`docs/12-phase12-app-theming.md`](docs/12-phase12-app-theming.md) |
 
 ## Project Structure
 - `shell.qml`: the main QML entry point for the UI (created in Phase 0, step 0.7).
