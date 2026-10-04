@@ -39,6 +39,12 @@ Scope {
     }
 
     Action {
+        name: "dashboard"
+        description: "Open or close the dashboard"
+        onPressed: ShellState.toggleDashboard()
+    }
+
+    Action {
         name: "brightnessUp"
         description: "Screen brightness up"
         onPressed: Brightness.increase()

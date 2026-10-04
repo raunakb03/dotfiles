@@ -7,6 +7,7 @@ import qs.components
 import qs.config
 import qs.modules.bar
 import qs.modules.bar.popouts
+import qs.modules.dashboard
 import qs.modules.launcher
 import qs.modules.notifications
 import qs.modules.osd
@@ -24,16 +25,18 @@ PanelWindow {
     readonly property bool launcherOpen: ShellState.launcherScreen === screen?.name
     readonly property bool sidebarOpen: ShellState.sidebarScreen === screen?.name
     readonly property bool sessionOpen: ShellState.sessionScreen === screen?.name
+    readonly property bool dashboardOpen: ShellState.dashboardScreen === screen?.name
+    readonly property bool dashboardPinned: dashboardOpen && ShellState.dashboardPinned // opened with the key
 
     WlrLayershell.namespace: "myshell-drawers"
     // Fullscreen windows are drawn above the Top layer. While a panel is showing, move up to
     // Overlay (above everything) so it also shows over a fullscreen app. (The bar comes along
     // for that moment: it's in the same window.)
-    readonly property bool panelShowing: launcherOpen || sidebarOpen || sessionOpen || popups.height > 0 || osd.width > 0
+    readonly property bool panelShowing: launcherOpen || sidebarOpen || sessionOpen || dashboardOpen || popups.height > 0 || osd.width > 0
     WlrLayershell.layer: panelShowing ? WlrLayer.Overlay : WlrLayer.Top
     // The launcher, the session menu and the Wi-Fi password field need the keyboard;
     // otherwise never take it
-    WlrLayershell.keyboardFocus: popouts.locked || launcherOpen || sessionOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+    WlrLayershell.keyboardFocus: popouts.locked || launcherOpen || sessionOpen || dashboardPinned ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
     exclusionMode: ExclusionMode.Ignore // the Exclusions windows reserve the space instead
 
     anchors {
@@ -69,12 +72,20 @@ PanelWindow {
         Region {
             item: session
         }
+
+        Region {
+            item: dashboard
+        }
+
+        Region {
+            item: dashboardTrigger
+        }
         // (the OSD is display-only: clicks go through it)
     }
 
     // While the launcher, sidebar or session menu is open, clicking outside this window closes it
     HyprlandFocusGrab {
-        active: root.launcherOpen || root.sidebarOpen || root.sessionOpen
+        active: root.launcherOpen || root.sidebarOpen || root.sessionOpen || root.dashboardPinned
         windows: [root]
         onCleared: ShellState.closeAll()
     }
@@ -129,6 +140,11 @@ PanelWindow {
             panel: session
             barOnRight: root.barOnRight
         }
+
+        AttachedBackground {
+            panel: dashboard
+            barOnRight: root.barOnRight
+        }
     }
 
     Bar {
@@ -161,7 +177,7 @@ PanelWindow {
         id: popups
 
         // Only on the focused monitor, and not while the history is open
-        visible: ShellState.focusedScreen === root.screen?.name && !root.sidebarOpen
+        visible: ShellState.focusedScreen === root.screen?.name && !root.sidebarOpen && !root.dashboardOpen
         barOnRight: root.barOnRight
     }
 
@@ -184,5 +200,34 @@ PanelWindow {
 
         open: root.sessionOpen
         barOnRight: root.barOnRight
+    }
+
+    Dashboard {
+        id: dashboard
+
+        open: root.dashboardOpen
+        barOnRight: root.barOnRight
+    }
+
+    // A 2 px strip along the top edge, under the dashboard: touching it opens the dashboard
+    Item {
+        id: dashboardTrigger
+
+        x: dashboard.x + dashboard.width * 0.15
+        width: dashboard.width * 0.7
+        height: 2
+
+        HoverHandler {
+            id: triggerHover
+
+            onHoveredChanged: if (hovered) ShellState.hoverDashboard(root.screen.name)
+        }
+    }
+
+    // Opened by hovering: close shortly after the mouse leaves both the strip and the dashboard
+    Timer {
+        running: root.dashboardOpen && !ShellState.dashboardPinned && !dashboard.hovered && !triggerHover.hovered
+        interval: 400
+        onTriggered: ShellState.dashboardScreen = ""
     }
 }
