@@ -26,6 +26,59 @@ Scope {
         text: ">keys "
     }
 
+    Action {
+        name: "sidebar"
+        description: "Open or close the notification history"
+        onPressed: ShellState.toggleSidebar()
+    }
+
+    Action {
+        name: "session"
+        description: "Open or close the power menu"
+        onPressed: ShellState.toggleSession()
+    }
+
+    Action {
+        name: "brightnessUp"
+        description: "Screen brightness up"
+        onPressed: Brightness.increase()
+    }
+
+    Action {
+        name: "brightnessDown"
+        description: "Screen brightness down"
+        onPressed: Brightness.decrease()
+    }
+
+    Action {
+        name: "mediaToggle"
+        description: "Play / pause the active media player"
+        onPressed: Players.togglePlaying()
+    }
+
+    Action {
+        name: "mediaNext"
+        description: "Next track"
+        onPressed: Players.next()
+    }
+
+    Action {
+        name: "mediaPrev"
+        description: "Previous track"
+        onPressed: Players.previous()
+    }
+
+    Action {
+        name: "mediaStop"
+        description: "Stop the active media player"
+        onPressed: Players.stop()
+    }
+
+    // A shortcut that does something once per key press
+    component Action: GlobalShortcut {
+        appid: "myshell"
+    }
+
     // Toggles the launcher, starting with `text` in the search field.
     // A release-type bind (the Super tap) sends only "released"; `hyprctl dispatch` sends only
     // "pressed"; a normal bind sends both. Toggle on whichever comes first, never twice per press.

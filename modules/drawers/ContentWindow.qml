@@ -3,10 +3,15 @@ import QtQuick.Effects
 import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Wayland
+import qs.components
 import qs.config
 import qs.modules.bar
 import qs.modules.bar.popouts
 import qs.modules.launcher
+import qs.modules.notifications
+import qs.modules.osd
+import qs.modules.session
+import qs.modules.sidebar
 import qs.services
 
 // One transparent, full-screen window per monitor. It draws the frame, the bar and the
@@ -17,13 +22,18 @@ PanelWindow {
 
     readonly property bool barOnRight: Config.bar.position === "right"
     readonly property bool launcherOpen: ShellState.launcherScreen === screen?.name
+    readonly property bool sidebarOpen: ShellState.sidebarScreen === screen?.name
+    readonly property bool sessionOpen: ShellState.sessionScreen === screen?.name
 
     WlrLayershell.namespace: "myshell-drawers"
-    // Fullscreen windows are drawn above the Top layer. While the launcher is open, move up to
-    // Overlay (above everything) so it also works over a fullscreen app.
-    WlrLayershell.layer: launcherOpen ? WlrLayer.Overlay : WlrLayer.Top
-    // The launcher and the Wi-Fi password field need the keyboard; otherwise never take it
-    WlrLayershell.keyboardFocus: popouts.locked || launcherOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+    // Fullscreen windows are drawn above the Top layer. While a panel is showing, move up to
+    // Overlay (above everything) so it also shows over a fullscreen app. (The bar comes along
+    // for that moment: it's in the same window.)
+    readonly property bool panelShowing: launcherOpen || sidebarOpen || sessionOpen || popups.height > 0 || osd.width > 0
+    WlrLayershell.layer: panelShowing ? WlrLayer.Overlay : WlrLayer.Top
+    // The launcher, the session menu and the Wi-Fi password field need the keyboard;
+    // otherwise never take it
+    WlrLayershell.keyboardFocus: popouts.locked || launcherOpen || sessionOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
     exclusionMode: ExclusionMode.Ignore // the Exclusions windows reserve the space instead
 
     anchors {
@@ -47,13 +57,26 @@ PanelWindow {
         Region {
             item: launcher
         }
+
+        Region {
+            item: popups
+        }
+
+        Region {
+            item: sidebar
+        }
+
+        Region {
+            item: session
+        }
+        // (the OSD is display-only: clicks go through it)
     }
 
-    // While the launcher is open, clicking anywhere outside this window closes it
+    // While the launcher, sidebar or session menu is open, clicking outside this window closes it
     HyprlandFocusGrab {
-        active: root.launcherOpen
+        active: root.launcherOpen || root.sidebarOpen || root.sessionOpen
         windows: [root]
-        onCleared: ShellState.closeLauncher()
+        onCleared: ShellState.closeAll()
     }
 
     PopoutState {
@@ -86,6 +109,26 @@ PanelWindow {
         LauncherBackground {
             panel: launcher
         }
+
+        AttachedBackground {
+            panel: popups
+            barOnRight: root.barOnRight
+        }
+
+        AttachedBackground {
+            panel: sidebar
+            barOnRight: root.barOnRight
+        }
+
+        AttachedBackground {
+            panel: osd
+            barOnRight: root.barOnRight
+        }
+
+        AttachedBackground {
+            panel: session
+            barOnRight: root.barOnRight
+        }
     }
 
     Bar {
@@ -112,5 +155,34 @@ PanelWindow {
         open: root.launcherOpen
         // Centred in the part of the screen the bar doesn't cover
         centreX: root.barOnRight ? (root.width - Appearance.sizes.barWidth) / 2 : Appearance.sizes.barWidth + (root.width - Appearance.sizes.barWidth) / 2
+    }
+
+    Popups {
+        id: popups
+
+        // Only on the focused monitor, and not while the history is open
+        visible: ShellState.focusedScreen === root.screen?.name && !root.sidebarOpen
+        barOnRight: root.barOnRight
+    }
+
+    Sidebar {
+        id: sidebar
+
+        open: root.sidebarOpen
+        barOnRight: root.barOnRight
+    }
+
+    Osd {
+        id: osd
+
+        open: OsdState.visible && OsdState.screen === root.screen?.name
+        barOnRight: root.barOnRight
+    }
+
+    Session {
+        id: session
+
+        open: root.sessionOpen
+        barOnRight: root.barOnRight
     }
 }

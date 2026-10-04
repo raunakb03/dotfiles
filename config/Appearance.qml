@@ -44,6 +44,9 @@ Singleton {
         readonly property int launcherItemHeight: 56
         readonly property int wallpaperWidth: 200 // thumbnail size in the wallpaper picker
         readonly property int wallpaperHeight: 130
+        readonly property int notificationWidth: 360 // popups and the sidebar's history
+        readonly property int osdHeight: 180         // the volume / brightness bars
+        readonly property int sessionButtonSize: 72  // the power menu's buttons
     }
 
     readonly property QtObject font: QtObject {
