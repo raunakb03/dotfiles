@@ -20,7 +20,7 @@ Item {
         {
             icon: "lock",
             name: "Lock",
-            command: ["hyprlock"]
+            command: ["loginctl", "lock-session"] // → logind → SessionWatcher → our lock screen
         },
         {
             icon: "logout",
