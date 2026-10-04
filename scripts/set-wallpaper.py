@@ -7,6 +7,7 @@ Writes three files:
     ~/.local/state/myshell/wallpaper.json   the image path    -> read by the shell's Wallpaper service
     ~/.local/state/myshell/scheme.json      the colours       -> read by the shell's Colours service
     ~/.config/hypr/scheme/current.lua       the same colours  -> read by Hyprland (borders, shadows)
+and then runs themes.py, which themes kitty, btop and GTK apps from scheme.json.
 """
 
 import json
@@ -20,6 +21,8 @@ from materialyoucolor.quantize import QuantizeCelebi
 from materialyoucolor.scheme.scheme_tonal_spot import SchemeTonalSpot
 from materialyoucolor.score.score import Score
 from PIL import Image
+
+import themes  # scripts/themes.py, next to this file
 
 HOME = Path.home()
 STATE_DIR = Path(os.environ.get("XDG_STATE_HOME", HOME / ".local/state")) / "myshell"
@@ -85,6 +88,7 @@ def main() -> None:
     write_atomically(STATE_DIR / "scheme.json",
                      json.dumps({"source": f"{source & 0xFFFFFF:06x}", "mode": "dark", "colours": colours}, indent=4) + "\n")
     write_atomically(HYPR_SCHEME, to_lua(colours))
+    themes.main()  # kitty, btop, GTK
 
     print(f"wallpaper: {image_path}")
     print(f"main colour: #{source & 0xFFFFFF:06x}, primary: #{colours['primary']}")
