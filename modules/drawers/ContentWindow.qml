@@ -19,7 +19,9 @@ PanelWindow {
     readonly property bool launcherOpen: ShellState.launcherScreen === screen?.name
 
     WlrLayershell.namespace: "myshell-drawers"
-    WlrLayershell.layer: WlrLayer.Top
+    // Fullscreen windows are drawn above the Top layer. While the launcher is open, move up to
+    // Overlay (above everything) so it also works over a fullscreen app.
+    WlrLayershell.layer: launcherOpen ? WlrLayer.Overlay : WlrLayer.Top
     // The launcher and the Wi-Fi password field need the keyboard; otherwise never take it
     WlrLayershell.keyboardFocus: popouts.locked || launcherOpen ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
     exclusionMode: ExclusionMode.Ignore // the Exclusions windows reserve the space instead
