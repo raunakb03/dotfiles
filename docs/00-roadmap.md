@@ -160,7 +160,7 @@ Every step in a phase guide has the same parts:
 - **Done when:** the dashboard opens from the top edge and CPU usage updates
   live.
 
-## Phase 10: Lock screen & idle
+## Phase 10: Lock screen & idle → [`11-phase10-lock-idle.md`](11-phase10-lock-idle.md)
 - **Read:** `shell/modules/lock/**`, `shell/modules/IdleMonitors.qml`,
   `shell/services/IdleInhibitor.qml`.
 - **Build:** `WlSessionLock` + `Services.Pam`, `IdleMonitor`s (dim → lock →
