@@ -1,0 +1,12 @@
+#%PAM-1.0
+# How the lock screen checks your password (modules/lock/Lock.qml: PamContext { config: "lock" }).
+# The same rules as /etc/pam.d/system-auth, written out because `include` doesn't work from
+# a private config directory:
+#   1. faillock preauth: refuse at once if the account is locked from too many failures
+#   2. unix: check the password against /etc/shadow; on success skip the next line
+#   3. faillock authfail: count the failure (3 in 15 min → locked for 10 min, see faillock.conf)
+#   4. faillock authsucc: a success resets the count
+auth    required                    pam_faillock.so     preauth
+auth    [success=1 default=bad]     pam_unix.so         nullok
+auth    [default=die]               pam_faillock.so     authfail
+auth    required                    pam_faillock.so     authsucc
