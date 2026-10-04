@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(myshell-engine LANGUAGES CXX)
 
-find_package(Qt6 6.9 REQUIRED COMPONENTS Core Qml)
+find_package(Qt6 6.9 REQUIRED COMPONENTS Core Qml DBus)
 qt_standard_project_setup(REQUIRES 6.9)
 
 # Put every QML module under build/qml/<URI as folders>, the layout QML imports expect
@@ -16,8 +16,11 @@ qt_add_qml_module(myshell-engine
     VERSION 1.0
     SOURCES
         src/systemstats.hpp src/systemstats.cpp
+        src/sessionwatcher.hpp src/sessionwatcher.cpp
 )
 
 # The generated type-registration code does `#include "systemstats.hpp"`, so src/ must be on the path
 target_include_directories(myshell-engine PRIVATE src)
 target_compile_options(myshell-engine PRIVATE -Wall -Wextra)
+# QtDBus: SessionWatcher talks to systemd-logind
+target_link_libraries(myshell-engine PRIVATE Qt6::DBus)
