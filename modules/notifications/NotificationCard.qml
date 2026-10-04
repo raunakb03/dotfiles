@@ -22,7 +22,9 @@ StyledRect {
             icon = icon.slice("image://icon/".length);
         if (icon === "")
             return "";
-        if (icon.startsWith("/") || icon.includes("://"))
+        if (icon.startsWith("/"))
+            return "file://" + icon; // a bare path would be read as a path inside the app (qrc:)
+        if (icon.includes("://"))
             return icon;
         return Quickshell.iconPath(icon, true);
     }
