@@ -220,10 +220,11 @@ create_bind(vars.kbAudioSettings, hl.dsp.exec_cmd(vars.audioSettings), nil, "App
 ---- Utilities ----
 -------------------
 
--- TEMPORARY screenshots (Phase 11 replaces these with the shell's area picker)
-create_bind(vars.kbScreenshot, hl.dsp.exec_cmd("grim - | wl-copy"), locked, "Utilities: screenshot (to clipboard)")
-create_bind(vars.kbScreenshotRegion, hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'), nil,
-    "Utilities: screenshot a region (to clipboard)")
+-- Screenshots: saved to ~/Pictures/Screenshots, copied, and announced (scripts/screenshot.sh)
+create_bind(vars.kbScreenshot, hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh"), locked,
+    "Utilities: screenshot (save + copy)")
+create_bind(vars.kbScreenshotRegion, hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot.sh region"), nil,
+    "Utilities: screenshot a region (save + copy)")
 create_bind(vars.kbColorPicker, hl.dsp.exec_cmd("hyprpicker -a"), nil, "Utilities: colour picker")
 
 -- Keybind cheat sheet: every bind with a description, searchable in the shell's launcher
