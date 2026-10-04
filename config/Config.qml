@@ -12,6 +12,7 @@ Singleton {
     property alias bar: adapter.bar
     property alias border: adapter.border
     property alias paths: adapter.paths
+    property alias services: adapter.services
 
     // False until shell.json has been read (or found missing). Until then every value above
     // is a default. Anything that must not start with defaults waits for this (see Drawers.qml).
@@ -46,6 +47,12 @@ Singleton {
                 property real paddingScale: 1
                 property real fontScale: 1
                 property real animDurationScale: 1
+            }
+
+            // Data the shell fetches
+            property JsonObject services: JsonObject {
+                property string weatherLocation: "" // a city ("Pune") or "lat,lon"; empty = guess from your IP
+                property bool useFahrenheit: false
             }
 
             property JsonObject paths: JsonObject {
