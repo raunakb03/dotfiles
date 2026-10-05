@@ -2198,6 +2198,11 @@ What was actually done, and where it differs from the steps above:
 - Fake fullscreen on `Super + Shift + F`: Zen's sidebar didn't appear in real
   fullscreen because Zen was told it was fullscreen (`fullscreenClient: 2`)
   and hid its UI.
+- **Changed 2026-10-05 (your request):** there is no real fullscreen any more.
+  `Super + F` is the fake fullscreen for every app, `Super + Shift + F` is gone,
+  and apps' own fullscreen requests (e.g. a video's fullscreen button) are
+  ignored with `suppress_event = "maximize fullscreen"`, so a video fills the
+  browser window and `Super + F` makes that fill the screen.
 - Faster animations everywhere (about 40–50% shorter than Caelestia's). All
   11 speeds now live in `variables.lua`, with the originals in comments.
 - Step 1.20: keybind descriptions and a rofi cheat sheet on `Super + /`
