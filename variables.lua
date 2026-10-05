@@ -133,9 +133,8 @@ return {
     kbNormalizeWindow          = "CTRL + SUPER + ALT + Backslash",
     kbWindowPip                = "SUPER + ALT + Backslash",
     kbPinWindow                = "SUPER + P",
-    kbWindowFullscreen         = "SUPER + F",
+    kbWindowFullscreen         = "SUPER + F",              -- fake fullscreen (the app keeps its UI)
     kbWindowBorderedFullscreen = "SUPER + ALT + F",
-    kbWindowFakeFullscreen     = "SUPER + SHIFT + F",
     kbToggleWindowFloating     = "SUPER + ALT + Space",
     kbCloseWindow              = "SUPER + Q",
     kbFocusLeft                = "SUPER + H",

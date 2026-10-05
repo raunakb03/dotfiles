@@ -26,9 +26,11 @@ end
 ---- Window rules ----
 ----------------------
 
--- Ignore "maximize me" requests from apps (kitty sends one when it opens),
--- so new windows tile normally
-hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
+-- Ignore apps' own "maximize me" requests (kitty sends one when it opens, so new windows tile
+-- normally) and "fullscreen me" requests (a video's fullscreen button): fullscreen happens only
+-- with Super + F, and only as fake fullscreen (keybinds.lua). A browser video then fills the
+-- browser window instead; Super + F makes that fill the screen.
+hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize fullscreen" })
 
 -- Every non-fullscreen window is slightly see-through (blur shows behind it)
 hl.window_rule({ match = { fullscreen = false }, opacity = vars.windowOpacity .. " override" })
