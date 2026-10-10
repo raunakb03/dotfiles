@@ -1,0 +1,13 @@
+# Installed on the old system but replaced by my-first-shell: never reinstall these.
+dunst
+hyprlock
+hyprpaper
+rofi
+rofi-wayland
+waybar
+network-manager-applet
+# Installed only when the hardware is there (install.sh detects it)
+amd-ucode
+intel-ucode
+nvidia-open-dkms
+libva-nvidia-driver
