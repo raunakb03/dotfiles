@@ -1,0 +1,21 @@
+{
+    "appearance": {
+        "animDurationScale": 1,
+        "fontScale": 1,
+        "paddingScale": 1,
+        "roundingScale": 1,
+        "spacingScale": 1
+    },
+    "bar": {
+        "showDate": true,
+        "showSeconds": false,
+        "position": "right"
+    },
+    "border": {
+        "thickness": 0,
+        "rounding": 0
+    },
+    "paths": {
+        "wallpaperDir": "~/raunak/Wallpapers"
+    }
+}
