@@ -17,7 +17,37 @@ into this repo, so the live config *is* the repo. Edit in place, then commit and
 | `cscripts` | `~/scripts` | small scripts |
 | `autostart` | `~/.config/autostart` | keeps nm-applet from autostarting |
 
-## New machine
+## New machine: one command
+
+On a fresh Arch + Hyprland install, logged in as your user (not root):
+
+```sh
+bash <(curl -fsSL https://raw.githubusercontent.com/raunakb03/dotfiles/main/install.sh)
+```
+
+`install.sh` does everything below, in order, and is safe to run again:
+
+1. installs `git`, `stow`, `base-devel`, and `yay` (AUR helper) if missing
+2. clones this repo to `~/dotfiles` (HTTPS; pushing uses SSH)
+3. installs every package in `packages/pacman.txt` and `packages/aur.txt`, plus the
+   hardware-specific ones it detects (AMD/Intel microcode, NVIDIA driver)
+4. moves any config in the way to `~/.local/share/dotfiles-backup-<date>/`, then stows every package
+5. oh-my-zsh + zsh-autosuggestions + zsh-syntax-highlighting, zsh as login shell
+6. tmux plugins (tpm)
+7. builds the shell's C++ plugin, sets a wallpaper (the default in `wallpapers/`, or your
+   collection with `--wallpapers <folder>`), which generates all the colours
+8. enables NetworkManager, bluetooth, sddm, fstrim, libvirtd
+
+Options: `--dry-run` (show, change nothing), `--wallpapers <dir>`, `--skip-packages`,
+`--skip-services`, `--yes`. Then reboot and pick Hyprland (uwsm) in SDDM.
+
+**Keeping the package lists current:** after installing or removing something you want on
+future installs, run `packages/update.sh` and commit. Packages you never want back go in
+`packages/exclude.txt`.
+
+**Wallpapers** (~700 MB) aren't in the repo: copy them from a backup with `--wallpapers`.
+
+## New machine: by hand
 
 ```sh
 sudo pacman -S stow git
