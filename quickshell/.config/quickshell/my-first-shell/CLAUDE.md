@@ -36,6 +36,11 @@ For each phase:
 
 Phases 0–4 docs are step-by-step guides the user typed through. Keep them as they are.
 
+## Git: one repo for everything (since 2026-10-10)
+All config lives in the stow repo **`~/dotfiles`**; this folder and `~/.config/hypr` are symlinks
+into it. Commit from `~/dotfiles` (`git -C ~/dotfiles …`), one commit per logical change as before.
+There is no separate repo here or in `~/.config/hypr` any more. Ask before `git push`.
+
 ## Every session
 - Work out where things stand from the **Progress** checkboxes in `docs/00-roadmap.md` and
   "Current Progress" in `PROJECT_CONTEXT.md`. If unclear, ask.

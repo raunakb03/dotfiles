@@ -35,7 +35,12 @@ When assisting with this project, strictly follow these rules:
    structure, or run commands change.
 
 ## 📁 Related locations
-- `~/.config/hypr/`: Hyprland Lua config (own git repo), built in Phase 1
+- `~/.config/hypr/`: Hyprland Lua config, built in Phase 1
+- **Since 2026-10-10 everything is in one stow repo, `~/dotfiles`** (GitHub `raunakb03/dotfiles`):
+  this folder is `~/dotfiles/quickshell/.config/quickshell/my-first-shell`, Hyprland is
+  `~/dotfiles/hypr/.config/hypr`, and `~/.config/{quickshell,hypr,myshell,kitty,…}` are symlinks
+  into it. The old separate repos (with their `.git`) are in
+  `~/.local/share/dotfiles-backup-2026-10-10/`; their full history was merged into `~/dotfiles`.
 - `~/.config/myshell/`: personal overrides (`hypr-vars.lua`, `hypr-user.lua`, later `shell.json`)
 
 ## 📊 Current Progress
