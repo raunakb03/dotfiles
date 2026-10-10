@@ -1,0 +1,24 @@
+# font
+theme = "tokyonight night"
+font-family = "jetbrains mono nerd font"
+font-style = regular
+font-size = 13
+
+# window
+window-padding-x = 5
+window-padding-y = 5
+confirm-close-surface=false
+resize-overlay = never
+
+# cursor stlying
+cursor-style = "block"
+cursor-style-blink = false
+shell-integration-features = no-cursor
+
+# slowdown mouse scrolling
+mouse-scroll-multiplier = 0.95
+
+# fix general slowness on hyprland (https://github.com/ghostty-org/ghostty/discussions/3224)
+async-backend = epoll
+background-opacity = 0.8
+
