@@ -169,7 +169,7 @@ done
 
 # ── 5. zsh: oh-my-zsh and its plugins ──────────────────────────────────────────────────────
 
-step "zsh (oh-my-zsh + plugins)"
+step "zsh (oh-my-zsh + plugins + Pure prompt)"
 # Set explicitly: if this runs from a zsh that already uses oh-my-zsh, the inherited $ZSH would
 # point somewhere else and the installer refuses to run
 export ZSH="$HOME/.oh-my-zsh" ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
@@ -183,6 +183,8 @@ plugins="$ZSH_CUSTOM/plugins"
 for plugin in zsh-autosuggestions zsh-syntax-highlighting; do
     [[ -d "$plugins/$plugin" ]] || run git clone --depth 1 "https://github.com/zsh-users/$plugin" "$plugins/$plugin"
 done
+# The Pure prompt: .zshrc loads it from ~/.zsh/pure (fpath+=($HOME/.zsh/pure); prompt pure)
+[[ -d "$HOME/.zsh/pure" ]] || run git clone --depth 1 https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
 if [[ "$(getent passwd "$USER" | cut -d: -f7)" != */zsh ]]; then
     run sudo chsh -s /usr/bin/zsh "$USER"
 fi

@@ -32,7 +32,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/raunakb03/dotfiles/main/inst
 3. installs every package in `packages/pacman.txt` and `packages/aur.txt`, plus the
    hardware-specific ones it detects (AMD/Intel microcode, NVIDIA driver)
 4. moves any config in the way to `~/.local/share/dotfiles-backup-<date>/`, then stows every package
-5. oh-my-zsh + zsh-autosuggestions + zsh-syntax-highlighting, zsh as login shell
+5. oh-my-zsh + zsh-autosuggestions + zsh-syntax-highlighting, the Pure prompt, zsh as login shell
 6. tmux plugins (tpm)
 7. builds the shell's C++ plugin, sets a wallpaper (the default in `wallpapers/`, or your
    collection with `--wallpapers <folder>`), which generates all the colours
