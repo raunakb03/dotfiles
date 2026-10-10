@@ -170,13 +170,16 @@ done
 # ── 5. zsh: oh-my-zsh and its plugins ──────────────────────────────────────────────────────
 
 step "zsh (oh-my-zsh + plugins)"
-if [[ -d "$HOME/.oh-my-zsh" ]]; then
+# Set explicitly: if this runs from a zsh that already uses oh-my-zsh, the inherited $ZSH would
+# point somewhere else and the installer refuses to run
+export ZSH="$HOME/.oh-my-zsh" ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
+if [[ -d "$ZSH" ]]; then
     info "oh-my-zsh is installed"
 else
     # KEEP_ZSHRC: don't overwrite our .zshrc link; RUNZSH/CHSH: don't start zsh or change shell
     run env KEEP_ZSHRC=yes RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
-plugins="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins"
+plugins="$ZSH_CUSTOM/plugins"
 for plugin in zsh-autosuggestions zsh-syntax-highlighting; do
     [[ -d "$plugins/$plugin" ]] || run git clone --depth 1 "https://github.com/zsh-users/$plugin" "$plugins/$plugin"
 done
