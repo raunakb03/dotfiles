@@ -1,0 +1,3 @@
+[Desktop Entry]
+# Overrides /etc/xdg/autostart/nm-applet.desktop: the shell's network popout replaces it
+Hidden=true
