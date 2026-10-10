@@ -18,13 +18,13 @@ source $ZSH/oh-my-zsh.sh
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 export PATH="$PATH:/usr/local/go/bin"
-export PATH="$HOME/development/flutter/bin:$PATH"
-export PATH="~/development/android-studio/bin/:$PATH"
+export PATH="$PATH:$HOME/.cargo/bin"
+# export PATH="$HOME/development/flutter/bin:$PATH"
+# export PATH="~/development/android-studio/bin/:$PATH"
 export PATH="$PATH:/home/rb/go/bin"
-export PATH="$PATH:~/.config/emacs/bin"
-export ANDROID_HOME="/home/rb003/Android/Sdk/"
+export PATH="$PATH:/home/rb003/raunak/codecrafters/testers/bin"
+# export ANDROID_HOME="/home/rb003/Android/Sdk/"
 
-. "$HOME/.cargo/env"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -64,4 +64,9 @@ function y() {
 	rm -f -- "$tmp"
 }
 
-fastfetch --config hypr
+# opencode
+export PATH=/home/rb003/.opencode/bin:$PATH
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/rb003/.local/bin:$PATH"
