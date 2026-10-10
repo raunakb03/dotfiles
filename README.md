@@ -41,9 +41,16 @@ bash <(curl -fsSL https://raw.githubusercontent.com/raunakb03/dotfiles/main/inst
 Options: `--dry-run` (show, change nothing), `--wallpapers <dir>`, `--skip-packages`,
 `--skip-services`, `--yes`. Then reboot and pick Hyprland (uwsm) in SDDM.
 
-**Keeping the package lists current:** after installing or removing something you want on
-future installs, run `packages/update.sh` and commit. Packages you never want back go in
-`packages/exclude.txt`.
+**The package lists** (`packages/`):
+
+| File | What | Who edits it |
+| --- | --- | --- |
+| `required.txt` | what the shell and Hyprland config need (Quickshell, fonts, upower, cliphist…) | you, by hand |
+| `pacman.txt` / `aur.txt` | everything else you installed | `update.sh` |
+| `exclude.txt` | never reinstall these (rofi, waybar…), and hardware-only packages | you, by hand |
+
+After installing or removing something you want on future installs, run `packages/update.sh`
+and commit.
 
 **Wallpapers** (~700 MB) aren't in the repo: copy them from a backup with `--wallpapers`.
 

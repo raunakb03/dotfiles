@@ -1,0 +1,52 @@
+# What my-first-shell and the Hyprland config need to work, listed explicitly so they never
+# depend on some other app happening to pull them in. Always installed by install.sh;
+# packages/update.sh never touches this file (edit it by hand).
+
+# Compositor and session
+hyprland
+uwsm
+xdg-desktop-portal-hyprland
+qt6-wayland
+
+# The shell (Quickshell + the C++ plugin build)
+quickshell
+qt6-declarative
+cmake
+base-devel
+
+# Colours from the wallpaper (scripts/set-wallpaper.py, scripts/themes.py)
+python
+python-pillow
+
+# Fonts the shell draws with (Google Sans Flex is bundled in the repo)
+ttf-material-symbols-variable
+ttf-jetbrains-mono-nerd
+
+# Services the bar, popouts and OSD read from
+upower
+networkmanager
+bluez
+bluez-utils
+pipewire
+wireplumber
+brightnessctl
+
+# Clipboard history (Super + V), screenshots and their notification, colour picker
+cliphist
+wl-clipboard
+grim
+slurp
+libnotify
+hyprpicker
+
+# Started by Hyprland at login (execs.lua)
+polkit-gnome
+gnome-keyring
+trash-cli
+
+# install.sh itself
+git
+stow
+rsync
+curl
+pciutils

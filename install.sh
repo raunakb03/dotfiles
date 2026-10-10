@@ -91,7 +91,7 @@ fi
 
 if ((!SKIP_PACKAGES)); then
     step "Base tools (git, stow, base-devel)"
-    run sudo pacman -Syu --needed --noconfirm git stow base-devel
+    run sudo pacman -Syu --needed --noconfirm git stow base-devel pciutils
 fi
 
 # ── 2. the dotfiles repo ───────────────────────────────────────────────────────────────────
@@ -126,9 +126,9 @@ if ((!SKIP_PACKAGES)); then
     lspci 2>/dev/null | grep -qi 'nvidia' && hardware+=(nvidia-open-dkms libva-nvidia-driver)
     info "detected: ${hardware[*]:-nothing extra}"
 
-    step "Official packages (packages/pacman.txt)"
+    step "Official packages (packages/required.txt + pacman.txt)"
     # Only names that exist in the repos: one unknown name would make pacman refuse everything
-    mapfile -t wanted < <(list "$DOTFILES/packages/pacman.txt"; printf '%s\n' "${hardware[@]}")
+    mapfile -t wanted < <(list "$DOTFILES/packages/required.txt"; list "$DOTFILES/packages/pacman.txt"; printf '%s\n' "${hardware[@]}")
     mapfile -t available < <(comm -12 <(printf '%s\n' "${wanted[@]}" | sort -u) <(pacman -Slq | sort -u))
     missing=$(comm -23 <(printf '%s\n' "${wanted[@]}" | sort -u) <(printf '%s\n' "${available[@]}" | sort -u) | tr '\n' ' ')
     [[ -n "${missing// /}" ]] && warn "not in the official repos any more, skipped: $missing"
