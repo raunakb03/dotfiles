@@ -1,2 +1,5 @@
 # tmux plugins are git clones installed by tpm (prefix + I), not stored here
 tmux/.config/tmux/plugins/
+
+# Python bytecode caches
+__pycache__/

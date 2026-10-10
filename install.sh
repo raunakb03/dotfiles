@@ -190,6 +190,9 @@ fi
 # ── 6. tmux plugins ────────────────────────────────────────────────────────────────────────
 
 step "tmux plugins (tpm)"
+# tpm installs into TMUX_PLUGIN_MANAGER_PATH; set it so a value inherited from a running tmux
+# session can't point it somewhere else
+export TMUX_PLUGIN_MANAGER_PATH="$HOME/.config/tmux/plugins/"
 tpm="$HOME/.config/tmux/plugins/tpm"
 [[ -d "$tpm" ]] || run git clone --depth 1 https://github.com/tmux-plugins/tpm "$tpm"
 run "$tpm/bin/install_plugins" || warn "tmux plugins: open tmux and press prefix + I"
@@ -214,7 +217,7 @@ if [[ -z "$(ls -A "$wall_dir" 2>/dev/null)" ]]; then
     info "no wallpapers yet: using the default one from the repo"
     run cp "$DOTFILES"/wallpapers/* "$wall_dir"/
 fi
-if [[ -f "$HOME/.local/state/myshell/wallpaper.json" ]]; then
+if [[ -f "${XDG_STATE_HOME:-$HOME/.local/state}/myshell/wallpaper.json" ]]; then
     info "a wallpaper is already set"
 else
     first=$(find "$wall_dir" -maxdepth 1 -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' \) | sort | head -1)
