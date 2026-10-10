@@ -1,6 +1,7 @@
-# What my-first-shell and the Hyprland config need to work, listed explicitly so they never
-# depend on some other app happening to pull them in. Always installed by install.sh;
-# packages/update.sh never touches this file (edit it by hand).
+# Always installed by install.sh. Edited by hand: packages/update.sh never touches this file.
+# For things that must be there no matter what else is installed: what my-first-shell and the
+# Hyprland config need, and the compilers/toolchains (some of which update.sh can't see because
+# they aren't "explicitly installed" packages on this machine).
 
 # Compositor and session
 hyprland
@@ -50,3 +51,7 @@ stow
 rsync
 curl
 pciutils
+
+# Compilers and toolchains (gcc comes with base-devel; clang, jdk, npm/nodejs, nasm are in pacman.txt)
+go
+rustup

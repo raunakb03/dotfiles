@@ -144,6 +144,12 @@ fi
 
 command -v stow >/dev/null || ((DRY_RUN)) || die "stow isn't installed (run without --skip-packages, or: sudo pacman -S stow)"
 
+# Rust: the rustup package only installs the tool; this downloads the compiler itself
+if ((!SKIP_PACKAGES)) && command -v rustup >/dev/null && ! rustup toolchain list 2>/dev/null | grep -q .; then
+    step "Rust toolchain"
+    run rustup default stable
+fi
+
 # ── 4. link the dotfiles ───────────────────────────────────────────────────────────────────
 
 step "Linking dotfiles with stow"
