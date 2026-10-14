@@ -39,6 +39,7 @@ libvirt
 linux
 linux-firmware
 linux-headers
+love
 lua-language-server
 nano
 nasm
