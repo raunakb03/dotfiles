@@ -98,7 +98,7 @@ return {
     -- Modifier only: the actual binds are mod + 0-9
     kbGoToWs                   = "SUPER",
     kbGoToWsGroup              = "CTRL + SUPER",
-    kbMoveWinToWs              = "SUPER + ALT",
+    kbMoveWinToWs              = "SUPER + SHIFT",          -- + number: send the window there (was SUPER + ALT)
     kbMoveWinToWsGroup         = "CTRL + SUPER + ALT",
 
     -- Everything below can be one string or a list of strings
@@ -174,7 +174,7 @@ return {
     kbLauncher                 = "SUPER + Space",
     kbExit                     = "CTRL + SUPER + ALT + Delete",
     kbLock                     = "SUPER + Escape",
-    kbSleep                    = "SUPER + SHIFT + L",
+    kbSleep                    = "",                       -- disabled (was SUPER + SHIFT + L; suspend is in the power menu)
     kbClipboard                = "SUPER + V",
     kbSidebar                  = "SUPER + N",              -- notification history
     kbSession                  = "CTRL + ALT + Delete",    -- power menu
