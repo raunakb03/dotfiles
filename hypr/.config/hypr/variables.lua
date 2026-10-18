@@ -62,7 +62,7 @@ return {
     windowsInSpeed             = 3,   -- 5   window opening
     windowsOutSpeed            = 2,   -- 3   window closing
     windowsMoveSpeed           = 3.5, -- 6   window moving / resizing / re-tiling
-    workspacesSpeed            = 3,   -- 5   switching workspace
+    workspacesSpeed            = 1,   -- 5   switching workspace
     specialWorkspaceSpeed      = 2.5, -- 4   special workspace sliding in/out
     fadeSpeed                  = 3.5, -- 6   window fades and dimming
     borderSpeed                = 3.5, -- 6   border colour change on focus
@@ -173,8 +173,8 @@ return {
     -- Misc
     kbLauncher                 = "SUPER + Space",
     kbExit                     = "CTRL + SUPER + ALT + Delete",
-    kbLock                     = "SUPER + Escape",
-    kbSleep                    = "",                       -- disabled (was SUPER + SHIFT + L; suspend is in the power menu)
+    kbLock                     = "",                       -- disabled: Super + Escape suspends instead (suspend locks first)
+    kbSleep                    = "SUPER + Escape",
     kbClipboard                = "SUPER + V",
     kbSidebar                  = "SUPER + N",              -- notification history
     kbSession                  = "CTRL + ALT + Delete",    -- power menu

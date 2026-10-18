@@ -42,4 +42,5 @@ private:
 
     QString m_sessionPath;            // e.g. /org/freedesktop/login1/session/_32
     QDBusUnixFileDescriptor m_inhibitor; // valid while we hold the delay lock
+    bool m_sleeping = false;             // between PrepareForSleep(true) and sleepReady()
 };

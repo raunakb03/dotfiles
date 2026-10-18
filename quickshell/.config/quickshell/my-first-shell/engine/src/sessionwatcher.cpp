@@ -62,6 +62,11 @@ void SessionWatcher::takeSleepInhibitor() {
 }
 
 void SessionWatcher::sleepReady() {
+    // Only while a suspend is waiting: QML calls this whenever the lock becomes secure, and an
+    // ordinary lock (Super + Escape, idle) must keep the inhibitor for the next suspend
+    if (!m_sleeping)
+        return;
+    m_sleeping = false;
     // QDBusUnixFileDescriptor owns a copy of the fd; replacing it closes that copy
     m_inhibitor = QDBusUnixFileDescriptor();
 }
@@ -76,8 +81,10 @@ void SessionWatcher::setLockedHint(bool locked) {
 
 void SessionWatcher::handlePrepareForSleep(bool sleeping) {
     if (sleeping) {
+        m_sleeping = true;
         emit aboutToSleep(); // QML locks, then calls sleepReady()
     } else {
+        m_sleeping = false;
         takeSleepInhibitor(); // ready for the next suspend
         emit resumed();
     }

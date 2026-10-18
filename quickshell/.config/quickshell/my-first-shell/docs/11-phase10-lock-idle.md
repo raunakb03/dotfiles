@@ -340,6 +340,26 @@ with that could already read your files or kill the locker.
       (from 28 Aug) re-plugs every USB keyboard/mouse after each resume. Its `atkbd` part does
       nothing (the driver is built in), and failures continued after it was installed.
 
+- **Changed 2026-10-18 (your requests):**
+  - **Idle times** in `shell.json`: screen off after 15 min (`screenOffAfter: 900`), and
+    automatic suspend is off (`suspendAfter: 0`). Locking still happens after 5 min (default).
+  - **`Super + Escape` now suspends** (`kbSleep` in `variables.lua`; `kbLock` is empty).
+    Suspending locks first, so waking always shows the lock screen. To lock without
+    suspending: **Lock** in the power menu (`Ctrl + Alt + Delete`), or `loginctl lock-session`.
+  - **Bug fixed in `SessionWatcher`:** `Lock.qml` calls `sleepReady()` whenever the lock
+    becomes secure, and that released the sleep inhibitor on *every* lock, not only before a
+    suspend. It was taken again only after waking, so after an ordinary lock (and unlock) the
+    next suspend didn't wait for the lock screen. `sleepReady()` now does nothing unless a
+    suspend is waiting (`m_sleeping`, set by `PrepareForSleep(true)`). Checked: the inhibitor
+    (`systemd-inhibit --list`) stays through a lock and unlock.
+  - **Slow wake-up → old reset service removed.** After a resume, the keyboard and mouse were
+    dead for ~7 s: `reset-input-devices-after-sleep.service` (your 28 Aug workaround) was
+    re-plugging the Logitech receiver (5 s) and the Keychron in software. The journal showed
+    it never fixed the dead-keyboard problem (6 cases after it was installed, the last on
+    4 Oct), and none in ~100 resumes since the lock screen's focus fixes. You disabled it and
+    moved its two files to `/root/reset-input-backup/`. To bring it back: move them back to
+    `/etc/systemd/system/` and `/usr/local/bin/`, then
+    `sudo systemctl enable reset-input-devices-after-sleep.service`.
 
 ## Check it
 
