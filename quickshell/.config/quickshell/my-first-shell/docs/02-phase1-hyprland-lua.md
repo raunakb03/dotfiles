@@ -2203,6 +2203,10 @@ What was actually done, and where it differs from the steps above:
   and apps' own fullscreen requests (e.g. a video's fullscreen button) are
   ignored with `suppress_event = "maximize fullscreen"`, so a video fills the
   browser window and `Super + F` makes that fill the screen.
+- **Changed 2026-10-18 (your request):** apps' own fullscreen requests work
+  again (`suppress_event = "maximize"` only), so YouTube's fullscreen button
+  gives real fullscreen: only the video shows, no Zen sidebar; Esc leaves it.
+  `Super + F` is still the fake fullscreen that keeps the app's UI.
 - Faster animations everywhere (about 40–50% shorter than Caelestia's). All
   11 speeds now live in `variables.lua`, with the originals in comments.
 - Step 1.20: keybind descriptions and a rofi cheat sheet on `Super + /`

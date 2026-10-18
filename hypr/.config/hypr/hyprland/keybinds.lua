@@ -171,7 +171,7 @@ create_bind(vars.kbWindowBorderedFullscreen, hl.dsp.window.fullscreen({ mode = "
 
 -- Fullscreen is always "fake": the window fills the screen, but the app is told it is NOT
 -- fullscreen, so it keeps its normal UI (e.g. Zen's sidebar on hover). There is no real
--- fullscreen bind, and apps' own fullscreen requests are ignored (see rules.lua).
+-- fullscreen bind; only apps themselves can ask for that (a video's fullscreen button).
 -- fullscreen_state doesn't toggle by itself, so we check the current state.
 create_bind(vars.kbWindowFullscreen, function()
     local win = hl.get_active_window()

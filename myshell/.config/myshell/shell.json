@@ -15,6 +15,10 @@
         "thickness": 0,
         "rounding": 0
     },
+    "idle": {
+        "screenOffAfter": 900,
+        "suspendAfter": 1800
+    },
     "paths": {
         "wallpaperDir": "~/raunak/Wallpapers"
     }
